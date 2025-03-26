@@ -1,19 +1,12 @@
 import React from 'react'
+import styles from './Admin.module.css'
 
 const AdminHeader = () => {
   // 관리자 상단 header
   return (
     <>
-      <div>
-        <div>
-          <h2>판다's</h2>
-        </div>
-        <div>
-          <div>
-            <input type="text" />
-            <button type='button'>검색</button>
-          </div>
-        </div>
+      <div className={styles.admin_header}>
+          <h1>축산축산</h1>
       </div>
     </>
   )
