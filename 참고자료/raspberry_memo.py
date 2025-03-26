@@ -19,29 +19,29 @@ data = {
  
 
 while True:
-
-  if cnt % 3 == 0:
+ 
+  if cnt % 3 == 0: # 30초마다 데이터를 저장
     # MariaDB 占쏙옙占쏙옙 占쏙옙占쏙옙
     conn = mysql.connector.connect(
-    host='192.168.30.76',
+    host='192.168.30.76', # 호스트 주소 : 내가 사용하는 컴퓨터 IP주소로 지정해줘야함
     user='moneymany_user',
     password='moneymany',
     database='moneymany',
     charset='utf8'
     )
 
-        # 커占쏙옙 占쏙옙占쏙옙
+    # 커서 생성
     cursor = conn.cursor()
 
-        # 占쏙옙占싱븝옙占쏙옙 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙
+    # 실행할 쿼리
     insert_query = f"INSERT INTO environment_data (TEMP) VALUES ({temp})"
         # cursor.execute(insert_query, (korea_time.strftime('%Y-%m-%d %H:%M:%S'),))
     cursor.execute(insert_query)
 
-        # 占쏙옙占쏙옙占쏙옙占?커占쏙옙    
+    # 커밋   
     conn.commit()
 
-        # 占쏙옙占쏙옙 占쏙옙占쏙옙
+    # 연결 종료
     cursor.close()
     conn.close()
     
