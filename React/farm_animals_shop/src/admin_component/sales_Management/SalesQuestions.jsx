@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 
 const SalesQuestions = () => {
   // 질의 응답 페이지
+const [questions, setQuestions] = useState([]);
+
   return (
     <>
       <div>Q&A게시판</div>
@@ -27,7 +29,9 @@ const SalesQuestions = () => {
             </tr>
           </thead>
           <tbody>
-            
+            {
+              
+            }
           </tbody>
         </table>
       </div>
