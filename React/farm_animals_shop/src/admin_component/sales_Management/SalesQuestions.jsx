@@ -1,6 +1,7 @@
 import React from "react";
 
 const SalesQuestions = () => {
+  // 질의 응답 페이지
   return (
     <>
       <div>Q&A게시판</div>
