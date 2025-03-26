@@ -1,16 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SalesQuestions = () => {
   // 질의 응답 페이지
+  const nav = useNavigate();
+  const [questions, setQuestions] = useState([]);
+
   return (
     <>
       <div>Q&A게시판</div>
       <div>
-      <span>총 ??개의 게시물</span>
-      <select>
-        <option>제목</option>
-        <option>작성자</option>
-      </select>
+        <span>총 {questions.length}개의 게시물</span>
+        <select>
+          <option>제목</option>
+          <option>작성자</option>
+        </select>
         <input type="text" />
         <button type="button">검색</button>
       </div>
@@ -27,9 +31,29 @@ const SalesQuestions = () => {
             </tr>
           </thead>
           <tbody>
-            
+            {questions.length === 0 ? (
+              <tr>
+                <td colSpan={5}>등록된 게시물이 없습니다.</td>
+              </tr>
+            ) : (
+              questions.map((question, i) => (
+                <tr key={i}>
+                  <td>{i + 1}</td>
+                  <td>{question.title}</td>
+                  <td>{question.userId}</td>
+                  <td>{question.regDate}</td>
+                  <td>{question.readCnt}</td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
+        <div>
+          {/* 버튼 클릭시 새로 글 작성하는 등록 페이지로 이동 */}
+          <button type="button" onClick={() => nav("/admin/sales-qnaform")}>
+            글쓰기
+          </button>
+        </div>
       </div>
     </>
   );

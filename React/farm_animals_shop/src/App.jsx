@@ -6,6 +6,7 @@ import AdminPullContents from './admin_component/AdminPullContents'
 import LiveStockInfo from './admin_component/livestock_management/LiveStockInfo'
 import SalesMemberInfo from './admin_component/sales_Management/SalesMemberInfo'
 import SalesPaymentInfo from './admin_component/sales_Management/SalesPaymentInfo'
+import SalesQnAForm from './admin_component/sales_Management/SalesQnAForm'
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
           <Route path='sales-memberInfo' element={<SalesMemberInfo/>}/>
           {/* 매출정보및 결제현황 정보 페이지 */}
           <Route path='sales-paymentInfo' element={<SalesPaymentInfo/>}/>
+          {/* Q&A 등록하기 페이지 */}
+          <Route path='sales-qnaform' element={<SalesQnAForm/>}/>
           {/* 질의응답 페이지 */}
           <Route path='sales-questions' element={<SalesQuestions/>}/>
         </Route>
