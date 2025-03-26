@@ -27,11 +27,11 @@ const LiveStockTemperature = () => {
 
 
 const data = {
-  labels: temp.map(t => t.timeLine), // 시간
+  labels: temp.reverse().map(t => t.timeLine), // 시간
   datasets: [
     {
       label: 'Temperature', // 그래프 라벨
-      data: temp.map(t => t.temp), // 데이터 수치
+      data: temp.reverse().map(t => t.temp), // 데이터 수치
       borderColor: 'rgba(75, 192, 192, 1)',
       backgroundColor: 'rgba(75, 192, 192, 0.2)',
     },

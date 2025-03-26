@@ -1,0 +1,34 @@
+.admin_main{
+  width: 100%;
+  border: 1px solid black;
+}
+
+.admin_header{
+  height: 100px;
+  text-align: center;
+  /* padding: 20px; */
+  border: 1px solid black;
+}
+
+.admin_main_contents{
+  display: flex;
+}
+
+.admin_main_contents>div:first-child{
+  flex-grow: 1;
+  padding: 20px 50px;
+}
+.admin_main_contents>div:last-child{
+  flex-grow: 2;
+  padding: 20px;
+}
+
+
+.stock_graph{
+  display: flex;
+  border: 1px solid black;
+}
+.sales_graph{
+  display: flex;
+  border: 1px solid black;
+}
