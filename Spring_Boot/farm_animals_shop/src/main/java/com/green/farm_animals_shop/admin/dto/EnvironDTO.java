@@ -1,4 +1,4 @@
-package com.green.farm_animals_shop.dto;
+package com.green.farm_animals_shop.admin.dto;
 
 import lombok.Getter;
 import lombok.Setter;

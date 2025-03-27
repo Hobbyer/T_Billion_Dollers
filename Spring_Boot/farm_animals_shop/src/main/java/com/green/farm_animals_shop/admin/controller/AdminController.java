@@ -1,11 +1,10 @@
-package com.green.farm_animals_shop.controller;
+package com.green.farm_animals_shop.admin.controller;
 
-import com.green.farm_animals_shop.dto.EnvironDTO;
-import com.green.farm_animals_shop.service.AdminService;
+import com.green.farm_animals_shop.admin.dto.EnvironDTO;
+import com.green.farm_animals_shop.admin.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

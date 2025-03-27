@@ -1,7 +1,7 @@
-package com.green.farm_animals_shop.service;
+package com.green.farm_animals_shop.admin.service;
 
-import com.green.farm_animals_shop.dto.EnvironDTO;
-import com.green.farm_animals_shop.mapper.AdminMapper;
+import com.green.farm_animals_shop.admin.dto.EnvironDTO;
+import com.green.farm_animals_shop.admin.mapper.AdminMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

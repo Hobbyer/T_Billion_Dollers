@@ -1,6 +1,6 @@
-package com.green.farm_animals_shop.mapper;
+package com.green.farm_animals_shop.admin.mapper;
 
-import com.green.farm_animals_shop.dto.EnvironDTO;
+import com.green.farm_animals_shop.admin.dto.EnvironDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
