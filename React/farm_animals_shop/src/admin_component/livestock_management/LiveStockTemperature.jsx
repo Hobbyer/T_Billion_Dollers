@@ -3,6 +3,7 @@ import { Line } from 'react-chartjs-2';
 import ChartJS from 'chart.js/auto';
 import { CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import axios from 'axios';
+
 const LiveStockTemperature = () => {
 
   ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -30,7 +31,7 @@ const data = {
   labels: temp.reverse().map(t => t.timeLine), // 시간
   datasets: [
     {
-      label: 'Temperature', // 그래프 라벨
+      label: '온도', // 그래프 라벨
       data: temp.reverse().map(t => t.temp), // 데이터 수치
       borderColor: 'rgba(75, 192, 192, 1)',
       backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -47,8 +48,9 @@ const options = {
     },
     title: {
       display: true,
-      text: 'LiveStock Temperature Over Time',
+      text: '실시간 온도 데이터',
     },
+   
   },
 };
 

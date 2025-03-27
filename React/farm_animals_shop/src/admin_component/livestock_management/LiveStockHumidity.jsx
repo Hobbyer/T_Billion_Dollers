@@ -5,6 +5,28 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from 'chart.js';
 // Chart.js 모듈을 등록
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
 
+
+// 커스텀 플러그인 정의
+const centerTextPlugin = {
+  id: 'centerTextPlugin',
+  beforeDraw: (chart) => {
+    const { width, height, ctx } = chart;
+    ctx.restore();
+
+    const fontSize = (height / 120).toFixed(2);
+    ctx.font = `${fontSize}em sans-serif`;
+    ctx.textBaseline = 'middle';
+
+    const text = '총합: 100';
+    const textX = Math.round((width - ctx.measureText(text).width) / 2);
+    const textY = height / 2;
+
+    ctx.fillText(text, textX, textY);
+    ctx.save();
+  },
+};
+
+
 const LiveStockHumidity = () => {
   const [humidity, setHumidity] = useState(null);
 
@@ -53,11 +75,14 @@ const LiveStockHumidity = () => {
     },
   };
 
+
+  
+
   return (
     <div>
       <h2>현재 습도</h2>
       {humidity !== null ? (
-        <Doughnut data={data} options={options} />
+        <Doughnut data={data} options={options} plugins={[centerTextPlugin]} />
       ) : (
         <p>습도 데이터를 불러오는 중...</p>
       )}
