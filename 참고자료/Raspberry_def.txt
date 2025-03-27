@@ -1,0 +1,39 @@
+
+### MariaDB connect ###
+def temp_db_save():
+   
+    conn = pymysql.connect(
+    host='192.168.30.151',
+    user='moneymany_user',
+    password='manymoney',
+    database='moneymany',
+    charset='utf8'
+    )
+
+    cursor = conn.cursor()
+
+    # query_execute (insert)
+    insert_query = f"INSERT INTO environment_data (TEMP) VALUES ({temp})"
+        # cursor.execute(insert_query, (korea_time.strftime('%Y-%m-%d %H:%M:%S'),))
+    cursor.execute(insert_query)
+  
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+
+### LED setting ###
+def led_operate():
+    GPIO.setmode(GPIO.BOARD)
+
+    LED = 7
+
+    GPIO.setup(LED, GPIO.OUT, initial=GPIO.LOW)
+
+    GPIO.output(LED, GPIO.HIGH)
+    sleep(0.5)
+
+
+    GPIO.output(LED, GPIO.LOW)
+    sleep(0.5)
