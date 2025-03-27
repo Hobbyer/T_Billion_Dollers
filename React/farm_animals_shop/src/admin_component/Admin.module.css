@@ -1,12 +1,11 @@
-.admin_main{
+/* .admin_main{
   width: 100%;
   border: 1px solid black;
 }
 
 .admin_header{
-  height: 100px;
   text-align: center;
-  /* padding: 20px; */
+  padding: 20px;
   border: 1px solid black;
 }
 
@@ -31,4 +30,4 @@
 .sales_graph{
   display: flex;
   border: 1px solid black;
-}
+} */
