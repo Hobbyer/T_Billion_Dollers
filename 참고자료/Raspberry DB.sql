@@ -5,3 +5,4 @@ CREATE TABLE ENVIRONMENT_DATA (
 );
 
 SELECT * FROM environment_data;
+
