@@ -1,12 +1,12 @@
 import { Route, Routes } from 'react-router-dom'
-import AdminMain from './admin_component/AdminMain'
 import './App.css'
 import SalesQuestions from './admin_component/sales_Management/SalesQuestions'
-import AdminPullContents from './admin_component/AdminPullContents'
 import LiveStockInfo from './admin_component/livestock_management/LiveStockInfo'
 import SalesMemberInfo from './admin_component/sales_Management/SalesMemberInfo'
 import SalesPaymentInfo from './admin_component/sales_Management/SalesPaymentInfo'
 import SalesQnAForm from './admin_component/sales_Management/SalesQnAForm'
+import AdminMain from './admin_component/main/AdminMain'
+import AdminPullContents from './admin_component/main/AdminPullContents'
 
 function App() {
   return (

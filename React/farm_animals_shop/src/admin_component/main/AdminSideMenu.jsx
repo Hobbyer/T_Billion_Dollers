@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const AdminSideMenu = () => {
   return (
-    <div>
+    <div className="sidemenu">
       <p>SIDE MENU</p>
       <ul>
         <li>

@@ -12,6 +12,4 @@ import java.time.LocalDateTime;
 public class EnvironDTO {
   private LocalDateTime timeLine;
   private double temp;
-  // 습도를 받아올 변수
-  private double humidity;
 }
