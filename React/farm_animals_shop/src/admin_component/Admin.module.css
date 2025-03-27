@@ -32,3 +32,114 @@
   display: flex;
   border: 1px solid black;
 }
+
+
+
+
+
+
+/* ★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★ */
+/* Q&A 목록 페이지 */
+.search_container {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+  border-top: 2px solid #444444;
+  border-bottom: 2px solid #444444;
+  padding: 20px 0;
+  width: 90%;
+}
+
+.search_container > div:nth-child(2) {
+  display: flex;
+  gap: 10px;
+}
+
+.list_table {
+  width: 80%;
+  border-collapse: collapse;
+  
+}
+
+.list_table tr:first-child {
+  border-bottom: 2px solid #444444;
+  padding: 10px;
+}
+
+.no_post {
+  text-align: center;
+  padding: 20px;
+}
+
+.list_btn {
+  text-align: center;
+  margin-top: 20px;
+}
+
+
+
+
+
+
+
+/* ★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★ */
+/* Q&A form - 등록하기 페이지 */
+
+/* 테이블 */
+.form_table {
+  width: 100%;
+  border-top: 1px solid #444444;
+  border-bottom: 1px solid #444444;
+  border-collapse: collapse;
+  margin: 20px 0;
+  text-align: center;
+}
+
+tr, td {
+  padding: 10px;
+}
+
+/* 첨부파일 */
+label {
+  border-radius: 4px;
+  color: gray;
+  cursor: pointer;
+  margin-left: 30px;
+}
+
+/* 모든 input 태그 */
+.form_container input {
+  border-width: 0;
+  border-width: 0 0 1px;
+  width: 60%;
+}
+
+.form_container input:focus {
+  outline: none;
+}
+
+/* 필수입력사항 "*" */
+.required  {
+  color: red;
+  font-weight: bold;
+}
+
+/* 목록, 등록 버튼 */
+.form_btn {
+  margin-top: 20px;
+  text-align: center;
+  
+}
+
+.form_btn > button {
+  width: 100px;
+  height: 30px;
+  background-color: #444444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  margin: 10px;
+  margin-top: 70px;
+  cursor: pointer;
+}
+
