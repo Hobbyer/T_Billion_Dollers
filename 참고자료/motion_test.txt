@@ -1,0 +1,66 @@
+import RPi.GPIO as GPIO
+from time import sleep
+
+led_G = 20
+led_Y = 21
+sensor = 17
+
+claxon = 18
+
+
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setup(led_G, GPIO.OUT)
+GPIO.setup(led_Y, GPIO.OUT)
+GPIO.setup(sensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
+
+GPIO.setup(claxon, GPIO.OUT)
+
+p = GPIO.PWM(claxon, 100)
+
+Frq = [ 262, 294, 330, 349, 392, 440, 493, 523 ]
+speed = 0.5
+        
+            
+
+print ("PIR Ready....")
+sleep(5)
+
+
+try:
+    while True:
+        print(GPIO.input(sensor))
+
+        if GPIO.input(sensor) == 1:
+            GPIO.output(led_Y, 1)
+            GPIO.output(led_G, 0)
+
+            print("Motion Detected !")
+
+            p.start(10)
+
+            for fr in Frq:
+                p.ChangeFrequency(fr)
+                sleep(speed)
+
+            sleep(0.3)
+
+
+            # GPIO.output(led_Y, 0)
+
+        if GPIO.input(sensor) == 0:
+            GPIO.output(led_G, 1)
+            GPIO.output(led_Y, 0)
+
+            # GPIO.output(led_G, 0)
+
+            p.stop()
+        
+
+            sleep(0.3)
+
+except KeyboardInterrupt:
+    print("Stopped by User")
+    GPIO.cleanup()
