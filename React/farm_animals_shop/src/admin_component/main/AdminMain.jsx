@@ -1,18 +1,19 @@
 import React, { useState } from 'react'
+
+import { Link, Outlet } from 'react-router-dom'
 import AdminHeader from './AdminHeader'
 import AdminSideMenu from './AdminSideMenu'
-import { Link, Outlet } from 'react-router-dom'
-import styles from './Admin.module.css'
+import '../Admin.css'
 
 const AdminMain = () => {
   // 관리자 메인 페이지
   return (
     
-    <div className={styles.admin_main}>
+    <div className='container'>
       <div>
         <AdminHeader/>
       </div>
-      <div className={styles.admin_main_contents}>
+      <div>
         <div>
           <AdminSideMenu/>
         </div>
