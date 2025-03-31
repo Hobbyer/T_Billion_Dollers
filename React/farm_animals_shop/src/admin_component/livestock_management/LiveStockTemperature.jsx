@@ -13,7 +13,7 @@ const LiveStockTemperature = () => {
   useEffect(()=>{
     const fetchTemperature = async () => {
       try {
-        const res = await axios.get('/api/admin/temp');
+        const res = await axios.get('/api/admin/temp', {headers: {Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`}});
         setTemp(res.data);
       } catch (error) {
         console.log(error)

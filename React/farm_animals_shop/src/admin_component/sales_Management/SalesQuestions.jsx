@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "../Admin.module.css";
 
 const SalesQuestions = () => {
   // 질의 응답 페이지
@@ -8,12 +7,12 @@ const SalesQuestions = () => {
   const [questions, setQuestions] = useState([]);
 
   return (
-    <div className={styles.list_container}>
+    <div>
 
       <h2>Q&A게시판</h2>
 
       {/* 검색input단 */}
-      <div className={styles.search_container}>
+      <div >
         <div>
           <span>총 {questions.length}개의 게시물</span>
         </div>
@@ -30,7 +29,7 @@ const SalesQuestions = () => {
       {/* 테이블 */}
       <div>
         
-          <table className={styles.list_table}>
+          <table >
             <thead>
               <tr>
                 <td>번호</td>
@@ -43,7 +42,7 @@ const SalesQuestions = () => {
             <tbody>
               {questions.length === 0 ? (
                 <tr>
-                  <td className={styles.no_post} colSpan={5}>등록된 게시물이 없습니다.</td>
+                  <td  colSpan={5}>등록된 게시물이 없습니다.</td>
                 </tr>
               ) : (
                 questions.map((question, i) => (
@@ -60,7 +59,7 @@ const SalesQuestions = () => {
           </table>
         
 
-        <div className={styles.list_btn}>
+        <div >
           {/* 버튼 클릭시 새로 글 작성하는 등록 페이지로 이동 */}
           <button type="button" onClick={() => nav("/admin/sales-qnaform")}>
             글쓰기
