@@ -1,73 +1,118 @@
-import React from "react";
-import styles from "../Admin.module.css";
+import axios from "axios";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Q&A 등록 게시판
 const SalesQnAForm = () => {
   const nav = useNavigate();
 
+  // input 태그들에 입력한 데이터를 저장하는 변수
+  const [question, setQuestion] = useState({
+    title: "",
+    userId: "",
+    content: "",
+  });
+
+  // 선택한 첨부파일을 저장할 변수
+  const [file, setFile] = useState(null);
+
+  // 값 입력 시 반복 실행되는 함수
+  const changeQuestion = (e) => {
+    setQuestion({
+      ...question,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  console.log(question);
+
+  // 등록 버튼 클릭 시 질문 등록 실행
+  const regQuestion = () => {
+    const regForm = new FormData();
+    // 질문 등록 시 (DB에 insert) 필요한 데이터 객체
+    regForm.append("title", question.title);
+    regForm.append("userId", question.userId);
+    regForm.append("content", question.content);
+
+    // 첨부파일 데이터 적재
+    regForm.append("file", file);
+
+    axios.post('/api/')
+  };
+
   return (
-    <div className={styles.form_container}>
+    <div>
       <h2>Q&A 등록하기</h2>
-      <table className={styles.form_table}>
+      <table>
         <colgroup>
-          <col style={{width:"20%"}} />
-          <col style={{width:"80%"}} />
+          <col style={{ width: "20%" }} />
+          <col style={{ width: "80%" }} />
         </colgroup>
         <tbody>
           {/* 글 제목 */}
-          <tr className={styles.form_title}>
-            <td>제목
-              <span className={styles.required}>*</span>
+          <tr>
+            <td>
+              제목
+              <span>*</span>
             </td>
             <td>
-              <input type="text" placeholder="제목을 입력해 주세요" />
+              <input
+                type="text"
+                name="title"
+                placeholder="제목을 입력해 주세요"
+                onChange={(e) => changeQuestion(e)}
+              />
             </td>
           </tr>
 
           {/* 작성자 */}
-          <tr className={styles.form_userId}>
-            <td>작성자
-              <span className={styles.required}>*</span>
+          <tr>
+            <td>
+              작성자
+              <span>*</span>
             </td>
             <td>
-              <input type="text" placeholder="이름을 입력해 주세요" />
+              <input
+                type="text"
+                name="userId"
+                placeholder="이름을 입력해 주세요"
+                onChange={(e) => changeQuestion(e)}
+              />
             </td>
           </tr>
 
           {/* 설명 */}
-          <tr className={styles.form_content}>
-            <td>설명
-              <span className={styles.required}>*</span>
+          <tr>
+            <td>
+              설명
+              <span>*</span>
             </td>
             <td>
-              <input type="text" placeholder="설명을 입력해 주세요" />
+              <textarea
+                name="content"
+                id=""
+                onChange={(e) => changeQuestion(e)}
+              ></textarea>
             </td>
           </tr>
         </tbody>
       </table>
 
       {/* 첨부파일 */}
-      <table className={styles.form_file}>
-        <colgroup>
-          <col style={{width:"20%"}} />
-          <col style={{width:"80%"}} />
-        </colgroup>
-        <tr>
-          <td>
-          <span>파일 첨부</span>
-          </td>
-          <td>
-            <label for="input-file">이곳을 클릭해 첨부파일을 업로드 하세요</label>
-            <input type="file" id="input-file" style={{display:"none"}} />
-          </td>
-        </tr>
-      </table>
+      <div>
+        <p>파일첨부</p>
+        <input type="file" onChange={(e) => changeQuestion(e)} />
+      </div>
 
       {/* 등록, 목록 버튼 */}
-      <div className={styles.form_btn}>
-        <button type="button" onClick={() => nav("/admin/sales-questions")}>목 록</button>
-        <button type="button">등 록</button>
+      <div>
+        <button type="button" onClick={() => nav("/admin/sales-questions")}>
+          목 록
+        </button>
+        {/* 등록누르면 서버로 갑니다 ! */}
+        <button type="button" onClick={(e) => regQuestion()}>
+          등 록
+        </button>
       </div>
     </div>
   );

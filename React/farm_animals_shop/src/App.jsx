@@ -7,6 +7,7 @@ import SalesPaymentInfo from './admin_component/sales_Management/SalesPaymentInf
 import SalesQnAForm from './admin_component/sales_Management/SalesQnAForm'
 import AdminMain from './admin_component/main/AdminMain'
 import AdminPullContents from './admin_component/main/AdminPullContents'
+import Login from './admin_component/auth/Login'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           {/* 질의응답 페이지 */}
           <Route path='sales-questions' element={<SalesQuestions/>}/>
         </Route>
+        <Route path='/auth/login' element={<Login />}/>
       </Routes>
       
     </>
