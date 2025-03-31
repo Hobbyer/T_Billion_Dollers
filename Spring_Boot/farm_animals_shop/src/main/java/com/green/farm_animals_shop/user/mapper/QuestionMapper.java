@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface QuestionMapper {
 
-  //Q&A 게시글 등록 쿼리(첨부파일보류)
+  //Q&A 게시글 등록 쿼리
   public void insertQuestion(QuestionDTO questionDTO);
 
 }

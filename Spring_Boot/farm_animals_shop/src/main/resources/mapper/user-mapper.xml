@@ -30,11 +30,11 @@
     <insert id="insertQuestion">
         INSERT INTO QUESTIONS (
             TITLE
-            , USER_NAME
+            , USER_ID
             , READ_CNT
         ) VALUES (
             #{title}
-            , #{userName}
+            , #{userId}
             , #{readCnt}
         )
     </insert>
