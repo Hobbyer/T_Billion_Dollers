@@ -1,65 +1,115 @@
-import React, { useState } from "react";
+import dayjs from "dayjs";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { GET } from "../../apis/CRUD";
+
+// ★ 질의 응답 페이지 ★
 
 const SalesQuestions = () => {
-  // 질의 응답 페이지
   const nav = useNavigate();
-  const [questions, setQuestions] = useState([]);
+  //조회한 게시글 목록 데이터를 저장할 state 변수
+  const [questionList, setQuestionList] = useState([]);
+
+  //서버에서 게시글 목록 받아오기
+  useEffect(() => {
+    GET("/api/questions")
+      .then((res) => setQuestionList(res.data))
+      .catch((error) => console.log(error));
+  }, []);
+
+  //검색창에 입력한 데이터를 저장할 변수
+  const [searchData, setSearchData] = useState({
+    searchKeyword: "TITLE",
+    searchValue: "",
+  });
+
+  //검색창 내용 변경 시 실행되는 함수
+  const changeSearchData = (e) => {
+    setSearchData({
+      ...searchData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  //검색 버튼 클릭 시 실행 함수
+  const searchList = () => {
+    GET(`/api/questions?searchKeyword=${searchData.searchKeyword}&searchValue=${searchData.searchValue}`)
+      .then((res) => setQuestionList(res.data))
+      .catch((error) => console.log(error));
+  };
 
   return (
     <div>
-
       <h2>Q&A게시판</h2>
 
       {/* 검색input단 */}
-      <div >
+      <div>
         <div>
-          <span>총 {questions.length}개의 게시물</span>
+          <span>총 {questionList.length}개의 게시물</span>
         </div>
         <div>
-          <select>
-            <option>제목</option>
-            <option>작성자</option>
+          <select
+            value={searchData.searchKeyword}
+            name="searchKeyword"
+            onChange={(e) => changeSearchData(e)}
+          >
+            <option value="TITLE">제목</option>
+            <option value="USER_ID">작성자</option>
           </select>
-          <input type="text" />
-          <button type="button">검색</button>
+          <input
+            type="text"
+            name="searchValue"
+            value={searchData.searchValue}
+            onChange={(e) => changeSearchData(e)}
+          />
+          <button type="button" onClick={(e) => searchList()}>
+            검색
+          </button>
         </div>
       </div>
 
       {/* 테이블 */}
       <div>
-        
-          <table >
-            <thead>
+        <table>
+          <thead>
+            <tr>
+              <td>번호</td>
+              <td>제목</td>
+              <td>작성자</td>
+              <td>작성일</td>
+              <td>조회수</td>
+            </tr>
+          </thead>
+          <tbody>
+            {questionList.length === 0 ? (
               <tr>
-                <td>번호</td>
-                <td>제목</td>
-                <td>작성자</td>
-                <td>작성일</td>
-                <td>조회수</td>
+                <td colSpan={5}>등록된 게시물이 없습니다.</td>
               </tr>
-            </thead>
-            <tbody>
-              {questions.length === 0 ? (
-                <tr>
-                  <td  colSpan={5}>등록된 게시물이 없습니다.</td>
-                </tr>
-              ) : (
-                questions.map((question, i) => (
+            ) : (
+              questionList.map((question, i) => {
+                return (
                   <tr key={i}>
-                    <td>{i + 1}</td>
-                    <td>{question.title}</td>
+                    <td>{questionList.length - i}</td>
+                    <td>
+                      <span
+                        onClick={(e) =>
+                          nav(`/admin/sales-questions/${question.questionNum}`)
+                        }
+                      >
+                        {question.title}
+                      </span>
+                    </td>
                     <td>{question.userId}</td>
-                    <td>{question.regDate}</td>
+                    <td>{dayjs(question.regDate).format("YYYY년 MM월 DD일")}</td>
                     <td>{question.readCnt}</td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        
+                );
+              })
+            )}
+          </tbody>
+        </table>
 
-        <div >
+        <div>
           {/* 버튼 클릭시 새로 글 작성하는 등록 페이지로 이동 */}
           <button type="button" onClick={() => nav("/admin/sales-qnaform")}>
             글쓰기

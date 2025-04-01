@@ -4,40 +4,61 @@
 <!-- 해당 파일에 모든 쿼리문을 작성 -->
 <!-- namespace에는 xml파일과 연결할 Mapper interface 파일명을 패키지를 포함하여 적어주세요 -->
 <mapper namespace="com.green.farm_animals_shop.user.mapper.QuestionMapper">
-    <!--질문DTO-->
-    <resultMap id="question" type="QuestionDTO">
-        <id column="QUESTIONS_NUM" property="questionsNum"/>
-        <result column="TITLE" property="title"/>
-        <result column="CONTENT" property="content"/>
-        <result column="REG_DATE" property="regDate"/>
-        <result column="READ_CNT" property="readCnt"/>
-        <result column="USER_ID" property="userId"/>
-        <result column="PRODUCT_NUM" property="productNum"/>
-    </resultMap>
 
-    <!--사용자DTO-->
-    <resultMap id="user" type="UserDTO">
-        <result column="USER_ID" property="userId"/>
-        <result column="USER_NAME" property="userName"/>
-        <result column="USER_PASSWORD" property="userPassword"/>
-        <result column="USER_ADDR" property="userAddr"/>
-        <result column="USER_EMAIL" property="userEmail"/>
-        <result column="USER_TEL" property="userTel"/>
-        <result column="USER_JOIN_DATE" property="userJoinDate"/>
-    </resultMap>
+    <!--검색 버튼 클릭 시 게시글 목록 조회-->
+    <select id="getQuestionList" resultType="QuestionDTO">
+        SELECT QUESTION_NUM
+            , TITLE
+            , USER_ID
+            , REG_DATE
+            , READ_CNT
+        FROM QUESTIONS
+        <if test="searchValue != null and searchValue != ''">
+            AND ${searchKeyword} LIKE CONCAT('%', #{searchValue}, '%')
+        </if>
+    </select>
 
     <!--Q&A 게시글 등록 쿼리(첨부파일보류)-->
     <insert id="insertQuestion">
         INSERT INTO QUESTIONS (
             TITLE
-            , USER_NAME
-            , READ_CNT
+            , USER_ID
+            , CONTENT
         ) VALUES (
             #{title}
-            , #{userName}
-            , #{readCnt}
+            , #{userId}
+            , #{content}
         )
     </insert>
+
+    <!--Q&A 게시글 상세 조회-->
+    <select id="getQuestion" resultType="QuestionDTO">
+        SELECT *
+        FROM QUESTIONS
+        WHERE QUESTION_NUM = #{questionNum}
+    </select>
+
+    <!--Q&A 게시글 삭제-->
+    <delete id="deleteQuestion">
+        DELETE FROM QUESTIONS
+        WHERE QUESTION_NUM = #{questionNum}
+    </delete>
+
+    <!--Q&A 게시글 수정-->
+    <update id="updateQuestion">
+        UPDATE QUESTIONS
+        SET
+            TITLE = #{title}
+            , CONTENT = #{content}
+    </update>
+
+    <!--Q&A 게시글 조회수 증가-->
+    <update id="updateReadCnt">
+        UPDATE QUESTIONS
+        SET
+        READ_CNT = READ_CNT + 1
+        WHERE NumQUESTION_NUM = #{questionNum}
+    </update>
 
 </mapper>
 

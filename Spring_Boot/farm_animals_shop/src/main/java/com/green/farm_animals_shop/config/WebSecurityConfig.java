@@ -58,6 +58,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
 
         .authorizeHttpRequests(authorize -> authorize
             .requestMatchers("/auth/**").permitAll()
+//            .anyRequest().permitAll());
             .anyRequest().authenticated());
 
     // JwtSecurityConfig 대신 JwtFilter를 사용하여 JWT 인증 필터를 추가합니다. (JwtSecurityConfig는 더 이상 사용되지 않음)

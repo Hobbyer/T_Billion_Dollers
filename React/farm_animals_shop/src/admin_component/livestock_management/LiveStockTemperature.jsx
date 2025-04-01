@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2';
 import ChartJS from 'chart.js/auto';
 import { CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import axios from 'axios';
+import { GET } from '../../apis/CRUD';
+import dayjs from 'dayjs';
 
 const LiveStockTemperature = () => {
 
@@ -13,7 +14,7 @@ const LiveStockTemperature = () => {
   useEffect(()=>{
     const fetchTemperature = async () => {
       try {
-        const res = await axios.get('/api/admin/temp', {headers: {Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`}});
+        const res = await GET('/api/admin/temp');
         setTemp(res.data);
       } catch (error) {
         console.log(error)
@@ -28,7 +29,7 @@ const LiveStockTemperature = () => {
 
 
 const data = {
-  labels: temp.reverse().map(t => t.timeLine), // 시간
+  labels: temp.reverse().map(t => dayjs(t.timeLine).format('HH시 mm분')), // 시간
   datasets: [
     {
       label: '온도', // 그래프 라벨
