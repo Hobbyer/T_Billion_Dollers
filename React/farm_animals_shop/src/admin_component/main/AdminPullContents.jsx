@@ -4,41 +4,44 @@ import LiveStockHumidity from "../livestock_management/LiveStockHumidity";
 import SalesRevenue from "../sales_Management/SalesRevenue";
 import SalesMember from "../sales_Management/SalesMember";
 import SalesPayment from "../sales_Management/SalesPayment";
+import ItemBox from "../../common_components/ItemBox";
 
 const AdminPullContents = () => {
   // 메인 핵심 풀 컨텐츠(축산 환경, 판매)
   return (
     <div className="main-content">
       <div>
-        <div>
+        <ItemBox>
             {/* 온도그래프 */}
             <LiveStockTemperature/>
-        </div>
+        </ItemBox>
         <div>
-          <div>
+          <ItemBox>
               {/* 습도그래프 */}
               <LiveStockHumidity/>
-          </div>
-            <div>
+          </ItemBox>
+            <ItemBox>
               {/* 오늘의 날씨 */}
               오늘의 날씨
-            </div>
+            </ItemBox>
         </div>
       </div>
 
       <div>
         <div>
-          {/* 회원 수 그래프 */}
-          <SalesMember/>
+          <ItemBox>
+            {/* 회원 수 그래프 */}
+            <SalesMember/>
+          </ItemBox>
+          <ItemBox>
+            {/* 일/월 매출 그래프 */}
+            <SalesRevenue/>
+          </ItemBox>
         </div>
-        <div>
-          {/* 일/월 매출 그래프 */}
-          <SalesRevenue/>
-        </div>
-        <div>
+        <ItemBox>
           {/* 결제 정보 간략한 목록 */}
           <SalesPayment/>
-        </div>
+        </ItemBox>
       </div>
     </div>
   );

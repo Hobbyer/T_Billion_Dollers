@@ -21,9 +21,16 @@
   display: grid;
   grid-template-columns: repeat(2,1fr);
   /* border: 1px solid black; */
+  gap: 20px;
 }
+
+.main-content>div:first-child div{
+  width: 100%;
+}
+
+
 
 .main-content>div:first-child>div:last-child{
   display: flex;
-  gap: 10px;
+  gap: 5px;
 }
