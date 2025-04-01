@@ -19,20 +19,21 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@RequiredArgsConstructor
-@Configuration
-@EnableWebSecurity
-@Component
+@RequiredArgsConstructor // 생성자 주입을 위한 롬복 어노테이션
+@Configuration // 이 클래스가 Spring의 설정 클래스를 나타냄
+@EnableWebSecurity // Spring Security를 활성화합니다.
+@Component // 이 클래스는 Spring의 컴포넌트 스캔에 의해 자동으로 등록됩니다.
 
+// WebMvcConfigurer를 구현하여 CORS 설정을 추가합니다.
 public class WebSecurityConfig implements WebMvcConfigurer {
 
-  private final TokenProvider tokenProvider;
-  private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-  private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+  private final TokenProvider tokenProvider; // JWT 토큰 제공자
+  private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint; // 인증 실패 핸들러
+  private final JwtAccessDeniedHandler jwtAccessDeniedHandler; // 접근 거부 핸들러
 
   @Override
-  public void addCorsMappings(CorsRegistry registry) {
-    registry.addMapping("/**")
+  public void addCorsMappings(CorsRegistry registry) { // CORS 설정 메서드
+    registry.addMapping("/**") // 모든 경로에 대해 CORS 설정을 적용합니다.
         .allowedOrigins("http://localhost:5173") // 허용할 출처를 설정합니다.
         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // 허용할 HTTP 메서드를 설정합니다.
         .allowCredentials(true); // 자격 증명(쿠키, 인증 헤더 등)을 허용합니다.
@@ -41,24 +42,25 @@ public class WebSecurityConfig implements WebMvcConfigurer {
 
   @Bean
   public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
+    return new BCryptPasswordEncoder(); // 비밀번호 인코더를 설정합니다.
   }
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
-        .httpBasic(httpBasic -> httpBasic.disable())
-        .cors(Customizer.withDefaults())
-        .csrf(csrf -> csrf.disable())
+        .httpBasic(httpBasic -> httpBasic.disable()) // 기본 인증을 비활성화합니다.
+        .cors(Customizer.withDefaults()) // CORS 설정을 활성화합니다.
+        .csrf(csrf -> csrf.disable()) // CSRF 보호를 비활성화합니다.
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        // 세션 관리를 Stateless로 설정합니다.
 
-        .exceptionHandling(exception -> exception
-            .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-            .accessDeniedHandler(jwtAccessDeniedHandler))
+        .exceptionHandling(exception -> exception // 예외 처리 설정
+            .authenticationEntryPoint(jwtAuthenticationEntryPoint) // 인증 실패 핸들러 설정
+            .accessDeniedHandler(jwtAccessDeniedHandler)) // 접근 거부 핸들러 설정
 
-        .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/auth/**").permitAll()
-            .anyRequest().authenticated());
+        .authorizeHttpRequests(authorize -> authorize // 요청 권한 설정
+            .requestMatchers("/auth/**").permitAll() // 인증 관련 API는 모두 허용합니다.
+            .anyRequest().authenticated()); // 나머지 요청은 인증을 요구합니다.
 
     // JwtSecurityConfig 대신 JwtFilter를 사용하여 JWT 인증 필터를 추가합니다. (JwtSecurityConfig는 더 이상 사용되지 않음)
     http.addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);

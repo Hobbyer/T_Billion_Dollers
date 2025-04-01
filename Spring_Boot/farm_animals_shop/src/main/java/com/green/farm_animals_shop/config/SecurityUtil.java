@@ -9,6 +9,8 @@ public class SecurityUtil {
   private SecurityUtil() {}
 
   public static String getCurrentMemberId() {
+
+    // 현재 인증 정보를 가져옵니다.
     final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (authentication == null || authentication.getName() == null) {

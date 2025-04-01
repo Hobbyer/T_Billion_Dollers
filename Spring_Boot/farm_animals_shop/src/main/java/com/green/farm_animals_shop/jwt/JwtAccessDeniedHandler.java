@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-@Component
+@Component // 이 클래스는 Spring의 컴포넌트 스캔에 의해 자동으로 등록됩니다.
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
   @Override

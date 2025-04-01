@@ -1,0 +1,38 @@
+.container{
+  border: 1px solid black;
+  width: 1200px;
+}
+.container div{
+  border: 1px solid black;
+}
+
+.container>div:last-child{
+  display: flex;
+}
+
+.container>div:last-child>div:first-child{
+  flex-grow: 1;
+}
+
+.container>div:last-child>div:last-child{
+  flex-grow: 2;
+}
+
+.main-content>div:first-child{
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  padding: 10px;
+}
+
+.main-content>div:first-child>div:first-child{
+  flex-grow: 2;
+}
+
+.main-content>div:first-child>div:nth-child(2){
+  flex-grow: 1;
+}
+
+.main-content>div:first-child>div:last-child{
+  flex-grow: 1;
+}
