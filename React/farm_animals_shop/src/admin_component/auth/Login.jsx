@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useState } from 'react'
+import { POST } from '../../apis/CRUD'
 
 const Login = () => {
 
@@ -16,7 +17,7 @@ const Login = () => {
   }
 
   const submitLogin = () => {
-    axios.post('/api/auth/login', user)
+    POST('/api/auth/login', user)
       .then(res => {
         sessionStorage.setItem('accessToken', res.data.accessToken)
         // sessionStorage.setItem('authority', res.data.authority)

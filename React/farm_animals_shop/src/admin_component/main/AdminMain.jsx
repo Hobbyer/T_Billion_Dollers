@@ -4,7 +4,7 @@ import { Link, Outlet } from 'react-router-dom'
 import AdminHeader from './AdminHeader'
 import AdminSideMenu from './AdminSideMenu'
 import '../Admin.css'
-import axios from 'axios'
+import { GET } from '../../apis/CRUD'
 
 const AdminMain = () => {
   
@@ -15,7 +15,7 @@ const AdminMain = () => {
     if (!sessionStorage.getItem('accessToken')){
       window.location.href = '/auth/login'      
     } else {
-      axios.get('/api/members/me', {headers: {Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`}})
+      GET('/api/members/me')
         .then(res => {
           setUserAuth(res.data.authority)
         })
