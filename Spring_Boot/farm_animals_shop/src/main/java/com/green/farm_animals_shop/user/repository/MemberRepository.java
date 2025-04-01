@@ -6,7 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
+@Repository // 이 클래스가 리포지토리 레이어의 컴포넌트임을 나타냄
+
+// JpaRepository를 상속받아 CRUD 기능을 제공
 public interface MemberRepository extends JpaRepository<Member, String> {
 
   Optional<Member> findByUserId(String userId); // 사용자 ID로 회원 조회

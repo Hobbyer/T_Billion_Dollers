@@ -20,35 +20,35 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-@Slf4j
-@Component
+@Slf4j // 로그 출력을 위한 롬복 어노테이션
+@Component // JWT 토큰을 생성하고 검증하는 컴포넌트
 public class TokenProvider {
 
-  private static final String AUTHORITIES_KEY = "auth";
-  private static final String BEARER_TYPE = "bearer";
-  private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000L * 60 * 30; // 30분
+  private static final String AUTHORITIES_KEY = "auth"; // JWT 클레임에 저장되는 권한 정보 키
+  private static final String BEARER_TYPE = "bearer"; // JWT의 권한 부여 방식
+  private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000L * 60 * 30; // 30분 // 액세스 토큰 만료 시간
   private final Key key; // JWT 서명에 사용되는 키
 
   // 주의점 : 여기서 @Value는 스프링이 제공하는 어노테이션으로, lombok의 @Value와는 다릅니다.
   // @param secretKey : application.properties에 정의된 jwt.secret 값을 주입받습니다.
   public TokenProvider(@Value("${jwt.secret}") String secretKey) {
 
-    byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-    this.key = Keys.hmacShaKeyFor(keyBytes);
+    byte[] keyBytes = Decoders.BASE64.decode(secretKey); // Base64로 인코딩된 비밀 키를 디코딩합니다.
+    this.key = Keys.hmacShaKeyFor(keyBytes); // HMAC SHA 알고리즘을 사용하여 키를 생성합니다.
   }
 
   // 토큰을 생성하는 메서드
   public TokenDTO generateTokenDTO(Authentication authentication) {
 
     String authorities = authentication.getAuthorities().stream()
-        .map(GrantedAuthority::getAuthority)
-        .collect(Collectors.joining(","));
+        .map(GrantedAuthority::getAuthority) // 권한 정보를 스트림으로 변환
+        .collect(Collectors.joining(",")); // 권한 정보를 쉼표로 구분하여 문자열로 변환
 
-    long now = (new Date()).getTime();
+    long now = (new Date()).getTime(); // 현재 시간을 밀리초 단위로 가져옵니다.
 
     Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME); // 액세스 토큰 만료 시간 설정
 
-    System.out.println(accessTokenExpiresIn);
+    System.out.println(accessTokenExpiresIn); // 디버깅용 로그
 
     String accessToken = Jwts.builder() // JWT 빌더 생성
         .setSubject(authentication.getName()) // JWT의 제목(Subject) 설정
@@ -71,9 +71,9 @@ public class TokenProvider {
       throw new RuntimeException("권한 정보가 없는 토큰입니다.");
     }
 
-    Collection<? extends GrantedAuthority> authorities =
-        Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-            .map(SimpleGrantedAuthority::new)
+    Collection<? extends GrantedAuthority> authorities = // 권한 정보 추출
+        Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(",")) // 권한 정보를 쉼표로 분리
+            .map(SimpleGrantedAuthority::new) // SimpleGrantedAuthority 객체로 변환
             .collect(Collectors.toList()); // JWT에서 권한 정보 추출
 
     UserDetails principal = new User(claims.getSubject(), "", authorities); // 사용자 정보 생성
