@@ -1,43 +1,36 @@
-import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { POST } from "../../apis/CRUD";
 
 // Q&A 등록 게시판
 const SalesQnAForm = () => {
   const nav = useNavigate();
 
   // input 태그들에 입력한 데이터를 저장하는 변수
-  const [question, setQuestion] = useState({
+  const [questionData, setQuestionData] = useState({
     title: "",
     userId: "",
     content: "",
   });
 
-  // 선택한 첨부파일을 저장할 변수
-  const [file, setFile] = useState(null);
-
   // 값 입력 시 반복 실행되는 함수
-  const changeQuestion = (e) => {
-    setQuestion({
-      ...question,
+  const changeQuestionData = (e) => {
+    setQuestionData({
+      ...questionData,
       [e.target.name]: e.target.value,
     });
   };
 
-  console.log(question);
+  console.log(questionData);
 
-  // 등록 버튼 클릭 시 질문 등록 실행
-  const regQuestion = () => {
-    const regForm = new FormData();
-    // 질문 등록 시 (DB에 insert) 필요한 데이터 객체
-    regForm.append("title", question.title);
-    regForm.append("userId", question.userId);
-    regForm.append("content", question.content);
-
-    // 첨부파일 데이터 적재
-    regForm.append("file", file);
-
-    axios.post('/api/')
+  // 등록 버튼 클릭 시 서버의 insert api 실행
+  const insertquestion = () => {
+    POST("/api/questions", questionData)
+      .then((res) => {
+        alert("질문이 등록 되었습니다.");
+        nav("/admin/sales-questions");
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -51,16 +44,14 @@ const SalesQnAForm = () => {
         <tbody>
           {/* 글 제목 */}
           <tr>
-            <td>
-              제목
-              <span>*</span>
-            </td>
+            <td>제목</td>
             <td>
               <input
                 type="text"
                 name="title"
+                value={questionData.title}
                 placeholder="제목을 입력해 주세요"
-                onChange={(e) => changeQuestion(e)}
+                onChange={(e) => changeQuestionData(e)}
               />
             </td>
           </tr>
@@ -75,8 +66,9 @@ const SalesQnAForm = () => {
               <input
                 type="text"
                 name="userId"
-                placeholder="이름을 입력해 주세요"
-                onChange={(e) => changeQuestion(e)}
+                value={questionData.userId}
+                placeholder={questionData.userId}
+                onChange={(e) => changeQuestionData(e)}
               />
             </td>
           </tr>
@@ -89,9 +81,13 @@ const SalesQnAForm = () => {
             </td>
             <td>
               <textarea
+                cols={50}
+                rows={5}
                 name="content"
-                id=""
-                onChange={(e) => changeQuestion(e)}
+                value={questionData.content}
+                onChange={(e) => {
+                  changeQuestionData(e);
+                }}
               ></textarea>
             </td>
           </tr>
@@ -101,7 +97,7 @@ const SalesQnAForm = () => {
       {/* 첨부파일 */}
       <div>
         <p>파일첨부</p>
-        <input type="file" onChange={(e) => changeQuestion(e)} />
+        <input type="file" onChange={(e) => changeQuestionData(e)} />
       </div>
 
       {/* 등록, 목록 버튼 */}
@@ -110,7 +106,7 @@ const SalesQnAForm = () => {
           목 록
         </button>
         {/* 등록누르면 서버로 갑니다 ! */}
-        <button type="button" onClick={(e) => regQuestion()}>
+        <button type="button" onClick={(e) => insertquestion()}>
           등 록
         </button>
       </div>

@@ -79,14 +79,14 @@ const LiveStockHumidity = () => {
   
 
   return (
-    <div>
+    <>
       <h2>현재 습도</h2>
       {humidity !== null ? (
         <Doughnut data={data} options={options} plugins={[centerTextPlugin]} />
       ) : (
         <p>습도 데이터를 불러오는 중...</p>
       )}
-    </div>
+    </>
   );
 };
 

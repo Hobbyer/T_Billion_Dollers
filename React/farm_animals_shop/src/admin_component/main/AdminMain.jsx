@@ -4,28 +4,27 @@ import { Link, Outlet } from 'react-router-dom'
 import AdminHeader from './AdminHeader'
 import AdminSideMenu from './AdminSideMenu'
 import '../Admin.css'
-import axios from 'axios'
+import { GET } from '../../apis/CRUD'
 
 const AdminMain = () => {
+  
+  const [userAuth,setUserAuth] = useState()
 
-  const [userAuth, setUserAuth] = useState()
-
-  useEffect(() => {
+  useEffect(()=>{
     // 세션 스토리지에 accessToken이 없으면 로그인 페이지로 이동
-    if(!sessionStorage.getItem('accessToken')){
-      window.location.href = '/auth/login'
+    if (!sessionStorage.getItem('accessToken')){
+      window.location.href = '/auth/login'      
     } else {
-      axios.get('/api/members/me', {headers: {Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`}})
-      .then(res => {
-        setUserAuth(res.data.authority)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+      GET('/api/members/me')
+        .then(res => {
+          setUserAuth(res.data.authority)
+        })
+        .catch(err => {
+          console.error(err)
+        })
     }
-  }, [])
-
-  // 관리자 메인 페이지
+  },[])
+  
   return (
     <>
     { userAuth !== 'ROLE_ADMIN' ?
@@ -34,14 +33,14 @@ const AdminMain = () => {
           <h1>관리자 권한이 없습니다.</h1>
         </div>
       </div>
-    :
+      :
       <div className='container'>
         <div>
-          <AdminHeader/>
+          <AdminSideMenu/>
         </div>
         <div>
           <div>
-            <AdminSideMenu/>
+            <AdminHeader/>
           </div>
           <div>
             <Outlet/>
@@ -49,7 +48,9 @@ const AdminMain = () => {
         </div>
       </div>
     }
+      
     </>
+   
   )
 }
 
