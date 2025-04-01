@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2';
 import ChartJS from 'chart.js/auto';
 import { CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import axios from 'axios';
+import { GET } from '../../apis/CRUD';
 
 const LiveStockTemperature = () => {
 
@@ -13,7 +13,7 @@ const LiveStockTemperature = () => {
   useEffect(()=>{
     const fetchTemperature = async () => {
       try {
-        const res = await axios.get('/api/admin/temp');
+        const res = await GET('/api/admin/temp');
         setTemp(res.data);
       } catch (error) {
         console.log(error)
