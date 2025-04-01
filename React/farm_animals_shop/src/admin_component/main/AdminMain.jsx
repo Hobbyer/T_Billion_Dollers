@@ -1,28 +1,56 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Link, Outlet } from 'react-router-dom'
 import AdminHeader from './AdminHeader'
 import AdminSideMenu from './AdminSideMenu'
 import '../Admin.css'
+import { GET } from '../../apis/CRUD'
 
 const AdminMain = () => {
-  // 관리자 메인 페이지
+  
+  const [userAuth,setUserAuth] = useState()
+
+  useEffect(()=>{
+    // 세션 스토리지에 accessToken이 없으면 로그인 페이지로 이동
+    if (!sessionStorage.getItem('accessToken')){
+      window.location.href = '/auth/login'      
+    } else {
+      GET('/api/members/me')
+        .then(res => {
+          setUserAuth(res.data.authority)
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    }
+  },[])
+  
   return (
-    
-    <div className='container'>
+    <>
+    { userAuth !== 'ROLE_ADMIN' ?
       <div>
-        <AdminHeader/>
+        <div>
+          <h1>관리자 권한이 없습니다.</h1>
+        </div>
       </div>
-      <div>
+      :
+      <div className='container'>
         <div>
           <AdminSideMenu/>
         </div>
         <div>
-          <Outlet/>
+          <div>
+            <AdminHeader/>
+          </div>
+          <div>
+            <Outlet/>
+          </div>
         </div>
       </div>
-    </div>
-    
+    }
+      
+    </>
+   
   )
 }
 

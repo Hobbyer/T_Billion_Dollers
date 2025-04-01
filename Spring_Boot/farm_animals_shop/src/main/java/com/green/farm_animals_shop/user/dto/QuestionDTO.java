@@ -1,20 +1,15 @@
 package com.green.farm_animals_shop.user.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@ToString
+@Data
 public class QuestionDTO {
-  private int questionsNum;
+  private int questionNum;
   private String title;
   private String content;
   private LocalDateTime regDate;
   private int readCnt;
   private String userId;
-  private int productNum;
 }

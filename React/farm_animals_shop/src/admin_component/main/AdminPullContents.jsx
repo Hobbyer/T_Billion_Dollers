@@ -10,32 +10,35 @@ const AdminPullContents = () => {
   return (
     <div className="main-content">
       <div>
-       <div>
-          {/* 온도그래프 */}
-          <LiveStockTemperature/>
-       </div>
-       <div>
-          {/* 습도그래프 */}
-          <LiveStockHumidity/>
-       </div>
-        {/* 오늘의 날씨 */}
         <div>
-          오늘의 날씨
+            {/* 온도그래프 */}
+            <LiveStockTemperature/>
+        </div>
+        <div>
+          <div>
+              {/* 습도그래프 */}
+              <LiveStockHumidity/>
+          </div>
+            <div>
+              {/* 오늘의 날씨 */}
+              오늘의 날씨
+            </div>
         </div>
       </div>
+
       <div>
-      <div>
-        {/* 회원 수 그래프 */}
-        <SalesMember/>
-      </div>
-      <div>
-        {/* 일/월 매출 그래프 */}
-        <SalesRevenue/>
-      </div>
-      <div>
+        <div>
+          {/* 회원 수 그래프 */}
+          <SalesMember/>
+        </div>
+        <div>
+          {/* 일/월 매출 그래프 */}
+          <SalesRevenue/>
+        </div>
+        <div>
           {/* 결제 정보 간략한 목록 */}
           <SalesPayment/>
-      </div>
+        </div>
       </div>
     </div>
   );
