@@ -8,8 +8,9 @@ import SalesQnAForm from './admin_component/sales_Management/SalesQnAForm'
 import AdminMain from './admin_component/main/AdminMain'
 import AdminPullContents from './admin_component/main/AdminPullContents'
 import Login from './admin_component/auth/Login'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import TestMain from './admin_component/test_components/TestMain'
+import SalesQnADetail from './admin_component/sales_Management/SalesQnADetail'
+
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
   // 원래 사용한 page가지고 와야함
@@ -30,7 +31,7 @@ function App() {
           {/* Q&A 등록하기 페이지 */}
           <Route path='sales-qnaform' element={<SalesQnAForm/>}/>
           {/* Q&A 상세페이지 */}
-          <Route path='sales-questions/:questionNum' element={<div></div>} />
+          <Route path='sales-questions/:questionNum' element={<SalesQnADetail />} />
         </Route>
         <Route path='/auth/login' element={<Login/>}/>
       </Routes>
