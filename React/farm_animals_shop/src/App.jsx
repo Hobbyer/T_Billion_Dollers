@@ -13,9 +13,10 @@ import SalesQnADetail from './admin_component/sales_Management/SalesQnADetail'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
+  // 원래 사용한 page가지고 와야함
   return (
     <>
-      <Routes>
+       <Routes>
         <Route path='/admin' element={<AdminMain/>}>
           {/* 화면 첫 페이지 컨텐츠를 보여줌 */}
           <Route path='' element={<AdminPullContents/>}/>
@@ -34,7 +35,6 @@ function App() {
         </Route>
         <Route path='/auth/login' element={<Login/>}/>
       </Routes>
-      
     </>
   )
 }
