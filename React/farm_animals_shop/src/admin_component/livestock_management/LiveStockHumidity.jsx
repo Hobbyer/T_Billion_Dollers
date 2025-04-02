@@ -1,45 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from 'chart.js';
+import { GET } from '../../apis/CRUD';
 
 // Chart.js 모듈을 등록
-ChartJS.register(ArcElement, Tooltip, Legend, Title);
-
-
-// 커스텀 플러그인 정의
-const centerTextPlugin = {
-  id: 'centerTextPlugin',
-  beforeDraw: (chart) => {
-    const { width, height, ctx } = chart;
-    ctx.restore();
-
-    const fontSize = (height / 120).toFixed(2);
-    ctx.font = `${fontSize}em sans-serif`;
-    ctx.textBaseline = 'middle';
-
-    const text = '총합: 100';
-    const textX = Math.round((width - ctx.measureText(text).width) / 2);
-    const textY = height / 2;
-
-    ctx.fillText(text, textX, textY);
-    ctx.save();
-  },
-};
-
+ChartJS.register(ArcElement, Tooltip, Legend, Title); // ✔ Chart.js 모듈 등록
+// ✔ Chart.js 모듈 사용법 : https://www.chartjs.org/docs/latest/getting-started/usage.html#basic-usage
 
 const LiveStockHumidity = () => {
   const [humidity, setHumidity] = useState(null);
 
   useEffect(() => {
-    // Spring Boot에서 습도 데이터 받아오기
-    fetch('/api/admin/get-humidity')
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Received humidity:', data.humidity);
-        if (data.humidity) {
-          setHumidity(data.humidity);
-        }
-      })
+    GET('/api/admin/humidity')
+      .then((res) => {
+        console.log('Received humidity list:', res.data);
+        const lastHumidity = res.data[0].humidity; // 가장 최근 습도 값
+          setHumidity(lastHumidity); // 습도 상태 업데이트
+        })
       .catch((error) => {
         console.error('Error fetching humidity:', error);
       });
@@ -51,40 +28,50 @@ const LiveStockHumidity = () => {
     datasets: [
       {
         label: '습도 상태',
-        data: [humidity, 100 - humidity], // 습도 값과 나머지 값
-        backgroundColor: ['#36A2EB', '#FF6384'], // 색상 설정
-        hoverBackgroundColor: ['#36A2EB', '#FF6384'], // 호버 색상
+        data: [humidity, 100 - humidity],  // ✔ 습도와 나머지 구성
+        backgroundColor: ['#36A2EB', '#FF6384'],
+        hoverBackgroundColor: ['#36A2EB', '#FF6384'],
       },
     ],
+  };
+
+  const centerTextPlugin = {
+    id: 'centerTextPlugin',
+    afterDraw: (chart) => {
+      const { width, height, ctx } = chart;
+      ctx.restore();
+
+      const value = chart.data.datasets[0].data[0]; // 습도
+      const text = `${value.toFixed(1)}%`;
+
+      ctx.font = `${(height / 10).toFixed(0)}px sans-serif`;
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#000'; // 중앙 텍스트 색상
+      const textX = (width - ctx.measureText(text).width) / 2;
+      const textY = height / 2;
+      ctx.fillText(text, textX, textY);
+
+      ctx.save();
+    },
   };
 
   const options = {
     responsive: true,
     plugins: {
-      tooltip: {
-        enabled: true, // 툴팁 활성화
-      },
-      legend: {
-        position: 'top', // 범례 위치 설정
-      },
+      tooltip: { enabled: true },
+      legend: { display: false }, // ✔ 범례 제거
     },
     elements: {
       arc: {
-        borderWidth: 5, // 링 두께 설정
+        borderWidth: 5,
       },
     },
   };
 
-
-  
-
   return (
     <>
-      <h2>현재 습도</h2>
-      {humidity !== null ? (
+      {humidity !== null && (
         <Doughnut data={data} options={options} plugins={[centerTextPlugin]} />
-      ) : (
-        <p>습도 데이터를 불러오는 중...</p>
       )}
     </>
   );

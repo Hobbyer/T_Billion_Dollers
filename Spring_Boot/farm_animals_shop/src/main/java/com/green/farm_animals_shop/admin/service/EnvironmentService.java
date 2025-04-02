@@ -20,6 +20,7 @@ public class EnvironmentService {
         .map(entity -> {
           EnvironDTO environDTO = new EnvironDTO();
           environDTO.setTimeLine(entity.getTimeLine());
+          environDTO.setTemp(entity.getTemp()); // temp 설정
           return environDTO;
         })
         .collect(Collectors.toList());
@@ -31,6 +32,7 @@ public class EnvironmentService {
         .map(entity -> {
           EnvironDTO environDTO = new EnvironDTO();
           environDTO.setTimeLine(entity.getTimeLine());
+          environDTO.setHumidity(entity.getHumidity());
           return environDTO;
         })
         .collect(Collectors.toList());

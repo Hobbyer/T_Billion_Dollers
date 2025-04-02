@@ -1,48 +1,55 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const AdminSideMenu = () => {
+  const [activeMenu, setActiveMenu] = useState(null);
+
+  const menuItems = [
+    { id: "home", to: "/admin", defaultImg: "/imgs/home.png", activeImg: "/imgs/home-icon-silhouette.png", label: "HOME" },
+    { id: "stock", to: "stock-detail", defaultImg: "/imgs/animal.png", activeImg: "/imgs/cow (1).png", label: "STOCK" },
+    { id: "sales", to: "sales-paymentInfo", defaultImg: "/imgs/group.png", activeImg: "/imgs/customer.png", label: "SALES" }
+  ];
+
   return (
     <div className="sidemenu">
-      <p>SIDE MENU</p>
+      <div
+        className="d-flex flex-column align-items-center text-white rounded-4"
+        style={{
+          width: "100px",
+          padding: "50px",
+          height: "100%",
+          backgroundColor: "#3D8D7A",
+        }}
+      >
+        {menuItems.map((item) => (
+          <div
+            key={item.id}
+            className="btn mb-3 p-3"
+            onClick={() => setActiveMenu(item.id)}
+          >
+            <Link to={item.to} style={{textDecoration:'none', color:'inherit'}}>
+              <img 
+                src={activeMenu === item.id ? item.activeImg : item.defaultImg} 
+                alt="" 
+                width={50} 
+                height={50}
+              />
+              <span>{item.label}</span>
+            </Link>
+          </div>
+        ))}
+      </div>
+
+      {/* 추가 하위 메뉴 언니 이거 navTab 으로  */}
       <ul>
         <li>
-          <p>
-            <Link to={"/admin"}>HOME</Link>
-          </p>
-          {/* 축산관련 핵심내용,판매관련 핵심내용 화면에 띄우기 */}
+          <Link to={"sales-memberInfo"}>회원 정보</Link>
         </li>
         <li>
-          <p>
-            <Link to={"stock-detail"}>STOCK</Link>
-          </p>
-          {/* 추가 하위 메뉴 : 온도관련 세부 페이지(실시간 온도,오늘날씨 기준 적정온도 알려주기), 모니터링 세부 페이지*/}
-          <ul>
-            <li>
-              <Link to={"stock-detail"}>축산 상세 페이지</Link>
-            </li>
-          </ul>
+          <Link to={"sales-paymentInfo"}>매출 정보</Link>
         </li>
         <li>
-          <p><Link to={'sales-paymentInfo'}>SALES</Link></p>
-          {/* 추가 하위 메뉴 : 등록된 상품등록 및 수정페이지, QnA 페이지 */}
-          <ul>
-            <li>
-              <Link to={"sales-memberInfo"}>
-                회원 정보
-              </Link>
-            </li>
-            <li>
-              <Link to={"sales-paymentInfo"}>
-                매출 정보
-              </Link>
-            </li>
-            <li>
-              <Link to={"sales-questions"}>
-                질의응답
-              </Link>
-            </li>
-          </ul>
+          <Link to={"sales-questions"}>질의응답</Link>
         </li>
       </ul>
     </div>
