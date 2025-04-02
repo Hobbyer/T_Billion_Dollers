@@ -43,6 +43,7 @@ const data = {
 
 const options = {
   responsive: true,
+  maintainAspectRatio: false, // 부모 div에 맞춰 자동 조정
   plugins: {
     legend: {
       position: 'top',

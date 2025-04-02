@@ -8,11 +8,14 @@ import SalesQnAForm from './admin_component/sales_Management/SalesQnAForm'
 import AdminMain from './admin_component/main/AdminMain'
 import AdminPullContents from './admin_component/main/AdminPullContents'
 import Login from './admin_component/auth/Login'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import TestMain from './admin_component/test_components/TestMain'
 
 function App() {
+  // 원래 사용한 page가지고 와야함
   return (
     <>
-      <Routes>
+       <Routes>
         <Route path='/admin' element={<AdminMain/>}>
           {/* 화면 첫 페이지 컨텐츠를 보여줌 */}
           <Route path='' element={<AdminPullContents/>}/>
@@ -31,7 +34,6 @@ function App() {
         </Route>
         <Route path='/auth/login' element={<Login/>}/>
       </Routes>
-      
     </>
   )
 }
