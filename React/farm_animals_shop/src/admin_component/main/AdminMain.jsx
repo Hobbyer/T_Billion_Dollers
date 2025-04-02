@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 
 import { Link, Outlet } from 'react-router-dom'
-import AdminHeader from './AdminHeader'
 import AdminSideMenu from './AdminSideMenu'
-import '../Admin.css'
 import { GET } from '../../apis/CRUD'
+import Header from './Header'
 
 const AdminMain = () => {
   
@@ -35,20 +34,21 @@ const AdminMain = () => {
       </div>
       :
       <div className='container'>
+      <Header/>
+      <div className="d-flex rounded-4 mb-5 p-3" style={{
+        borderWidth:'10px'
+        ,borderStyle:'solid'
+        ,borderColor:'#3F7D58'
+      }}>
         <div>
           <AdminSideMenu/>
         </div>
-        <div>
-          <div>
-            <AdminHeader/>
-          </div>
-          <div>
-            <Outlet/>
-          </div>
+        <div className="flex-grow-1 p-3">
+          <Outlet /> 
         </div>
       </div>
-    }
-      
+   </div>
+}
     </>
    
   )
