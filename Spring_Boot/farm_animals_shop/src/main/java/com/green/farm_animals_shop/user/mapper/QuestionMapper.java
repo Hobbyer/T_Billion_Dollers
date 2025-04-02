@@ -27,7 +27,7 @@ public interface QuestionMapper {
   public void updateReadCnt(int questionNum);
 
   //답글 목록 조회
-  
+
   //답글 등록
 
   //답글 삭제
