@@ -1,9 +1,13 @@
 import axios from 'axios'
 import React, { useState } from 'react'
-import { POST } from '../../apis/CRUD'
-
+import { Form, Button, Container, Stack, Col, Row } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
+ 
+ 
 const Login = () => {
-
+  const nav = useNavigate();
+  sessionStorage.clear();
+ 
   const [user,setUser] = useState({
     userId: '',
     password: ''
@@ -17,35 +21,41 @@ const Login = () => {
   }
 
   const submitLogin = () => {
-    POST('/api/auth/login', user)
+    axios.post('/api/auth/login', user)
       .then(res => {
         sessionStorage.setItem('accessToken', res.data.accessToken)
-        // sessionStorage.setItem('authority', res.data.authority)
+        nav('/')
       })
       .catch(err => {
         console.error(err)
       })
   }
-
+ 
   return (
     <>
-      <div>Login</div>
-      <div>
-        <input type="text" name='userId' onChange={(e)=>{
-          saveData(e)
-        }} />
-        <input type="password" name='password' onChange={(e)=>{
-          saveData(e)
-        }} />
-        <button type='button' onClick={(e)=>{
-          submitLogin()
-        }}>Login</button>
-        <button type='button' onClick={(e)=>{
-          sessionStorage.clear()
-        }}>로그아웃</button>
-      </div>
+      <Container>
+        <Form style={{width: '300px', margin: 'auto'}}>
+          <Form.Group className="mb-3" controlId="formGroupEmail">
+            <Form.Label>아이디</Form.Label>
+            <Form.Control type="text" name='userId' placeholder="User ID" onChange={(e)=>{
+              saveData(e)
+            }}/>
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formGroupPassword">
+            <Form.Label>비밀번호</Form.Label>
+            <Form.Control type="password" name='password' placeholder="Password" autoComplete='off' onChange={(e)=>{
+              saveData(e)
+            }} />
+          </Form.Group>
+          <Stack>
+            <Button variant="success" onClick={
+              submitLogin
+            }>로그인</Button>
+          </Stack>
+        </Form>
+      </Container>
     </>
   )
-}
-
-export default Login
+ }
+ 
+ export default Login

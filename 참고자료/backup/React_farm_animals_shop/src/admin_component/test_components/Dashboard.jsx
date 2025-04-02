@@ -1,11 +1,7 @@
 import React from "react";
 import LiveStockTemperature from "../livestock_management/LiveStockTemperature";
-import LiveStockHumidity from "../livestock_management/LiveStockHumidity";
-import WeatherCard from "../livestock_management/WeatherCard";
 
-
-const AdminPullContents = () => {
-  // 메인 핵심 풀 컨텐츠(축산 환경, 판매)
+const Dashboard = () => {
   return (
     <div className="container-fuild">
       <div className="row" style={{width:'100%',height:'100%'}}>
@@ -39,7 +35,6 @@ const AdminPullContents = () => {
                 className="p-4 text-dark text-center rounded"
                 style={{ backgroundColor: "#A3D1C6", height: "100%" }}
               >
-                <LiveStockHumidity />
               </div>
             </div>
             <div className="col-md-7">
@@ -49,7 +44,6 @@ const AdminPullContents = () => {
                 </h3>
               </div>
               <div className="p-4 bg-warning text-dark text-center rounded">
-                <WeatherCard />
               </div>
             </div>
           </div>
@@ -69,4 +63,4 @@ const AdminPullContents = () => {
   );
 };
 
-export default AdminPullContents;
+export default Dashboard;

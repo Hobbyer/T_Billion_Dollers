@@ -1,10 +1,12 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 import { Form, Button, Container, Stack, Col, Row } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
  
  
 const Login = () => {
-  sessionStorage.clear()
+  const nav = useNavigate();
+  sessionStorage.clear();
  
   const [user,setUser] = useState({
     userId: '',
@@ -22,6 +24,7 @@ const Login = () => {
     axios.post('/api/auth/login', user)
       .then(res => {
         sessionStorage.setItem('accessToken', res.data.accessToken)
+        nav('/')
       })
       .catch(err => {
         console.error(err)
@@ -40,7 +43,7 @@ const Login = () => {
           </Form.Group>
           <Form.Group className="mb-3" controlId="formGroupPassword">
             <Form.Label>비밀번호</Form.Label>
-            <Form.Control type="password" name='password' placeholder="Password" onChange={(e)=>{
+            <Form.Control type="password" name='password' placeholder="Password" autoComplete='off' onChange={(e)=>{
               saveData(e)
             }} />
           </Form.Group>

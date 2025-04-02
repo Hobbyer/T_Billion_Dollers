@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
 import SalesQuestions from './admin_component/sales_Management/SalesQuestions'
 import LiveStockInfo from './admin_component/livestock_management/LiveStockInfo'
@@ -11,12 +11,14 @@ import Login from './admin_component/auth/Login'
 import SalesQnADetail from './admin_component/sales_Management/SalesQnADetail'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
+import Signup from './admin_component/auth/Signup'
 
 function App() {
   // 원래 사용한 page가지고 와야함
   return (
     <>
-       <Routes>
+      <Routes>
+        <Route path='/' element={<Navigate to='/admin' replace />} />
         <Route path='/admin' element={<AdminMain/>}>
           {/* 화면 첫 페이지 컨텐츠를 보여줌 */}
           <Route path='' element={<AdminPullContents/>}/>
@@ -34,6 +36,7 @@ function App() {
           <Route path='sales-questions/:questionNum' element={<SalesQnADetail />} />
         </Route>
         <Route path='/auth/login' element={<Login/>}/>
+        <Route path='/auth/signup' element={<Signup/>}/>
       </Routes>
     </>
   )
