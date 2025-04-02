@@ -18,6 +18,15 @@
         </if>
     </select>
 
+    <!--페이징 처리-->
+    <select id="getQuestionListCount" resultType="int">
+        SELECT COUNT(*) <!-- COUNT(*)는 전체 게시글 수 -->
+        FROM QUESTIONS
+        <if test="searchValue != null and searchValue != ''">
+            AND ${searchKeyword} LIKE CONCAT('%', #{searchValue}, '%') <!-- 검색어가 있을 경우 -->
+        </if>
+    </select>
+
     <!--Q&A 게시글 등록 쿼리(첨부파일보류)-->
     <insert id="insertQuestion">
         INSERT INTO QUESTIONS (
