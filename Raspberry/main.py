@@ -19,6 +19,11 @@ shared_data = {
 TEMP_LED = 4 # 온도 LED 핀 번호
 sensor = DHT.DHT22(board.D10) # DHT22 센서 핀 번호
 
+# FAN 제어용 핀 추가
+FAN_PIN = 19
+GPIO.setup(FAN_PIN, GPIO.OUT)
+GPIO.output(FAN_PIN, GPIO.LOW)
+
 LED_GREEN = 20 # LED_GREEN 핀 번호
 LED_YELLOW = 21 # LED_YELLOW 핀 번호
 PIR_SENSOR = 17 # PIR_SENSOR 핀 번호
@@ -76,6 +81,33 @@ def dht22_loop():
         except RuntimeError as e: # 센서 읽기 오류가 발생한 경우
             print(f"[DHT22] Sensor read error: {e.args[0]}") # 오류 메시지를 출력합니다.
             time.sleep(2) # 2초 대기합니다.
+
+# ------------------------------
+# FAN 제어 루프 (온도 기준)
+# ------------------------------
+FAN_PIN = 19  # 팬 제어용 핀 번호
+GPIO.setup(FAN_PIN, GPIO.OUT)
+GPIO.output(FAN_PIN, GPIO.LOW)
+
+def fan_loop():
+    print("[Fan] Fan control thread started.")
+    fan_on = False
+
+    while True:
+        temp = shared_data.get('temperature')
+
+        if temp is not None:
+            if temp > 25.1 and not fan_on:
+                print(f"[Fan] Temp {temp:.1f}°C > 25.1 → Fan ON")
+                GPIO.output(FAN_PIN, GPIO.HIGH)
+                fan_on = True
+
+            elif temp <= 22.0 and fan_on:
+                print(f"[Fan] Temp {temp:.1f}°C ≤ 22.0 → Fan OFF")
+                GPIO.output(FAN_PIN, GPIO.LOW)
+                fan_on = False
+
+        time.sleep(2)
 
 # ------------------------------
 # PIR 모션 루프
@@ -143,10 +175,11 @@ if __name__ == "__main__": # 메인 스레드에서 실행되는 경우
 
     try:
         threads = [
-            threading.Thread(target=dht22_loop, daemon=True), # DHT22 센서 스레드
-            threading.Thread(target=motion_loop, daemon=True), # PIR 모션 스레드
-            threading.Thread(target=db_saving_loop, daemon=True) # DB 저장 스레드
-        ]
+        threading.Thread(target=dht22_loop, daemon=True),
+        threading.Thread(target=motion_loop, daemon=True),
+        threading.Thread(target=db_saving_loop, daemon=True),
+        threading.Thread(target=fan_loop, daemon=True),  # 팬 제어 스레드 추가
+    ]
 
         for t in threads: # 각 스레드를 시작합니다.
             t.start() 
