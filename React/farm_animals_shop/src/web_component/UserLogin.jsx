@@ -4,7 +4,7 @@ import { Form, Button, Container, Stack, Col, Row, Image } from 'react-bootstrap
 import { useNavigate } from 'react-router-dom'
  
  
-const Login = () => {
+const UserLogin = () => {
   const nav = useNavigate();
   sessionStorage.clear();
  
@@ -21,10 +21,10 @@ const Login = () => {
   }
 
   const submitLogin = () => {
-    axios.post('/api/auth/login', user)
+    axios.post('/api/user/login', user)
       .then(res => {
         sessionStorage.setItem('accessToken', res.data.accessToken)
-        nav('/')
+        nav('/farmdas')
       })
       .catch(err => {
         console.error(err)
@@ -36,7 +36,7 @@ const Login = () => {
       <Container className='d-flex justify-content-center align-items-center' style={{ minHeight: '100vh' }}>
         <div>
           <div className='text-center mb-5'>
-          <Image src='/public/imgs/setting_icon.jpg' width="120px" className='mb-3' />
+          <Image src='/public/imgs/animal.png' width="100px" className='mb-3' />
           <h1>Farmdas</h1>
           </div>
           <Form style={{ width: '300px', marginTop: '20px' }}>
@@ -64,4 +64,4 @@ const Login = () => {
   )
  }
  
- export default Login
+ export default UserLogin
