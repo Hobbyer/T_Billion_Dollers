@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useState } from 'react'
-import { Form, Button, Container, Stack, Col, Row } from 'react-bootstrap'
+import { Form, Button, Container, Stack, Col, Row, Image } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
  
  
@@ -33,26 +33,32 @@ const Login = () => {
  
   return (
     <>
-      <Container>
-        <Form style={{width: '300px', margin: 'auto'}}>
-          <Form.Group className="mb-3" controlId="formGroupEmail">
-            <Form.Label>아이디</Form.Label>
-            <Form.Control type="text" name='userId' placeholder="User ID" onChange={(e)=>{
-              saveData(e)
-            }}/>
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formGroupPassword">
-            <Form.Label>비밀번호</Form.Label>
-            <Form.Control type="password" name='password' placeholder="Password" autoComplete='off' onChange={(e)=>{
-              saveData(e)
-            }} />
-          </Form.Group>
-          <Stack>
-            <Button variant="success" onClick={
-              submitLogin
-            }>로그인</Button>
-          </Stack>
-        </Form>
+      <Container className='d-flex justify-content-center align-items-center' style={{ minHeight: '100vh' }}>
+        <div>
+          <div className='text-center mb-5'>
+          <Image src='/public/imgs/setting_icon.jpg' width="120px" className='mb-3' />
+          <h1>Farmdas</h1>
+          </div>
+          <Form style={{ width: '300px', marginTop: '20px' }}>
+            <Form.Group className="mb-3" controlId="formGroupEmail">
+              <Form.Label>아이디</Form.Label>
+              <Form.Control type="text" name='userId' placeholder="User ID" onChange={(e) => {
+                saveData(e)
+              }} />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formGroupPassword">
+              <Form.Label>비밀번호</Form.Label>
+              <Form.Control type="password" name='password' placeholder="Password" autoComplete='off' onChange={(e) => {
+                saveData(e)
+              }} />
+            </Form.Group>
+            <Stack>
+              <Button variant="success" onClick={
+                submitLogin
+              }>로그인</Button>
+            </Stack>
+          </Form>
+        </div>
       </Container>
     </>
   )
