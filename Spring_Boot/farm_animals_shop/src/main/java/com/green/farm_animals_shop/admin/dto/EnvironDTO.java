@@ -11,5 +11,6 @@ import java.time.LocalDateTime;
 @ToString
 public class EnvironDTO {
   private LocalDateTime timeLine;
-  private double temp;
+  private float temp;
+  private float humidity;
 }

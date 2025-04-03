@@ -3,6 +3,7 @@ import { Line } from 'react-chartjs-2';
 import ChartJS from 'chart.js/auto';
 import { CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { GET } from '../../apis/CRUD';
+import dayjs from 'dayjs';
 
 const LiveStockTemperature = () => {
 
@@ -28,7 +29,7 @@ const LiveStockTemperature = () => {
 
 
 const data = {
-  labels: temp.reverse().map(t => t.timeLine), // 시간
+  labels: temp.reverse().map(t => dayjs(t.timeLine).format('HH시 mm분')), // 시간
   datasets: [
     {
       label: '온도', // 그래프 라벨
@@ -42,6 +43,7 @@ const data = {
 
 const options = {
   responsive: true,
+  maintainAspectRatio: false, // 부모 div에 맞춰 자동 조정
   plugins: {
     legend: {
       position: 'top',
