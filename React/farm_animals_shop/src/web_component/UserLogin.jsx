@@ -21,7 +21,7 @@ const UserLogin = () => {
   }
 
   const submitLogin = () => {
-    axios.post('/api/user/login', user)
+    axios.post('/api/auth/login', user)
       .then(res => {
         sessionStorage.setItem('accessToken', res.data.accessToken)
         nav('/farmdas')
@@ -36,8 +36,8 @@ const UserLogin = () => {
       <Container className='d-flex justify-content-center align-items-center' style={{ minHeight: '100vh' }}>
         <div>
           <div className='text-center mb-5'>
-          <Image src='/public/imgs/animal.png' width="100px" className='mb-3' />
-          <h1>Farmdas</h1>
+            <Image src='/public/imgs/animal.png' width="100px" className='mb-3' />
+            <h1>Farmdas</h1>
           </div>
           <Form style={{ width: '300px', marginTop: '20px' }}>
             <Form.Group className="mb-3" controlId="formGroupEmail">
