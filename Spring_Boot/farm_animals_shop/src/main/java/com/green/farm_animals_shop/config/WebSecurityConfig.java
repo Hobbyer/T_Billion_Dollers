@@ -60,6 +60,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
 
         .authorizeHttpRequests(authorize -> authorize // 요청 권한 설정
             .requestMatchers("/auth/**").permitAll() // 인증 관련 API는 모두 허용합니다.
+            .requestMatchers("/api/auth/**").permitAll() // 인증 관련 API는 모두 허용합니다.
             .anyRequest().authenticated()); // 나머지 요청은 인증을 요구합니다.
 
     // JwtSecurityConfig 대신 JwtFilter를 사용하여 JWT 인증 필터를 추가합니다. (JwtSecurityConfig는 더 이상 사용되지 않음)
