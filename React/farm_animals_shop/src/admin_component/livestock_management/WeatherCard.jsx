@@ -1,48 +1,38 @@
 // src/components/TemperatureCard.js
 import React, { useEffect, useState } from 'react';
 import { GET } from '../../apis/CRUD';
-import axios from 'axios';
+import { position } from '../../constant/mapData';
 
 const WeatherCard = () => {
+  const [weatherData, setWeatherData] = useState(null);
 
-const [weatherData,setWeatherData] = useState([]);
+  useEffect(() => {
+    GET(`/weather?lat=${position.lat}&lon=${position.lon}&appid=79bad4162ec9092093d4369bf45b9031&units=metric&lang=kr`)
+      .then(res => {
+        console.log(res.data);
+        setWeatherData(res.data);
+      })
+      .catch(e => console.error(e));
+  }, []);
 
-// useEffect(()=>{
-// 	// GET('/api/admin/weather')
-// 	.then(res=>console.log(res.data)
-// 	)
-// 	.catch(e=>console.error(e))
-// },[])
-
-return (
-	<div className="card p-3 text-center">
-			<div>
-      <h2>기상 데이터</h2>
-      {weatherData.length > 0 ? (
-        <table border="1">
-          <thead>
-            <tr>
-              <th>날짜</th>
-              <th>시간</th>
-              <th>기온</th>
-            </tr>
-          </thead>
-          <tbody>
-            {weatherData.map((item, index) => (
-              <tr key={index}>
-                <td>{item.fcstDate}</td>
-                <td>{item.fcstTime}</td>
-                <td>{item.fcstValue}°C</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+  return (
+    <div className="card p-3 text-center">
+      {weatherData && weatherData.main ? (
+        <>
+          <h2 style={{fontWeight:'bold'}}>{weatherData.name}</h2>
+          <img
+            src={`https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
+            alt="weather icon"
+            className="mx-auto"
+          />
+          <p>{weatherData.weather[0].description}</p>
+          <p>{weatherData.main.temp.toFixed(1)}°C</p>
+        </>
       ) : (
-        <p>Loading...</p>
+        <p>날씨 정보를 불러오는 중...</p>
       )}
     </div>
-	</div>
-);
+  );
 };
 
 export default WeatherCard;
