@@ -21,7 +21,7 @@ const LiveStockInfo = () => {
             <div className="col-md-full">
               <div
                 className="p-4 text-dark text-center rounded"
-                style={{ backgroundColor: "#B3D8A8" }}
+                style={{ backgroundColor: "#B3D8A8"}}
               >
                 <LiveStockTemperature />
               </div>
