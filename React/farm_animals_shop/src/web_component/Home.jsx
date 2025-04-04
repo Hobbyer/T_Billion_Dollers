@@ -35,7 +35,7 @@ const Home = () => {
       </style>
 
       <Container className="text-center mt-3 mx-auto">
-        <div style={{ padding: "0 100px" }}>
+        <div style={{ padding: "0 100px", minWidth: "800px" }}>
           <article className="text-end mb-4" style={{ fontSize: "13px" }}>
             <Nav className="justify-content-end">
               <Nav.Item>
@@ -44,7 +44,7 @@ const Home = () => {
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link href="/" className="px-2">
+                <Nav.Link href="/farmdas/signup" className="px-2">
                   회원가입
                 </Nav.Link>
               </Nav.Item>
@@ -177,7 +177,9 @@ const Home = () => {
                   top: "8px",
                   right: "16px",
                   width: "20px",
+                  cursor: "pointer",
                 }}
+                onClick={()=> {}}
               />
             </div>
           </div>
