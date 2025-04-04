@@ -45,4 +45,17 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5' // JWT 라이브러리 추가
 	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5' // JWT 라이브러리 추가
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5' // JWT 라이브러리 추가
+<<<<<<< HEAD
+
+	// 기상청 API를 사용하기 위한 webClient
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+//	// JSON 변환을 위한 Jackson 라이브러리
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+//	implementation 'org.apache.httpcomponents:httpclient'
+
+	// AWS S3
+	implementation 'net.nurigo:sdk:4.2.7'
+=======
+>>>>>>> ab780d3fcf7b9a5b745e94ec8b2d3e8143c74678
 }

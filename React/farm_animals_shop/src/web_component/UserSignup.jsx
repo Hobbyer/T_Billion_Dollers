@@ -13,6 +13,7 @@ const UserSignup = () => {
     email: '',
     emailSecond: '@test.com',
     phoneNumber: '',
+    phoneCheck: '',
     address: '',
     isAgreed: false,
   });
@@ -47,12 +48,33 @@ const UserSignup = () => {
     }
   }
 
+  const sendVerificationCode = () => {
+    axios.post('/api/auth/send', { phoneNumber: formData.phoneNumber })
+    .then(res => {
+      alert('인증번호가 발송되었습니다')
+    })
+    .catch(err => {
+      alert('인증번호 발송 실패!')
+      console.error(err)
+    })
+  }
+
+  const verifyCode = () => {
+    axios.post('/api/auth/verify', { phoneNumber: formData.phoneNumber, code: formData.phoneCheck })
+    .then(res => {
+      alert('인증 성공!')
+    })
+    .catch(err => {
+      alert('인증 실패')
+    })
+  }
+
   return (
     <>
       <Container className='mt-5 mb-5 px-5 d-flex justify-content-center align-items-center' style={{ minHeight: '100vh' }}>
         <div style={{ width: '100%', maxWidth: '600px' }}>
-          <div className='text-center mb-5' onClick={() => { nav('/farmdas') }} style={{ cursor: 'pointer' }}>
-            <Image src='/public/imgs/animal.png' width="100px" className='mb-3' />
+          <div className='text-center mb-5'>
+            <Image src='/public/imgs/animal.png' width="100px" className='mb-3' onClick={() => { nav('/farmdas') }} style={{ cursor: 'pointer' }} />
             <h1>Farmdas</h1>
           </div>
           <Form className='w-100'>
@@ -137,7 +159,7 @@ const UserSignup = () => {
                   type="text"
                   placeholder="010-1234-5678"
                   name="phoneNumber"
-                  value={formData.phone}
+                  value={formData.phoneNumber}
                   onChange={handleChange}
                 />
               </Form.Group>
@@ -153,7 +175,10 @@ const UserSignup = () => {
               </Form.Group>
               
               <Form.Group as={Col} controlId="formGridPhoneCheckButton">
-                <Button variant="primary" type="submit">
+                <Button variant='success' type="button" onClick={verifyCode}>
+                  확인
+                </Button>
+                <Button variant="success" type="button" onClick={sendVerificationCode}>
                   인증번호 발송
                 </Button>
               </Form.Group>
@@ -189,7 +214,7 @@ const UserSignup = () => {
             </Form.Group>
 
             <div className="d-flex justify-content-center">
-              <Button variant="primary" type="button" onClick={signupSubmit}>
+              <Button variant="success" type="button" onClick={signupSubmit}>
                 회원가입
               </Button>
             </div>

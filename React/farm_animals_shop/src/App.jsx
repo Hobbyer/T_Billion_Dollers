@@ -15,6 +15,7 @@ import Signup from './admin_component/auth/Signup'
 import Home from './web_component/Home'
 import UserLogin from './web_component/UserLogin'
 import UserSignup from './web_component/UserSignup'
+import QnA from './web_component/QnA'
 
 function App() {
   // 원래 사용한 page가지고 와야함
@@ -48,7 +49,8 @@ function App() {
         <Route path='/farmdas/login' element={<UserLogin />} />
         {/* 일반 회원가입 */}
         <Route path='/farmdas/signup' element={<UserSignup />} />
-        {/* 일반 회원정보 */}
+        {/* 고객센터 */}
+        <Route path='/farmdas/qna' element={<QnA />} />
       </Routes>
     </>
   )
