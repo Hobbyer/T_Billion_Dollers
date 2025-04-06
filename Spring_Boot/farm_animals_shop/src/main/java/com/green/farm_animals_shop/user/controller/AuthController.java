@@ -32,6 +32,14 @@ public class AuthController {
     return ResponseEntity.ok(authService.login(requestDTO)); // 로그인 요청 처리
   }
 
+  // 리프레시 토큰 요청 처리
+  @PostMapping("/refresh")
+  public ResponseEntity<TokenDTO> refreshToken(@RequestBody Map<String, String> request) {
+    String refreshToken = request.get("refreshToken");
+    TokenDTO tokenDTO = authService.reissueToken(refreshToken);
+    return ResponseEntity.ok(tokenDTO);
+  }
+
   @PostMapping("/send")
   public ResponseEntity<?> sendSms(@RequestBody SmsRequestDTO requestDTO) throws Exception {
     smsService.sendSms(requestDTO.getPhoneNumber());

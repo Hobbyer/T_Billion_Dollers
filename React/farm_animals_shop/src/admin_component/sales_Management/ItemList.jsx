@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Button, Container, Figure, FloatingLabel, Form, InputGroup, Modal, Nav, Navbar, Pagination, Table } from 'react-bootstrap'
 import { DELETE, GET, POST } from '../../apis/CRUD';
 import axios from 'axios';
+import dayjs from 'dayjs';
 
 const ItemList = () => {
 
@@ -462,7 +463,7 @@ const ItemList = () => {
                                 <td>{item.itemName}</td>
                                 <td>{item.price}</td>
                                 <td>{item.stock}</td>
-                                <td>{item.regDate}</td>
+                                <td>{dayjs(item.createdAt).format("YYYY-MM-DD")}</td>
                                 <td>{item.seller}</td>
                               </tr>
                             )
