@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,6 +47,11 @@ public class WebSecurityConfig implements WebMvcConfigurer {
   }
 
   @Bean
+  public WebSecurityCustomizer webSecurityCustomizer() {
+    return (web) -> web.ignoring().requestMatchers("/upload/**"); // 특정 경로에 대한 보안을 비활성화합니다.
+  }
+
+  @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
         .httpBasic(httpBasic -> httpBasic.disable()) // 기본 인증을 비활성화합니다.
@@ -61,6 +67,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
         .authorizeHttpRequests(authorize -> authorize // 요청 권한 설정
             .requestMatchers("/auth/**").permitAll() // 인증 관련 API는 모두 허용합니다.
             .requestMatchers("/api/auth/**").permitAll() // 인증 관련 API는 모두 허용합니다.
+            .requestMatchers("/farmdas/**").permitAll() // farmdas 관련 API는 모두 허용합니다.
             .anyRequest().authenticated()); // 나머지 요청은 인증을 요구합니다.
 
     // JwtSecurityConfig 대신 JwtFilter를 사용하여 JWT 인증 필터를 추가합니다. (JwtSecurityConfig는 더 이상 사용되지 않음)

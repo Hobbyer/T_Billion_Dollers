@@ -39,7 +39,10 @@ const Login = () => {
           <Image src='/public/imgs/setting_icon.jpg' width="120px" className='mb-3' />
           <h1>Farmdas</h1>
           </div>
-          <Form style={{ width: '300px', marginTop: '20px' }}>
+          <Form style={{ width: '300px', marginTop: '20px' }} onSubmit={(e) => {
+              e.preventDefault(); // 새로고침 방지
+              submitLogin();      // 로그인 함수 실행
+            }}>
             <Form.Group className="mb-3" controlId="formGroupEmail">
               <Form.Label>아이디</Form.Label>
               <Form.Control type="text" name='userId' placeholder="User ID" onChange={(e) => {
@@ -53,9 +56,9 @@ const Login = () => {
               }} />
             </Form.Group>
             <Stack>
-              <Button variant="success" onClick={
-                submitLogin
-              }>로그인</Button>
+              <Button type='submit' variant="success" >
+                로그인
+              </Button>
             </Stack>
           </Form>
         </div>

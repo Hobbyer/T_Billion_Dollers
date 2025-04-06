@@ -7,7 +7,7 @@ const AdminSideMenu = () => {
   const menuItems = [
     { id: "home", to: "/admin", defaultImg: "/imgs/home.png", activeImg: "/imgs/home-icon-silhouette.png", label: "HOME" },
     { id: "stock", to: "stock-detail", defaultImg: "/imgs/animal.png", activeImg: "/imgs/cow (1).png", label: "STOCK" },
-    { id: "sales", to: "sales-paymentInfo", defaultImg: "/imgs/group.png", activeImg: "/imgs/customer.png", label: "SALES" }
+    { id: "sales", to: "sales-manage", defaultImg: "/imgs/group.png", activeImg: "/imgs/customer.png", label: "SALES" }
   ];
 
   return (

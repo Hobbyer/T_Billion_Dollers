@@ -28,7 +28,16 @@ public class JwtFilter extends OncePerRequestFilter {
   }
 
   @Override
+  // 모든 요청에 대해 작동
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+    String requestURI = request.getRequestURI();
+
+    // 정적 리소스 (/upload/)는 필터에서 제외
+    if (requestURI.startsWith("/upload/")) {
+      filterChain.doFilter(request, response);
+      return;
+    }
 
     String jwt = resolveToken(request); // 요청에서 JWT를 추출합니다.
 

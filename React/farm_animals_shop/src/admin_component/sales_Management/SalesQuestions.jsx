@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GET } from "../../apis/CRUD";
+import { Container } from "react-bootstrap";
 
 // ★ 질의 응답 페이지 ★
 
@@ -39,7 +40,7 @@ const SalesQuestions = () => {
   };
 
   return (
-    <div>
+    <Container className='mt-3' style={{ maxHeight: '400px', overflowY: 'auto' }}>
       <h2>Q&A게시판</h2>
 
       {/* 검색input단 */}
@@ -116,7 +117,7 @@ const SalesQuestions = () => {
           </button>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 
