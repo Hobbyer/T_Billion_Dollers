@@ -55,4 +55,5 @@ dependencies {
 
 	// AWS S3
 	implementation 'net.nurigo:sdk:4.2.7'
+
 }
