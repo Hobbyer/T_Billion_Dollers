@@ -13,7 +13,7 @@ import net.nurigo.sdk.message.model.Message;
 
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentHashMap; //ConcurreuntHashMap은 멀티스레드 환경에서 안전하게 사용할 수 있는 HashMap입니다.
 
 @Service
 public class SmsService {

@@ -33,17 +33,17 @@ const AdminMain = () => {
         </div>
       </div>
       :
-      <div className='container'>
-      <Header/>
-      <div className="d-flex rounded-4 mb-5 p-3" style={{
-        borderWidth:'10px'
-        ,borderStyle:'solid'
-        ,borderColor:'#3F7D58'
-      }}>
+      <div className='container' style={{minWidth:'1000px'}}>
+        <Header/>
+        <div className="d-flex rounded-4 mb-5 p-3" style={{
+          borderWidth:'10px'
+          ,borderStyle:'solid'
+          ,borderColor:'#3F7D58'
+        }}>
         <div>
           <AdminSideMenu/>
         </div>
-        <div className="flex-grow-1 p-3">
+        <div className="flex-grow-1 px-3">
           <Outlet /> 
         </div>
       </div>
