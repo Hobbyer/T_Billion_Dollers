@@ -15,8 +15,14 @@ import UserLogin from './web_component/UserLogin'
 import UserSignup from './web_component/UserSignup'
 import QnA from './web_component/QnA'
 import SalesManage from './admin_component/sales_Management/SalesManage'
+import { useEffect } from 'react'
+import { startTokenRefreshScheduler } from './apis/TokenService'
 
 function App() {
+  // 토큰 만료 시간 체크 및 갱신 로직을 여기에 추가할 수 있습니다.
+  useEffect(() => {
+    startTokenRefreshScheduler();
+  }, [])
   // 원래 사용한 page가지고 와야함
   return (
     <>

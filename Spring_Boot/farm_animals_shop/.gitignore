@@ -1,6 +1,7 @@
 # ==============================
 # ✅ Secret / Environment 설정
 # ==============================
+*.env
 .env
 .env.*
 secret.properties

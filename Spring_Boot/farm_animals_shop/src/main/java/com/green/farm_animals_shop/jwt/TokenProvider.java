@@ -27,6 +27,8 @@ public class TokenProvider {
   private static final String AUTHORITIES_KEY = "auth"; // JWT 클레임에 저장되는 권한 정보 키
   private static final String BEARER_TYPE = "bearer"; // JWT의 권한 부여 방식
   private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000L * 60 * 30; // 30분 // 액세스 토큰 만료 시간
+  private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 60 * 24 * 7; // 7일 // 리프레시 토큰 만료 시간
+
   private final Key key; // JWT 서명에 사용되는 키
 
   // 주의점 : 여기서 @Value는 스프링이 제공하는 어노테이션으로, lombok의 @Value와는 다릅니다.
@@ -37,7 +39,7 @@ public class TokenProvider {
     this.key = Keys.hmacShaKeyFor(keyBytes); // HMAC SHA 알고리즘을 사용하여 키를 생성합니다.
   }
 
-  // 토큰을 생성하는 메서드
+  // 토큰을 생성하는 메서드 (액세스 토큰과 리프레시 토큰을 함께 발급하는 메서드)
   public TokenDTO generateTokenDTO(Authentication authentication) {
 
     String authorities = authentication.getAuthorities().stream()
@@ -46,10 +48,15 @@ public class TokenProvider {
 
     long now = (new Date()).getTime(); // 현재 시간을 밀리초 단위로 가져옵니다.
 
-    Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME); // 액세스 토큰 만료 시간 설정
+    // 액세스 토큰 만료 시간을 설정합니다.
+    Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME); // 현재시간 + 30분
+    // 리프레시 토큰 만료 시간을 설정합니다.
+    Date refreshTokenExpiresIn = new Date(now + REFRESH_TOKEN_EXPIRE_TIME); // 현재시간 + 7일
 
     System.out.println(accessTokenExpiresIn); // 디버깅용 로그
+    System.out.println(refreshTokenExpiresIn); // 디버깅용 로그
 
+    // 액세스 토큰을 생성합니다.
     String accessToken = Jwts.builder() // JWT 빌더 생성
         .setSubject(authentication.getName()) // JWT의 제목(Subject) 설정
         .claim(AUTHORITIES_KEY, authorities) // JWT의 클레임 설정
@@ -57,15 +64,24 @@ public class TokenProvider {
         .signWith(key, SignatureAlgorithm.HS512) // JWT 서명 알고리즘 설정
         .compact(); // JWT 생성
 
+    // 리프레시 토큰을 생성합니다.
+    String refreshToken = Jwts.builder()
+        .setSubject(authentication.getName()) // JWT의 제목(Subject) 설정
+        .setExpiration(refreshTokenExpiresIn) // JWT의 만료 시간 설정
+        .signWith(key, SignatureAlgorithm.HS512) // JWT 서명 알고리즘 설정
+        .compact(); // JWT 생성
+
     return TokenDTO.builder() // TokenDTO 객체 생성
         .grantType(BEARER_TYPE) // JWT의 권한 부여 방식 설정
         .accessToken(accessToken) // 생성된 액세스 토큰 설정
         .accessTokenExpiresIn(accessTokenExpiresIn.getTime()) // 액세스 토큰 만료 시간 설정
+        .refreshToken(refreshToken) // 생성된 리프레시 토큰 설정
+        .refreshTokenExpiresIn(refreshTokenExpiresIn.getTime()) // 리프레시 토큰 만료 시간 설정
         .build();
   }
 
-  public Authentication getAuthentication(String accessToken) {
-    Claims claims = parseClaims(accessToken); // JWT에서 클레임을 파싱
+  public Authentication getAuthentication(String token) {
+    Claims claims = parseClaims(token); // JWT에서 클레임을 파싱
 
     if (claims.get(AUTHORITIES_KEY) == null) {
       throw new RuntimeException("권한 정보가 없는 토큰입니다.");

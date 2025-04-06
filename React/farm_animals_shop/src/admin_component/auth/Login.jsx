@@ -24,6 +24,7 @@ const Login = () => {
     axios.post('/api/auth/login', user)
       .then(res => {
         sessionStorage.setItem('accessToken', res.data.accessToken)
+        sessionStorage.setItem('refreshToken', res.data.refreshToken)
         nav('/')
       })
       .catch(err => {

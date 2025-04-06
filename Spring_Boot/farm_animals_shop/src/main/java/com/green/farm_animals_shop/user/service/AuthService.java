@@ -33,11 +33,22 @@ public class AuthService {
     return MemberResponseDTO.of(memberRepository.save(member)); // 회원 정보 저장
   }
 
+  // 기존 로그인 메서드 (액세스 토큰 사용)
   public TokenDTO login(MemberRequestDTO requestDTO) { // 로그인 요청 처리
     UsernamePasswordAuthenticationToken authenticationToken = requestDTO.toAuthentication(); // 사용자 인증 정보 생성
-
     Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken); // 인증 처리
 
     return tokenProvider.generateTokenDTO(authentication); // JWT 토큰 생성
+  }
+
+  // 리프레시 토큰을 이용해 새 토큰을 발급하는 메서드
+  public TokenDTO reissueToken(String refreshToken) {
+    if (!tokenProvider.validateToken(refreshToken)) { // 리프레시 토큰 유효성 검사
+      throw new RuntimeException("유효하지 않은 리프레시 토큰입니다."); // 예외 처리
+    }
+    // 리프레시 토큰의 클레임에서 사용자 정보를 얻습니다.
+    Authentication authentication = tokenProvider.getAuthentication(refreshToken);
+
+    return tokenProvider.generateTokenDTO(authentication); // 새로운 액세스 토큰과 리프레시 토큰 생성
   }
 }
