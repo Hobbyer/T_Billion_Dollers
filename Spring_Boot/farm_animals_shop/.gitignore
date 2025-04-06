@@ -1,3 +1,16 @@
+# ==============================
+# ✅ Secret / Environment 설정
+# ==============================
+.env
+.env.*
+secret.properties
+*.secret
+*.key
+*.pem
+*.crt
+*.p12
+
+### Java ###
 HELP.md
 .gradle
 build/
