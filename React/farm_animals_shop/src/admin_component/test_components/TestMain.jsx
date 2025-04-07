@@ -2,7 +2,7 @@ import React from 'react'
 import Sidebar from './Sidebar';
 import Dashboard from './Dashboard';
 import Header from '../main/Header';
-import DashboardCard from './DashboardCard';
+// import DashboardCard from './DashboardCard';
 
 const TestMain = () => {
   return (

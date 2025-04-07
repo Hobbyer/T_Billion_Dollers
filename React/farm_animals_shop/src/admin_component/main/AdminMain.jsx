@@ -27,11 +27,7 @@ const AdminMain = () => {
   return (
     <>
     { userAuth !== 'ROLE_ADMIN' ?
-      <div>
-        <div>
-          <h1>관리자 권한이 없습니다.</h1>
-        </div>
-      </div>
+      null
       :
       <div className='container' style={{minWidth:'1000px'}}>
         <Header/>
