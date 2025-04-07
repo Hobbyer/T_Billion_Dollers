@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { Button, Container, Figure, FloatingLabel, Form, InputGroup, Modal, Nav, Navbar, Pagination, Table } from 'react-bootstrap'
+import { Button, Container, Figure, FloatingLabel, Form, InputGroup, Modal, Nav, Navbar, Offcanvas, Pagination, Table } from 'react-bootstrap'
 import { DELETE, GET, POST } from '../../apis/CRUD';
 import axios from 'axios';
 import dayjs from 'dayjs';
@@ -147,6 +147,7 @@ const ItemList = () => {
 
   // 상품 리스트 조회
   const [itemList, setItemList] = useState([]);
+  const [itemShow, setItemShow] = useState(false);
 
   const getItemListASC = () => {
     GET('/api/admin/items').then(
@@ -155,6 +156,9 @@ const ItemList = () => {
       }
     ).catch()
   }
+
+  const handleClose = () => setItemShow(false);
+  const handleShow = () => setItemShow(true);
 
 
   useEffect(() => {
@@ -460,7 +464,21 @@ const ItemList = () => {
                                 <td className='text-center align-middle'>
                                   <img src={`http://localhost:8080${item.imagePath}`} alt="상품 이미지" style={{ width: '50px', height: '50px' }} />
                                 </td>
-                                <td>{item.itemName}</td>
+                                <td>
+                                  <Form.Text variant="primary" onClick={handleShow}>
+                                    {item.itemName}
+                                  </Form.Text>
+
+                                  <Offcanvas show={itemShow} onHide={handleClose} placement="end">
+                                    <Offcanvas.Header closeButton>
+                                      <Offcanvas.Title>Offcanvas</Offcanvas.Title>
+                                    </Offcanvas.Header>
+                                    <Offcanvas.Body>
+                                      Some text as placeholder. In real life you can have the elements you
+                                      have chosen. Like, text, images, lists, etc.
+                                    </Offcanvas.Body>
+                                  </Offcanvas>
+                                </td>
                                 <td>{item.price}</td>
                                 <td>{item.stock}</td>
                                 <td>{dayjs(item.createdAt).format("YYYY-MM-DD")}</td>
