@@ -157,8 +157,12 @@ const ItemList = () => {
     ).catch()
   }
 
+  // 상품 상세보기
   const handleClose = () => setItemShow(false);
   const handleShow = () => setItemShow(true);
+
+  const [itemModifyShow, setItemModifyShow] = useState(false);
+
 
 
   useEffect(() => {
@@ -464,20 +468,119 @@ const ItemList = () => {
                                 <td className='text-center align-middle'>
                                   <img src={`http://localhost:8080${item.imagePath}`} alt="상품 이미지" style={{ width: '50px', height: '50px' }} />
                                 </td>
+                                
                                 <td>
-                                  <Form.Text variant="primary" onClick={handleShow}>
+                                  <Form.Text variant="primary" onClick={handleShow} style={{ cursor: 'pointer' }}>
                                     {item.itemName}
                                   </Form.Text>
-
-                                  <Offcanvas show={itemShow} onHide={handleClose} placement="end">
-                                    <Offcanvas.Header closeButton>
-                                      <Offcanvas.Title>Offcanvas</Offcanvas.Title>
-                                    </Offcanvas.Header>
-                                    <Offcanvas.Body>
-                                      Some text as placeholder. In real life you can have the elements you
-                                      have chosen. Like, text, images, lists, etc.
-                                    </Offcanvas.Body>
-                                  </Offcanvas>
+                                  {!itemModifyShow ?
+                                  <Offcanvas show={itemShow} onHide={handleClose} placement="end" scroll={true} style={{ width: '350px' }}>
+                                  <Offcanvas.Header closeButton>
+                                    <Offcanvas.Title>{item.itemName}</Offcanvas.Title>
+                                  </Offcanvas.Header>
+                                  <Offcanvas.Body>
+                                    <div className='d-flex justify-content-center align-items-center mb-3'>
+                                      <Figure.Image
+                                        width={'100%'}
+                                        height={180}
+                                        alt="상품 이미지"
+                                        src={`http://localhost:8080${item.imagePath}`}
+                                        style={{ width: '100%', height: '240px', border: '1px solid black', objectFit: 'cover' }}
+                                      />
+                                    </div>
+                                    <div className='mb-3'>
+                                      <span>가격</span>
+                                      {item.price} 원
+                                    </div>
+                                    <div className='mb-3'>
+                                      <span>재고</span>
+                                      {item.stock} 개
+                                    </div>
+                                    <div className='mb-3'>
+                                      <span>상품 설명</span>
+                                      <p>{item.description}</p>
+                                    </div>
+                                    <div className='mb-3'>
+                                      <span>판매처</span>
+                                      <p>{item.seller}</p>
+                                    </div>
+                                    <div>
+                                      <span>등록일</span>
+                                      {dayjs(item.createdAt).format("YYYY-MM-DD")}
+                                    </div>
+                                    <div className='d-flex justify-content-end align-items-center mt-3'>
+                                      <Button variant="success" size="sm" className='me-2' onClick={() => {
+                                        setItemModifyShow(true)
+                                      }}>
+                                        수정
+                                      </Button>
+                                      <Button variant="danger" size="sm" onClick={(e) => {
+                                        confirm(`"${item.itemName}" 상품을 삭제하시겠습니까?`) &&
+                                        DELETE(`/api/admin/items/${item.itemCode}`)
+                                          .then((res) => {
+                                            alert(`"${item.itemName}" 상품이 삭제되었습니다.`)
+                                            setItemShow(false)
+                                          })
+                                          .catch((error) => {
+                                            console.error(error)
+                                            alert('상품 삭제 실패')
+                                          })
+                                      }}>
+                                        삭제
+                                      </Button>
+                                    </div>
+                                  </Offcanvas.Body>
+                                </Offcanvas>  
+                                :
+                                <Offcanvas show={itemShow} onHide={handleClose} placement="end" scroll={true} style={{ width: '350px' }}>
+                                  <Offcanvas.Header closeButton>
+                                    <Offcanvas.Title>{item.itemName}</Offcanvas.Title>
+                                  </Offcanvas.Header>
+                                  <Offcanvas.Body>
+                                    <div className='d-flex justify-content-center align-items-center mb-3'>
+                                      <Figure.Image
+                                        width={'100%'}
+                                        height={180}
+                                        alt="상품 이미지"
+                                        src={`http://localhost:8080${item.imagePath}`}
+                                        style={{ width: '100%', height: '240px', border: '1px solid black', objectFit: 'cover' }}
+                                      />
+                                    </div>
+                                    <div className='mb-3'>
+                                      <span>가격</span>
+                                      <input type="text" defaultValue={item.price} />
+                                    </div>
+                                    <div className='mb-3'>
+                                      <span>재고</span>
+                                      <input type="text" defaultValue={item.stock} />
+                                    </div>
+                                    <div className='mb-3'>
+                                      <span>상품 설명</span>
+                                      <input type="textarea" defaultValue={item.description} />
+                                    </div>
+                                    <div className='mb-3'>
+                                      <span>판매처</span>
+                                      <p>{item.seller}</p>
+                                    </div>
+                                    <div>
+                                      <span>등록일</span>
+                                      {dayjs(item.createdAt).format("YYYY-MM-DD")}
+                                    </div>
+                                    <div className='d-flex justify-content-end align-items-center mt-3'>
+                                      <Button variant="success" size="sm" className='me-2' onClick={() => {
+                                        
+                                      }}>
+                                        수정 완료
+                                      </Button>
+                                      <Button variant="secondary" size="sm" onClick={(e) => {
+                                        setItemModifyShow(false)
+                                      }}>
+                                        취소
+                                      </Button>
+                                    </div>
+                                  </Offcanvas.Body>
+                                </Offcanvas> 
+                                }
                                 </td>
                                 <td>{item.price}</td>
                                 <td>{item.stock}</td>
