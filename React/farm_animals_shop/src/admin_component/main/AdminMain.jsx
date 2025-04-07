@@ -29,7 +29,7 @@ const AdminMain = () => {
     { userAuth !== 'ROLE_ADMIN' ?
       null
       :
-      <div className='container' style={{minWidth:'1000px'}}>
+      <div className='mb-5 container' style={{minWidth:'1000px', maxHeight:'700px'}}>
         <Header/>
         <div className="d-flex rounded-4 mb-5 p-3" style={{
           borderWidth:'10px'
