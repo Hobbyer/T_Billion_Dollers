@@ -37,7 +37,7 @@ const Login = () => {
       <Container className='d-flex justify-content-center align-items-center' style={{ minHeight: '100vh' }}>
         <div>
           <div className='text-center mb-5'>
-          <Image src='/public/imgs/setting_icon.jpg' width="120px" className='mb-3' />
+          <Image src='/imgs/setting_icon.jpg' width="120px" className='mb-3' />
           <h1>Farmdas</h1>
           </div>
           <Form style={{ width: '300px', marginTop: '20px' }} onSubmit={(e) => {

@@ -9,6 +9,8 @@ public class FarmAnimalsShopApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FarmAnimalsShopApplication.class, args);
 
+		System.getenv("MYSQL_URL");
+
 	}
 
 }
