@@ -3,6 +3,8 @@ import { Form, Button, Container, Row, Col, Image } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+const baseURL = import.meta.env.VITE_API_URL;
+
 const UserSignup = () => {
   const nav = useNavigate();
 
@@ -34,7 +36,7 @@ const UserSignup = () => {
 
   const signupSubmit = (e) => {
     if (formData.isAgreed === true) {
-    axios.post('/api/auth/signup', formData)
+    axios.post(`${baseURL}/auth/signup`, formData)
       .then((res) => {
         console.log(res.data);
         alert('회원가입이 완료되었습니다.')
@@ -49,7 +51,7 @@ const UserSignup = () => {
   }
 
   const sendVerificationCode = () => {
-    axios.post('/api/auth/send', { phoneNumber: formData.phoneNumber })
+    axios.post(`${baseURL}/auth/send`, { phoneNumber: formData.phoneNumber })
     .then(res => {
       alert('인증번호가 발송되었습니다')
     })
@@ -60,7 +62,7 @@ const UserSignup = () => {
   }
 
   const verifyCode = () => {
-    axios.post('/api/auth/verify', { phoneNumber: formData.phoneNumber, code: formData.phoneCheck })
+    axios.post(`${baseURL}/auth/verify`, { phoneNumber: formData.phoneNumber, code: formData.phoneCheck })
     .then(res => {
       alert('인증 성공!')
     })

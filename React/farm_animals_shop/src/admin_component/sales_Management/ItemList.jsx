@@ -5,6 +5,8 @@ import { DELETE, GET, POST } from '../../apis/CRUD';
 import axios from 'axios';
 import dayjs from 'dayjs';
 
+const baseURL = import.meta.env.VITE_API_URL;
+
 const ItemList = () => {
 
 // ★ 상품 관리 ★ //
@@ -55,7 +57,7 @@ const ItemList = () => {
   const [categoryList, setCategoryList] = useState([]);
 
   const getCategoryList = () => {
-    GET('/api/admin/categories').then((res) => {
+    GET(`${baseURL}/admin/categories`).then((res) => {
       setCategoryList(res.data)
     }).catch()
   }
@@ -63,7 +65,7 @@ const ItemList = () => {
   
 
   const insertCategory = () => {
-    POST('/api/admin/categories', {cateName: infoData.cateName})
+    POST(`${baseURL}/admin/categories`, {cateName: infoData.cateName})
       .then((res) => {
         alert('카테고리 등록 성공')
         setCategoryModal(false)
@@ -76,7 +78,7 @@ const ItemList = () => {
 
   const deleteCategory = (category) => {
     if (confirm(`"${category.cateName}" 카테고리를 삭제하시겠습니까?`)) {
-      POST('/api/admin/categories/delete', {cateCode: category.cateCode})
+      POST(`${baseURL}/admin/categories/delete`, {cateCode: category.cateCode})
       .then((res) => {
         alert(`"${category.cateName}" 카테고리가 삭제되었습니다.`)
         setCategoryModal(false)
@@ -128,7 +130,7 @@ const ItemList = () => {
 
       formData.append('image', image); // 이미지 파일 추가
 
-    axios.post('/api/admin/items', formData,{
+    axios.post(`${baseURL}/admin/items`, formData,{
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
         'Content-Type': 'multipart/form-data' // multipart/form-data로 설정
@@ -150,7 +152,7 @@ const ItemList = () => {
   const [itemShow, setItemShow] = useState(false);
 
   const getItemListASC = () => {
-    GET('/api/admin/items').then(
+    GET(`${baseURL}/admin/items`).then(
       (res) => {
         setItemList(res.data)
       }
@@ -516,7 +518,7 @@ const ItemList = () => {
                                       </Button>
                                       <Button variant="danger" size="sm" onClick={(e) => {
                                         confirm(`"${item.itemName}" 상품을 삭제하시겠습니까?`) &&
-                                        DELETE(`/api/admin/items/${item.itemCode}`)
+                                        DELETE(`${baseURL}/admin/items/${item.itemCode}`)
                                           .then((res) => {
                                             alert(`"${item.itemName}" 상품이 삭제되었습니다.`)
                                             setItemShow(false)

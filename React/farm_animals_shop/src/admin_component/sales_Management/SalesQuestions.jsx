@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { GET } from "../../apis/CRUD";
 import { Container } from "react-bootstrap";
 
+const baseURL = import.meta.env.VITE_API_URL;
+
 // ★ 질의 응답 페이지 ★
 
 const SalesQuestions = () => {
@@ -13,7 +15,7 @@ const SalesQuestions = () => {
 
   //서버에서 게시글 목록 받아오기
   useEffect(() => {
-    GET("/api/questions")
+    GET(`${baseURL}/questions`)
       .then((res) => setQuestionList(res.data))
       .catch((error) => console.log(error));
   }, []);
@@ -34,7 +36,7 @@ const SalesQuestions = () => {
 
   //검색 버튼 클릭 시 실행 함수
   const searchList = () => {
-    GET(`/api/questions?searchKeyword=${searchData.searchKeyword}&searchValue=${searchData.searchValue}`)
+    GET(`${baseURL}/questions?searchKeyword=${searchData.searchKeyword}&searchValue=${searchData.searchValue}`)
       .then((res) => setQuestionList(res.data))
       .catch((error) => console.log(error));
   };

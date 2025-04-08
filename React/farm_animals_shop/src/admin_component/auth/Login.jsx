@@ -2,9 +2,12 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { Form, Button, Container, Stack, Col, Row, Image } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
- 
- 
+
+const baseURL = import.meta.env.VITE_API_URL;
+
+
 const Login = () => {
+
   const nav = useNavigate();
   sessionStorage.clear();
  
@@ -21,7 +24,7 @@ const Login = () => {
   }
 
   const submitLogin = () => {
-    axios.post('/api/auth/login', user)
+    axios.post(`${baseURL}/auth/login`, user)
       .then(res => {
         sessionStorage.setItem('accessToken', res.data.accessToken)
         sessionStorage.setItem('refreshToken', res.data.refreshToken)
