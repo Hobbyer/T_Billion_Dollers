@@ -5,6 +5,8 @@ import AdminSideMenu from './AdminSideMenu'
 import { GET } from '../../apis/CRUD'
 import Header from './Header'
 
+const baseURL = import.meta.env.VITE_API_URL;
+
 const AdminMain = () => {
   
   const [userAuth,setUserAuth] = useState()
@@ -14,7 +16,7 @@ const AdminMain = () => {
     if (!sessionStorage.getItem('accessToken')){
       window.location.href = '/auth/login'      
     } else {
-      GET('/api/members/me')
+      GET(`${baseURL}/members/me`)
         .then(res => {
           setUserAuth(res.data.authority)
         })

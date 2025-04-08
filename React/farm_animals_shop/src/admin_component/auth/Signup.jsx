@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 
+const baseURL = import.meta.env.VITE_API_URL; // Vite 환경변수 사용법에 맞게 수정
+
 const Signup = () => {
   const [formData, setFormData] = useState({
     userId: '',
@@ -30,7 +32,7 @@ const Signup = () => {
 
   const signupSubmit = (e) => {
     if (formData.isAgreed === true) {
-    axios.post('/api/auth/signup', formData)
+    axios.post(`${baseURL}/auth/signup`, formData)
       .then((res) => {
         console.log(res.data);
       })

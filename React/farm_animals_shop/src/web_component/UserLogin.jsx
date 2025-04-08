@@ -2,6 +2,8 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { Form, Button, Container, Stack, Col, Row, Image } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
+
+const baseURL = import.meta.env.VITE_API_URL;
  
  
 const UserLogin = () => {
@@ -21,7 +23,7 @@ const UserLogin = () => {
   }
 
   const submitLogin = () => {
-    axios.post('/api/auth/login', user)
+    axios.post(`${baseURL}/auth/login`, user)
       .then(res => {
         sessionStorage.setItem('accessToken', res.data.accessToken)
         nav('/farmdas')
