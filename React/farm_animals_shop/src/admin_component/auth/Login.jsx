@@ -38,7 +38,7 @@ const Login = () => {
         <div>
           <div className='text-center mb-5'>
           <Image src='/public/imgs/setting_icon.jpg' width="120px" className='mb-3' />
-          <h1>Farmdas</h1>
+          <h1 className='font-weight-bold'>Farmdas</h1>
           </div>
           <Form style={{ width: '300px', marginTop: '20px' }} onSubmit={(e) => {
               e.preventDefault(); // 새로고침 방지

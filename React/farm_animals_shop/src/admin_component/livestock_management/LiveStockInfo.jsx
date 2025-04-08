@@ -2,7 +2,6 @@ import React from "react";
 import LiveStockTemperature from "./LiveStockTemperature";
 import LiveStockHumidity from "./LiveStockHumidity";
 import WeatherCard from "./WeatherCard";
-import DeviceCard from "./DeviceCard";
 
 const LiveStockInfo = () => {
   // 축산 환경 상세 페이지
@@ -63,7 +62,6 @@ const LiveStockInfo = () => {
             style={{ backgroundColor: "#A3D1C6" }}
           >
             <h4>리모콘 자리</h4>
-            <DeviceCard/>
           </div>
         </div>
       </div>
