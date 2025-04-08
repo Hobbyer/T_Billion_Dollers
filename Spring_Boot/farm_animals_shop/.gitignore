@@ -5,6 +5,8 @@
 .env
 .env.*
 secret.properties
+*.application-dev.properties
+*.application-prod.properties
 *.secret
 *.key
 *.pem
