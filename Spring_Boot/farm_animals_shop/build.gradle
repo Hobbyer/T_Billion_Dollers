@@ -7,6 +7,14 @@ plugins {
 group = 'com.green'
 version = '0.0.1-SNAPSHOT'
 
+jar {
+	enabled = true
+}
+
+bootJar {
+	archiveFileName = 'app.jar' // Render의 Start Command에서 사용
+}
+
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(17)
