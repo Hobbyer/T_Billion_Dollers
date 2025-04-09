@@ -18,6 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @RequiredArgsConstructor // 생성자 주입을 위한 롬복 어노테이션
@@ -36,12 +37,18 @@ public class WebSecurityConfig implements WebMvcConfigurer {
   public void addCorsMappings(CorsRegistry registry) { // CORS 설정 메서드
     registry.addMapping("/**") // 모든 경로에 대해 CORS 설정을 적용합니다.
         .allowedOrigins(
-            "http://localhost:5173",       // 개발용 로컬
+            "http://localhost:5173",        // 개발용 로컬
             "https://farmdas.netlify.app"  // Netlify 배포 도메인
         ) // 허용할 출처를 설정합니다.
-        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // 허용할 HTTP 메서드를 설정합니다.
+        .allowedMethods("*") // 모든 HTTP 메서드를 허용합니다.
         .allowCredentials(true); // 자격 증명(쿠키, 인증 헤더 등)을 허용합니다.
 //        .maxAge(3600); // Preflight 요청에 대한 캐시 시간(초)을 설정합니다.
+  }
+
+  @Override
+  public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    registry.addResourceHandler("/upload/**") // "/upload/**" 경로에 대한 리소스 핸들러를 추가합니다.)
+        .addResourceLocations("classpath:/static/upload/images/"); // 실제 파일 경로를 설정합니다.
   }
 
   @Bean
@@ -69,7 +76,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
 
         .authorizeHttpRequests(authorize -> authorize // 요청 권한 설정
             .requestMatchers("/auth/**").permitAll() // 인증 관련 API는 모두 허용합니다.
-            .requestMatchers("/api/auth/**").permitAll() // 인증 관련 API는 모두 허용합니다.
+            .requestMatchers("/upload/**").permitAll() // 업로드 관련 API는 모두 허용합니다.
             .requestMatchers("/farmdas/**").permitAll() // farmdas 관련 API는 모두 허용합니다.
             .anyRequest().authenticated()); // 나머지 요청은 인증을 요구합니다.
 

@@ -35,6 +35,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
     // 정적 리소스 (/upload/)는 필터에서 제외
     if (requestURI.startsWith("/upload/")) {
+      // 이 부분에서 반드시 로그를 남겨서 우회 여부를 확인해보세요.
+      System.out.println("Bypassing JWT filter for static resource: " + requestURI);
       filterChain.doFilter(request, response);
       return;
     }
