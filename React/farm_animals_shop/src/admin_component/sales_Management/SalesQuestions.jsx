@@ -1,8 +1,11 @@
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { GET } from "../../apis/CRUD";
 import { Container } from "react-bootstrap";
+import { GET } from "../../apis/CRUD";
+
+
+
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -16,8 +19,12 @@ const SalesQuestions = () => {
   //서버에서 게시글 목록 받아오기
   useEffect(() => {
     GET(`${baseURL}/questions`)
-      .then((res) => setQuestionList(res.data))
-      .catch((error) => console.log(error));
+      .then(res => {
+        setQuestionList(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }, []);
 
   //검색창에 입력한 데이터를 저장할 변수

@@ -18,6 +18,7 @@ const AdminMain = () => {
     } else {
       GET(`${baseURL}/members/me`)
         .then(res => {
+          sessionStorage.setItem('userId', res.data.userId)
           setUserAuth(res.data.authority)
         })
         .catch(err => {
