@@ -13,6 +13,7 @@ const Signup = () => {
     emailSecond: '@test.com',
     phoneNumber: '',
     address: '',
+    authority: '',
     isAgreed: false,
   });
 
@@ -31,7 +32,6 @@ const Signup = () => {
   };
 
   const signupSubmit = (e) => {
-    if (formData.isAgreed === true) {
     axios.post(`${baseURL}/auth/signup`, formData)
       .then((res) => {
         console.log(res.data);
@@ -39,9 +39,6 @@ const Signup = () => {
       .catch((err) => {
         console.error(err);
       });
-    } else {
-      alert('회원가입에 대한 모든 내용을 동의해주세요.')
-    }
   }
 
   return (
@@ -54,7 +51,6 @@ const Signup = () => {
               type="text"
               placeholder="User ID"
               name="userId"
-              value={formData.userId}
               onChange={handleChange}
             />
           </Form.Group>
@@ -66,7 +62,6 @@ const Signup = () => {
                 type="password"
                 placeholder="Password"
                 name="password"
-                value={formData.password}
                 autoComplete='off'
                 onChange={handleChange}
               />
@@ -78,7 +73,6 @@ const Signup = () => {
                 type="password"
                 placeholder="Password Check"
                 name="passwordCheck"
-                value={formData.passwordCheck}
                 autoComplete='off'
                 onChange={handleChange}
               />
@@ -91,7 +85,6 @@ const Signup = () => {
               type="text"
               placeholder="Name"
               name="name"
-              value={formData.name}
               onChange={handleChange}
             />
           </Form.Group>
@@ -103,7 +96,6 @@ const Signup = () => {
                 type="email"
                 placeholder="Email"
                 name="emailFirst"
-                value={formData.emailFirst}
                 onChange={handleChange}
               />
             </Form.Group>
@@ -111,7 +103,6 @@ const Signup = () => {
             <Form.Group as={Col} controlId="formEmailSecond">
               <Form.Select
                 name="emailSecond"
-                value={formData.emailSecond}
                 onChange={handleChange}
               >
                 <option>@test.com</option>
@@ -129,7 +120,6 @@ const Signup = () => {
                 type="text"
                 placeholder="010-1234-5678"
                 name="phoneNumber"
-                value={formData.phone}
                 onChange={handleChange}
               />
             </Form.Group>
@@ -139,7 +129,6 @@ const Signup = () => {
                 type="text"
                 placeholder="인증번호"
                 name="phoneCheck"
-                value={formData.phoneCheck}
                 onChange={handleChange}
               />
             </Form.Group>
@@ -170,14 +159,14 @@ const Signup = () => {
             />
           </Form.Group>
 
-          <Form.Group className="mb-4 d-flex justify-content-end" id="formGridCheckbox">
-            <Form.Check
-              type="checkbox"
-              label="회원가입에 대한 모든 내용을 동의합니다."
-              name="isAgreed"
-              checked={formData.isAgreed}
+          <Form.Group controlId="roleSelect" className="mb-5">
+            <Form.Select
+              name="authority"
               onChange={handleChange}
-            />
+            >
+              <option value="ROLE_ADMIN">관리자</option>
+              <option value="ROLE_USER">일반회원</option>
+            </Form.Select>
           </Form.Group>
 
           <div className="d-flex justify-content-center">
