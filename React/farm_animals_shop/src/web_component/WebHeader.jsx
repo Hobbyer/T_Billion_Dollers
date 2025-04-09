@@ -18,11 +18,23 @@ const WebHeader = () => {
       </style>
       <article className="text-end mb-4" style={{ fontSize: "13px" }}>
         <Nav className="justify-content-end">
-          <Nav.Item>
-            <Nav.Link href="/farmdas/login" className="px-2">
-              로그인
-            </Nav.Link>
-          </Nav.Item>
+          {
+            sessionStorage.getItem("accessToken") ? (
+              <Nav.Item>
+                <Nav.Link href="/farmdas/logout" className="px-2">
+                  로그아웃
+                </Nav.Link>
+              </Nav.Item>
+            )
+            : (
+              <Nav.Item>
+                <Nav.Link href="/farmdas/login" className="px-2">
+                  로그인
+                </Nav.Link>
+              </Nav.Item>
+            )
+          }
+          {}
           <Nav.Item>
             <Nav.Link href="/farmdas/signup" className="px-2">
               회원가입
@@ -44,7 +56,7 @@ const WebHeader = () => {
             height="50"
             className="d-inline-block align-top me-2"
             onClick={() => {
-              nav("/farmdas")
+              nav("/farmdas/")
             }}
             style={{ cursor: "pointer" }}
           />

@@ -4,8 +4,11 @@ import { Button, Container, Figure, Form, InputGroup, Modal, Nav, Navbar, Pagina
 import SalesQuestions from './SalesQuestions';
 import SalesInfo from './SalesInfo';
 import ItemList from './ItemList';
+import { useNavigate } from 'react-router-dom';
 
 const SalesManage = () => {
+  const nav = useNavigate();
+
   const [activeTab, setActiveTab] = useState('salesInfo');
 
   return (
@@ -29,6 +32,13 @@ const SalesManage = () => {
             <Nav.Link href="#3">주문 정보</Nav.Link>
             <Nav.Link href="#4">회원 정보</Nav.Link>
             <Nav.Link href="#QnA" onClick={() => setActiveTab('QnA')} >QnA</Nav.Link>
+          </Nav>
+          <Nav className="ml-auto">
+            <Button variant="outline-success" className='mx-2' onClick={()=>{
+              nav('/farmdas/')
+            }} >
+              쇼핑몰 바로가기
+            </Button>
           </Nav>
         </Container>
       </Navbar>

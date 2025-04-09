@@ -468,7 +468,7 @@ const ItemList = () => {
                               <tr key={j}>
                                 <td>{item.itemCode}</td>
                                 <td className='text-center align-middle'>
-                                  <img src={`http://localhost:8080${item.imagePath}`} alt="상품 이미지" style={{ width: '50px', height: '50px' }} />
+                                  <img src={`${baseURL}${item.imagePath}`} alt="상품 이미지" style={{ width: '50px', height: '50px' }} />
                                 </td>
                                 
                                 <td>
@@ -486,7 +486,7 @@ const ItemList = () => {
                                         width={'100%'}
                                         height={180}
                                         alt="상품 이미지"
-                                        src={`http://localhost:8080${item.imagePath}`}
+                                        src={`${baseURL}${item.imagePath}`}
                                         style={{ width: '100%', height: '240px', border: '1px solid black', objectFit: 'cover' }}
                                       />
                                     </div>
@@ -544,7 +544,7 @@ const ItemList = () => {
                                         width={'100%'}
                                         height={180}
                                         alt="상품 이미지"
-                                        src={`http://localhost:8080${item.imagePath}`}
+                                        src={`${baseURL}${item.imagePath}`}
                                         style={{ width: '100%', height: '240px', border: '1px solid black', objectFit: 'cover' }}
                                       />
                                     </div>
