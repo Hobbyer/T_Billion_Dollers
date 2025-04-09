@@ -33,7 +33,7 @@ const AdminMain = () => {
       :
       <div className='mb-5 container' style={{minWidth:'1000px', maxHeight:'700px'}}>
         <Header/>
-        <div className="d-flex rounded-4 mb-5 p-3" style={{
+        <div className="d-flex rounded-4 mb-5 p-3 shadow-lg" style={{
           borderWidth:'10px'
           ,borderStyle:'solid'
           ,borderColor:'#3F7D58'
