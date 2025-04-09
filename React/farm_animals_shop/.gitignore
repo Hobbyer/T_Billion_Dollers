@@ -26,3 +26,4 @@ dist-ssr
 #API_KEY 
 *.env
 .env
+*.env.*

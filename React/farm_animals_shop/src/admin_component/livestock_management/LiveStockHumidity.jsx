@@ -3,6 +3,8 @@ import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from 'chart.js';
 import { GET } from '../../apis/CRUD';
 
+const baseURL = import.meta.env.VITE_API_URL;
+
 // Chart.js 모듈을 등록
 ChartJS.register(ArcElement, Tooltip, Legend, Title); // ✔ Chart.js 모듈 등록
 // ✔ Chart.js 모듈 사용법 : https://www.chartjs.org/docs/latest/getting-started/usage.html#basic-usage
@@ -11,7 +13,7 @@ const LiveStockHumidity = () => {
   const [humidity, setHumidity] = useState(null);
 
   useEffect(() => {
-    GET('/api/admin/humidity')
+    GET(`${baseURL}/admin/humidity`)
       .then((res) => {
         console.log('Received humidity list:', res.data);
         const lastHumidity = res.data[0].humidity; // 가장 최근 습도 값
@@ -70,9 +72,11 @@ const LiveStockHumidity = () => {
 
   return (
     <>
-      {humidity !== null && (
-        <Doughnut data={data} options={options} plugins={[centerTextPlugin]} />
-      )}
+      <div>
+        {humidity !== null && (
+          <Doughnut data={data} options={{...options, maintainAspectRatio: false}} plugins={[centerTextPlugin]} />
+        )}
+      </div>
     </>
   );
 };

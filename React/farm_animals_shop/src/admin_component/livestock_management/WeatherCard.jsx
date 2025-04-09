@@ -16,7 +16,7 @@ const WeatherCard = () => {
   }, []);
 
   return (
-    <div className="card p-3 text-center">
+    <div>
       {weatherData && weatherData.main ? (
         <>
           <h2 style={{fontWeight:'bold'}}>{weatherData.name}</h2>

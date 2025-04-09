@@ -2,9 +2,12 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { Form, Button, Container, Stack, Col, Row, Image } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
- 
- 
+
+const baseURL = import.meta.env.VITE_API_URL;
+
+
 const Login = () => {
+
   const nav = useNavigate();
   sessionStorage.clear();
  
@@ -21,7 +24,7 @@ const Login = () => {
   }
 
   const submitLogin = () => {
-    axios.post('/api/auth/login', user)
+    axios.post(`${baseURL}/auth/login`, user)
       .then(res => {
         sessionStorage.setItem('accessToken', res.data.accessToken)
         sessionStorage.setItem('refreshToken', res.data.refreshToken)
@@ -37,8 +40,8 @@ const Login = () => {
       <Container className='d-flex justify-content-center align-items-center' style={{ minHeight: '100vh' }}>
         <div>
           <div className='text-center mb-5'>
-          <Image src='/public/imgs/setting_icon.jpg' width="120px" className='mb-3' />
-          <h1 className='font-weight-bold'>Farmdas</h1>
+          <Image src='/imgs/setting_icon.jpg' width="120px" className='mb-3' />
+          <h1>Farmdas</h1>
           </div>
           <Form style={{ width: '300px', marginTop: '20px' }} onSubmit={(e) => {
               e.preventDefault(); // 새로고침 방지

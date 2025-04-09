@@ -5,6 +5,8 @@
 .env
 .env.*
 secret.properties
+Spring_Boot/farm_animals_shop/src/main/resources/application-dev.properties
+Spring_Boot/farm_animals_shop/src/main/resources/application-prod.properties
 *.secret
 *.key
 *.pem

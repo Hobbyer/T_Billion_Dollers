@@ -5,6 +5,8 @@ import AdminSideMenu from './AdminSideMenu'
 import { GET } from '../../apis/CRUD'
 import Header from './Header'
 
+const baseURL = import.meta.env.VITE_API_URL;
+
 const AdminMain = () => {
   
   const [userAuth,setUserAuth] = useState()
@@ -14,7 +16,7 @@ const AdminMain = () => {
     if (!sessionStorage.getItem('accessToken')){
       window.location.href = '/auth/login'      
     } else {
-      GET('/api/members/me')
+      GET(`${baseURL}/members/me`)
         .then(res => {
           setUserAuth(res.data.authority)
         })
@@ -31,7 +33,7 @@ const AdminMain = () => {
       :
       <div className='mb-5 container' style={{minWidth:'1000px', maxHeight:'700px'}}>
         <Header/>
-        <div className="d-flex rounded-4 mb-5 p-3" style={{
+        <div className="d-flex rounded-4 mb-5 p-3 shadow-lg" style={{
           borderWidth:'10px'
           ,borderStyle:'solid'
           ,borderColor:'#3F7D58'

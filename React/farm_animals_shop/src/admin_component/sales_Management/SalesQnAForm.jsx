@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { POST } from "../../apis/CRUD";
 
+const baseURL = import.meta.env.VITE_API_URL;
+
 // Q&A 등록 게시판
 const SalesQnAForm = () => {
   const nav = useNavigate();
@@ -25,7 +27,7 @@ const SalesQnAForm = () => {
 
   // 등록 버튼 클릭 시 서버의 insert api 실행
   const insertquestion = () => {
-    POST("/api/questions", questionData)
+    POST(`${baseURL}/questions`, questionData)
       .then((res) => {
         alert("질문이 등록 되었습니다.");
         nav("/admin/sales-questions");

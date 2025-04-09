@@ -5,6 +5,8 @@ import { CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, 
 import { GET } from '../../apis/CRUD';
 import dayjs from 'dayjs';
 
+const baseURL = import.meta.env.VITE_API_URL;
+
 const LiveStockTemperature = () => {
 
   ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -14,7 +16,7 @@ const LiveStockTemperature = () => {
   useEffect(()=>{
     const fetchTemperature = async () => {
       try {
-        const res = await GET('/api/admin/temp');
+        const res = await GET(`${baseURL}/admin/temp`);
         setTemp(res.data);
       } catch (error) {
         console.log(error)
@@ -57,6 +59,7 @@ const options = {
 };
 
 return <Line data={data} options={options} />;
+
 };
 
 export default LiveStockTemperature
