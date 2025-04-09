@@ -12,16 +12,18 @@
             , USER_ID
             , REG_DATE
             , READ_CNT
-        FROM QUESTIONS
+        FROM questions
+        <where>
         <if test="searchValue != null and searchValue != ''">
-            AND ${searchKeyword} LIKE CONCAT('%', #{searchValue}, '%')
+            #{searchKeyword} LIKE CONCAT('%', #{searchValue}, '%')
         </if>
+        </where>
     </select>
 
     <!--페이징 처리-->
     <select id="getQuestionListCount" resultType="int">
         SELECT COUNT(*) <!-- COUNT(*)는 전체 게시글 수 -->
-        FROM QUESTIONS
+        FROM questions
         <if test="searchValue != null and searchValue != ''">
             AND ${searchKeyword} LIKE CONCAT('%', #{searchValue}, '%') <!-- 검색어가 있을 경우 -->
         </if>
@@ -29,7 +31,7 @@
 
     <!--Q&A 게시글 등록 쿼리(첨부파일보류)-->
     <insert id="insertQuestion">
-        INSERT INTO QUESTIONS (
+        INSERT INTO questions (
             TITLE
             , USER_ID
             , CONTENT
@@ -43,19 +45,19 @@
     <!--Q&A 게시글 상세 조회-->
     <select id="getQuestion" resultType="QuestionDTO">
         SELECT *
-        FROM QUESTIONS
+        FROM questions
         WHERE QUESTION_NUM = #{questionNum}
     </select>
 
     <!--Q&A 게시글 삭제-->
     <delete id="deleteQuestion">
-        DELETE FROM QUESTIONS
+        DELETE FROM questions
         WHERE QUESTION_NUM = #{questionNum}
     </delete>
 
     <!--Q&A 게시글 수정-->
     <update id="updateQuestion">
-        UPDATE QUESTIONS
+        UPDATE questions
         SET
             TITLE = #{title}
             , CONTENT = #{content}
@@ -63,7 +65,7 @@
 
     <!--Q&A 게시글 조회수 증가-->
     <update id="updateReadCnt">
-        UPDATE QUESTIONS
+        UPDATE questions
         SET
         READ_CNT = READ_CNT + 1
         WHERE NumQUESTION_NUM = #{questionNum}

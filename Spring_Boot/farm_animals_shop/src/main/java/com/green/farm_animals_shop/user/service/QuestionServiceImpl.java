@@ -1,6 +1,7 @@
 package com.green.farm_animals_shop.user.service;
 
 import com.green.farm_animals_shop.user.dto.QuestionDTO;
+import com.green.farm_animals_shop.user.dto.SearchDTO;
 import com.green.farm_animals_shop.user.mapper.QuestionMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,8 @@ public class QuestionServiceImpl implements QuestionService {
 
   //  //Q&A 게시글 목록 리스트
   @Override
-  public List<QuestionDTO> getQuestionList() {
-    return questionMapper.getQuestionList();
+  public List<QuestionDTO> getQuestionList(SearchDTO searchDTO) {
+    return questionMapper.getQuestionList(searchDTO);
   }
 
   //Q&A 게시글 등록

@@ -1,8 +1,11 @@
 package com.green.farm_animals_shop.user.controller;
 
 import com.green.farm_animals_shop.user.dto.QuestionDTO;
+import com.green.farm_animals_shop.user.dto.SearchDTO;
+import com.green.farm_animals_shop.user.repository.MemberRepository;
 import com.green.farm_animals_shop.user.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,10 +16,11 @@ import java.util.List;
 public class QuestionController {
   private final QuestionService questionService;
 
+  //Q&A 게시글 목록 리스트 (+검색)
   @GetMapping("")
-  //Q&A 게시글 목록 리스트
-  public List<QuestionDTO> getList(QuestionDTO questionDTO){
-    return questionService.getQuestionList();
+  public List<QuestionDTO> getList(SearchDTO searchDTO){
+    System.out.println("searchDTO = " + searchDTO);
+    return questionService.getQuestionList(searchDTO);
   }
 
   //Q&A 게시글 상세 조회

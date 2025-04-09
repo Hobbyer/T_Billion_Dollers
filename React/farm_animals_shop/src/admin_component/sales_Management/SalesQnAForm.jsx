@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { POST } from "../../apis/CRUD";
+import { GET, POST } from "../../apis/CRUD";
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -11,7 +11,7 @@ const SalesQnAForm = () => {
   // input 태그들에 입력한 데이터를 저장하는 변수
   const [questionData, setQuestionData] = useState({
     title: "",
-    userId: "",
+    userId: sessionStorage.getItem("userId"),
     content: "",
   });
 
@@ -65,13 +65,13 @@ const SalesQnAForm = () => {
               <span>*</span>
             </td>
             <td>
-              <input
+              <p>{questionData.userId}</p>
+              {/* <input
                 type="text"
                 name="userId"
-                value={questionData.userId}
-                placeholder={questionData.userId}
-                onChange={(e) => changeQuestionData(e)}
-              />
+                value={sessionStorage.getItem('userId')}
+                readOnly
+              /> */}
             </td>
           </tr>
 
