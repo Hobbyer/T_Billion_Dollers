@@ -72,9 +72,11 @@ const LiveStockHumidity = () => {
 
   return (
     <>
-      {humidity !== null && (
-        <Doughnut data={data} options={options} plugins={[centerTextPlugin]} />
-      )}
+      <div>
+        {humidity !== null && (
+          <Doughnut data={data} options={{...options, maintainAspectRatio: false}} plugins={[centerTextPlugin]} />
+        )}
+      </div>
     </>
   );
 };

@@ -5,19 +5,19 @@ const AdminSideMenu = () => {
   const [activeMenu, setActiveMenu] = useState(null);
 
   const menuItems = [
-    { id: "home", to: "/admin", defaultImg: "/imgs/home.png", activeImg: "/imgs/home-icon-silhouette.png", label: "HOME" },
-    { id: "stock", to: "stock-detail", defaultImg: "/imgs/animal.png", activeImg: "/imgs/cow (1).png", label: "STOCK" },
+    // { id: "home", to: "/admin", defaultImg: "/imgs/home.png", activeImg: "/imgs/home-icon-silhouette.png", label: "HOME" },
+    { id: "stock", to: "/admin", defaultImg: "/imgs/animal.png", activeImg: "/imgs/cow (1).png", label: "STOCK" },
     { id: "sales", to: "sales-manage", defaultImg: "/imgs/group.png", activeImg: "/imgs/customer.png", label: "SALES" }
   ];
 
   return (
     <div className="sidemenu">
       <div
-        className="d-flex flex-column align-items-center text-white rounded-4"
+        className="d-flex flex-column align-items-center text-white rounded-4 shadow"
         style={{
           width: "100px",
           padding: "50px",
-          height: "100%",
+          // height: "100%",
           backgroundColor: "#3D8D7A",
         }}
       >
@@ -41,7 +41,7 @@ const AdminSideMenu = () => {
       </div>
 
       {/* 추가 하위 메뉴 언니 이거 navTab 으로  */}
-      <ul>
+      {/* <ul>
         <li>
           <Link to={"sales-memberInfo"}>회원 정보</Link>
         </li>
@@ -51,7 +51,7 @@ const AdminSideMenu = () => {
         <li>
           <Link to={"sales-questions"}>질의응답</Link>
         </li>
-      </ul>
+      </ul> */}
     </div>
   );
 };
