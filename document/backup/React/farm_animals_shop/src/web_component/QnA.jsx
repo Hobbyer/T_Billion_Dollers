@@ -1,20 +1,22 @@
 import React, { useState } from 'react'
-import WebHeader from './WebHeader'
 import { Button, Container, Form } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
 import { POST } from '../apis/CRUD'
+import { jwtDecode } from 'jwt-decode'
 
 const baseURL = import.meta.env.VITE_API_URL;
 
 const QnA = () => {
   const nav = useNavigate();
-
-  const user = useSelector((state) => state.member);
-  const dispatch = useDispatch();
+  if (sessionStorage.getItem('accessToken') === null) {
+    alert("로그인 후 이용 가능합니다.")
+    nav('/farmdas/login')
+  } else {
+    var user = jwtDecode(sessionStorage.getItem('accessToken'));
+  }
 
   const [saveData, setSaveData] = useState({
-    userId: user.userid,
+    userId: "",
     title: "",
     content: "",
   });
@@ -22,7 +24,8 @@ const QnA = () => {
   const saveHandler = (e) => {
     setSaveData({
       ...saveData,
-      [e.target.name] : e.target.value
+      [e.target.name] : e.target.value,
+      userId: user.sub
     })
   }
 
@@ -50,8 +53,7 @@ const QnA = () => {
       </style>
       <Container className="mt-3 mx-auto">
         <div style={{ padding: "0 100px", minWidth: "800px" }}>
-          
-          <div>
+          <div style={{ textAlign: "left"}}>
             <Form.Group>
               <Form.Label className=''>제목</Form.Label>
               <Form.Control
@@ -59,19 +61,19 @@ const QnA = () => {
                 name='title'
                 className='mb-3'
                 style={{ width: "100%", margin: "0 auto" }}
-                onChange={(e) => {saveHandler(e)}}
-              />
+                onChange={(e) => {saveHandler(e)}} />
               <Form.Label className=''>문의 내용</Form.Label>
               <Form.Control
                 type='text'
                 name='content'
                 className='mb-3'
                 style={{ width: "100%", height: "300px", margin: "0 auto" }}
-                onChange={(e) => {saveHandler(e)}}
-              />
+                onChange={(e) => {saveHandler(e)}} />
             </Form.Group>
             <div className='d-flex justify-content-center'>
-              <Button variant="success" type="button" className='mb-3' onClick={submitHandler} >
+              <Button variant="success" type="button" className='mb-3' onClick={()=>{
+                submitHandler()
+                }} >
                 문의하기
               </Button>
             </div>

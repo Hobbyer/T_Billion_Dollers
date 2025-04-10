@@ -21,7 +21,7 @@ const Header = () => {
               height="50"
               className="d-inline-block align-top me-2"
             />
-            FRAMDAS
+            FARMDAS
         </Navbar.Brand>
       </Container>
     </Navbar>

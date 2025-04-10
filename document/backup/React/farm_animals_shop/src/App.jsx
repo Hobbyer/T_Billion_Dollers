@@ -2,7 +2,6 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
 import SalesQuestions from './admin_component/sales_Management/SalesQuestions'
 import LiveStockInfo from './admin_component/livestock_management/LiveStockInfo'
-import SalesQnAForm from './admin_component/sales_Management/SalesQnAForm'
 import AdminMain from './admin_component/main/AdminMain'
 import Login from './admin_component/auth/Login'
 import SalesQnADetail from './admin_component/sales_Management/SalesQnADetail'
@@ -21,6 +20,8 @@ import { useDispatch } from 'react-redux'
 import { setMember } from './redux/memberSlice'
 import store from './redux/store'
 import FarmdasLayout from './web_component/FarmdasLayout'
+import { clearMember } from './redux/memberSlice'
+import Cart from './web_component/Cart'
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -33,20 +34,26 @@ function App() {
 
     const token = sessionStorage.getItem('accessToken');
 
-    if (token && store.getState().member.userId === '') {
-      GET(`${baseURL}/members/me`).then(res => {
-        dispatch(setMember)({
-          authority: res.data.authority,
-          userId : res.data.userId,
-          userName : res.data.name
+    if (token) {
+      GET('/members/me')
+        .then((res) => {
+          dispatch(setMember({
+            userId: res.data.userId,
+            userName: res.data.name,
+            authority: res.data.authority,
+          }));
         })
-      })
-      .catch(err => {
-        console.error(err)
-      })
+        .catch(() => {
+          dispatch(clearMember()); // 이 부분도 마찬가지!
+          sessionStorage.removeItem("accessToken");
+          sessionStorage.removeItem("refreshToken");
+        });
+    } else {
+      dispatch(clearMember());
     }
   }, [])
-  // 원래 사용한 page가지고 와야함
+
+  
   return (
     <>
       <Routes>
@@ -66,8 +73,6 @@ function App() {
 
           {/* 질의응답 페이지 */}
           <Route path='sales-questions' element={<SalesQuestions/>}/>
-          {/* Q&A 등록하기 페이지 */}
-          <Route path='sales-qnaform' element={<SalesQnAForm/>}/>
           {/* Q&A 상세페이지 */}
           <Route path='sales-questions/:questionNum' element={<SalesQnADetail />} />
         </Route>
@@ -82,10 +87,27 @@ function App() {
         {/* 일반 회원가입 */}
         <Route path='signup' element={<UserSignup />} />
 
-        <Route path='/farmdas' >
+        <Route path='/farmdas' element={<FarmdasLayout />}>
           <Route index element={<Home /> } />
           {/* 고객센터 */}
           <Route path='qna' element={<QnA />} />
+          {/* 장바구니 */}
+          <Route path='cart/:userId' element={<Cart />} />
+
+
+
+          {/* 페이지 생성 및 구현해야되는 컴포넌트들 */}
+          {/* 주문내역 */}
+          <Route path='order' element={<div>주문내역</div>} />
+          {/* 마이페이지 */}
+          <Route path='mypage' element={<div>마이페이지</div>} />
+          {/* 상품상세 */}
+          <Route path='product/:productId' element={<div>상품상세</div>} />
+          {/* 상품리스트 */}
+          <Route path='product' element={<div>상품리스트</div>} />
+          {/* 카테고리별 상품리스트 */}
+          <Route path='product/:category' element={<div>상품리스트</div>} />
+
         </Route>
       </Routes>
     </>
