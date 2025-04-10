@@ -2,7 +2,6 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
 import SalesQuestions from './admin_component/sales_Management/SalesQuestions'
 import LiveStockInfo from './admin_component/livestock_management/LiveStockInfo'
-import SalesQnAForm from './admin_component/sales_Management/SalesQnAForm'
 import AdminMain from './admin_component/main/AdminMain'
 import Login from './admin_component/auth/Login'
 import SalesQnADetail from './admin_component/sales_Management/SalesQnADetail'
@@ -73,8 +72,6 @@ function App() {
 
           {/* 질의응답 페이지 */}
           <Route path='sales-questions' element={<SalesQuestions/>}/>
-          {/* Q&A 등록하기 페이지 */}
-          <Route path='sales-qnaform' element={<SalesQnAForm/>}/>
           {/* Q&A 상세페이지 */}
           <Route path='sales-questions/:questionNum' element={<SalesQnADetail />} />
         </Route>

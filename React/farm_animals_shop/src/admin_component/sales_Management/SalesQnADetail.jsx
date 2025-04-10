@@ -16,10 +16,8 @@ const SalesQnADetail = () => {
   //조회한 상세 정보를 저장할 state 변수
   const [question, setQuestion] = useState({});
 
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  //답글 작성 시 필요한 state 변수
+  const [replyContent, setReplyContent] = useState({}); //답글 내용
 
   //해당 게시글의 답글 목록을 저장할 state 변수
 
@@ -70,40 +68,11 @@ const SalesQnADetail = () => {
               게시물의 내용이 여기에 표시됩니다.
             </FormText>
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formAttachment">
-            <FormLabel style={{ fontWeight: "bold", fontSize: "20px" }}>
-              첨부파일
-            </FormLabel>
-            <FormText
-              style={{
-                display: "block",
-                fontSize: "16px",
-                marginBottom: "10px",
-              }}
-            >
-              첨부파일 이름 또는 다운로드 링크
-            </FormText>
-          </Form.Group>
-          <Stack direction="horizontal" gap={3} className="md-4">
-            <Button
-              variant="primary"
-              style={{
-                backgroundColor: "rgba(0, 123, 255, 0.8)",
-                border: "none",
-              }}
-            >
-              수정
+          <div className="d-flex justify-content-end mt-5">
+            <Button type="button" variant="danger" >
+                삭제
             </Button>
-            <Button
-              variant="secondary"
-              style={{
-                backgroundColor: "rgba(108, 117, 125, 0.8)",
-                border: "none",
-              }}
-            >
-              취소
-            </Button>
-          </Stack>
+          </div>
         </Form>
       </Container>
     </>

@@ -118,13 +118,6 @@ const SalesQuestions = () => {
             )}
           </tbody>
         </table>
-
-        <div>
-          {/* 버튼 클릭시 새로 글 작성하는 등록 페이지로 이동 */}
-          <button type="button" onClick={() => nav("/admin/sales-qnaform")}>
-            글쓰기
-          </button>
-        </div>
       </div>
     </Container>
   );

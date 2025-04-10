@@ -10,8 +10,12 @@ const baseURL = import.meta.env.VITE_API_URL;
 
 const QnA = () => {
   const nav = useNavigate();
-
-  const user = jwtDecode(sessionStorage.getItem('accessToken'));
+  if (sessionStorage.getItem('accessToken') === null) {
+    alert("로그인 후 이용 가능합니다.")
+    nav('/farmdas/login')
+  } else {
+    var user = jwtDecode(sessionStorage.getItem('accessToken'));
+  }
 
   const [saveData, setSaveData] = useState({
     userId: "",
