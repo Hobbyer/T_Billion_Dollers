@@ -2,6 +2,9 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Form, Button, Container, Stack, Col, Row, Image } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
+import { GET } from '../../apis/CRUD';
+import { useDispatch } from 'react-redux';
+import { setMember } from '../../redux/memberSlice';
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -10,6 +13,8 @@ const Login = () => {
 
   const nav = useNavigate();
   sessionStorage.clear();
+
+  const dispatch = useDispatch();
  
   const [user,setUser] = useState({
     userId: '',
@@ -28,14 +33,20 @@ const Login = () => {
       .then(res => {
         sessionStorage.setItem('accessToken', res.data.accessToken);
         sessionStorage.setItem('refreshToken', res.data.refreshToken);
-        console.log(res.data.accessToken);
-        nav('/')
+
+        GET(`${baseURL}/members/me`).then(res => {
+          dispatch(setMember({
+            authority: res.data.authority,
+            userId : res.data.userId,
+            userName : res.data.name
+          }))
+        })
+        nav('/admin')
       })
       .catch(err => {
         console.error(err)
       })
   }
-
  
   return (
     <>
@@ -62,7 +73,9 @@ const Login = () => {
               }} />
             </Form.Group>
             <Stack>
-              <Button type='submit' variant="success" >
+              <Button type='button' variant="success" onClick={() => {
+                submitLogin()
+              }}>
                 로그인
               </Button>
             </Stack>
