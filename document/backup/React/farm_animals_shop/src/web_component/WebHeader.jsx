@@ -3,15 +3,15 @@ import { Nav, Image } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { href, replace, useNavigate } from 'react-router-dom'
 import { clearMember } from '../redux/memberSlice';
-import { jwtDecode } from 'jwt-decode';
 
 const WebHeader = () => {
   const nav = useNavigate();
   
-  const user = jwtDecode(sessionStorage.getItem('accessToken'));
+  const user = useSelector((state) => state.member);
   const dispatch = useDispatch();
 
   const [myPage, setMyPage] = useState("/public/imgs/black_face.jpg")
+
 
   return (
     <>
@@ -29,11 +29,11 @@ const WebHeader = () => {
       <article className="text-end mb-4" style={{ fontSize: "13px" }}>
         <Nav className="justify-content-end">
           {
-            sessionStorage.getItem("accessToken") ? 
+            user.authority !== "guest" ? 
             <>
               <Nav.Item>
                 <Nav.Link className="px-2">
-                  {user.sub} 님
+                  {user.userName} 님
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>

@@ -21,7 +21,6 @@ import { useDispatch } from 'react-redux'
 import { setMember } from './redux/memberSlice'
 import store from './redux/store'
 import FarmdasLayout from './web_component/FarmdasLayout'
-import { clearMember } from './redux/memberSlice'
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -34,26 +33,20 @@ function App() {
 
     const token = sessionStorage.getItem('accessToken');
 
-    if (token) {
-      GET('/members/me')
-        .then((res) => {
-          dispatch(setMember({
-            userId: res.data.userId,
-            userName: res.data.name,
-            authority: res.data.authority,
-          }));
+    if (token && store.getState().member.userId === '') {
+      GET(`${baseURL}/members/me`).then(res => {
+        dispatch(setMember)({
+          authority: res.data.authority,
+          userId : res.data.userId,
+          userName : res.data.name
         })
-        .catch(() => {
-          dispatch(clearMember()); // 이 부분도 마찬가지!
-          sessionStorage.removeItem("accessToken");
-          sessionStorage.removeItem("refreshToken");
-        });
-    } else {
-      dispatch(clearMember());
+      })
+      .catch(err => {
+        console.error(err)
+      })
     }
   }, [])
-
-  
+  // 원래 사용한 page가지고 와야함
   return (
     <>
       <Routes>
@@ -89,7 +82,7 @@ function App() {
         {/* 일반 회원가입 */}
         <Route path='signup' element={<UserSignup />} />
 
-        <Route path='/farmdas' element={<FarmdasLayout />}>
+        <Route path='/farmdas' >
           <Route index element={<Home /> } />
           {/* 고객센터 */}
           <Route path='qna' element={<QnA />} />
