@@ -10,7 +10,6 @@ const baseURL = import.meta.env.VITE_API_URL;
 
 const ItemList = () => {
 
-  const { userAuth } = useOutletContext();
 
 // ★ 상품 관리 ★ //
   // 카테고린 관리 모달창
@@ -65,8 +64,6 @@ const ItemList = () => {
     }).catch()
   }
 
-  
-
   const insertCategory = () => {
     POST(`${baseURL}/admin/categories`, {cateName: infoData.cateName})
       .then((res) => {
@@ -93,7 +90,7 @@ const ItemList = () => {
     } 
   }
 
-  // 상품 등록 API 호출
+  
   // -- 상품 이미지 등록 및 미리보기 -- //
   const [itemPreview, setItemPreview] = useState("/imgs/recipe.jpg"); // 초기 이미지 경로
 
@@ -121,7 +118,6 @@ const ItemList = () => {
   // -- 상품 이미지 등록 및 미리보기 -- End //
 
   // 상품 등록 및 관리
-
   const insertItem = () => {
     const formData = new FormData();
       formData.append('itemName', infoData.itemName);
@@ -133,6 +129,7 @@ const ItemList = () => {
 
       formData.append('image', image); // 이미지 파일 추가
 
+    // 상품 등록 API 호출
     axios.post(`${baseURL}/admin/items`, formData,{
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
@@ -471,7 +468,7 @@ const ItemList = () => {
                               <tr key={j}>
                                 <td>{item.itemCode}</td>
                                 <td className='text-center align-middle'>
-                                  <img src={`${baseURL}${item.imagePath}`} alt="상품 이미지" style={{ width: '50px', height: '50px' }} />
+                                  <img src={item.imagePath} alt="상품 이미지" style={{ width: '50px', height: '50px' }} />
                                 </td>
                                 
                                 <td>
@@ -489,7 +486,7 @@ const ItemList = () => {
                                         width={'100%'}
                                         height={180}
                                         alt="상품 이미지"
-                                        src={`${baseURL}${item.imagePath}`}
+                                        src={item.imagePath}
                                         style={{ width: '100%', height: '240px', border: '1px solid black', objectFit: 'cover' }}
                                       />
                                     </div>
