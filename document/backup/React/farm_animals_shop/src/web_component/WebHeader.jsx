@@ -2,16 +2,31 @@ import React, { useState } from 'react'
 import { Nav, Image } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { href, replace, useNavigate } from 'react-router-dom'
-import { clearMember } from '../redux/memberSlice';
+import { jwtDecode } from 'jwt-decode';
 
 const WebHeader = () => {
   const nav = useNavigate();
-  
-  const user = useSelector((state) => state.member);
+
+  const [reload, setReload] = useState(false);
+
+  if (sessionStorage.getItem('accessToken') !== null) {
+    var user = jwtDecode(sessionStorage.getItem('accessToken'));
+  } else {
+    user = "비회원"
+  }
   const dispatch = useDispatch();
 
   const [myPage, setMyPage] = useState("/public/imgs/black_face.jpg")
 
+  const userValidate = () => {
+    if (sessionStorage.getItem('accessToken') === null) {
+      alert("로그인 후 이용 가능합니다.")
+      setReload(!reload);
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   return (
     <>
@@ -29,17 +44,17 @@ const WebHeader = () => {
       <article className="text-end mb-4" style={{ fontSize: "13px" }}>
         <Nav className="justify-content-end">
           {
-            user.authority !== "guest" ? 
+            sessionStorage.getItem("accessToken") ? 
             <>
               <Nav.Item>
                 <Nav.Link className="px-2">
-                  {user.userName} 님
+                  {user.sub} 님
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
                 <Nav.Link className="px-2" onClick={() => {
                   sessionStorage.clear();
-                  dispatch(clearMember());
+                  setReload(!reload);
                 }}>
                   로그아웃
                 </Nav.Link>
@@ -60,7 +75,9 @@ const WebHeader = () => {
             </>
           }
           <Nav.Item>
-            <Nav.Link href="/farmdas/qna" className="px-2">
+            <Nav.Link className="px-2" onClick={() => {
+              userValidate() ? nav("/farmdas/qna") : setReload(!reload);
+            }}>
               고객센터
             </Nav.Link>
           </Nav.Item>
@@ -86,9 +103,9 @@ const WebHeader = () => {
           style={{ fontSize: "14px" }}
         >
           <Nav.Item>
-            <Nav.Link href="/home" className="px-2">
+            <Nav.Link href={`/farmdas/cart/${user.sub}`} className="px-2">
               <Image
-                src="/public/imgs/basket.jpg"
+                src="/imgs/basket.jpg"
                 roundedCircle
                 style={{
                   border: "1px solid black",
@@ -102,7 +119,7 @@ const WebHeader = () => {
           <Nav.Item>
             <Nav.Link eventKey="link-1" className="px-2">
               <Image
-                src="/public/imgs/recipe.jpg"
+                src="/imgs/recipe.jpg"
                 roundedCircle
                 style={{
                   border: "1px solid black",
