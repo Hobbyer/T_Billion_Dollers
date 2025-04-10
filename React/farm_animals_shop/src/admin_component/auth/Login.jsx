@@ -15,6 +15,7 @@ const Login = () => {
   sessionStorage.clear();
 
   const dispatch = useDispatch();
+
  
   const [user,setUser] = useState({
     userId: '',
@@ -28,24 +29,19 @@ const Login = () => {
     })
   }
 
-  const submitLogin = () => {
-    axios.post(`${baseURL}/auth/login`, user)
-      .then(res => {
-        sessionStorage.setItem('accessToken', res.data.accessToken);
-        sessionStorage.setItem('refreshToken', res.data.refreshToken);
+  const submitLogin = async () => {
+    const PostRes = await axios.post(`${baseURL}/auth/login`, user);
+      sessionStorage.setItem('accessToken', PostRes.data.accessToken);
+      sessionStorage.setItem('refreshToken', PostRes.data.refreshToken);
 
-        GET(`${baseURL}/members/me`).then(res => {
-          dispatch(setMember({
-            authority: res.data.authority,
-            userId : res.data.userId,
-            userName : res.data.name
-          }))
-        })
-        nav('/admin')
-      })
-      .catch(err => {
-        console.error(err)
-      })
+    const userRes = await GET(`${baseURL}/members/me`);
+      dispatch(setMember({
+        authority: userRes.data.authority,
+        userId : userRes.data.userId,
+        userName : userRes.data.name
+      }));
+
+    nav('/admin')
   }
  
   return (
@@ -73,9 +69,7 @@ const Login = () => {
               }} />
             </Form.Group>
             <Stack>
-              <Button type='button' variant="success" onClick={() => {
-                submitLogin()
-              }}>
+              <Button type='submit' variant="success" >
                 로그인
               </Button>
             </Stack>
