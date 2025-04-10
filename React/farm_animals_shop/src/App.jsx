@@ -26,7 +26,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path='/' element={<Navigate to='/admin' replace />} />
+        <Route path='/' element={<Navigate to='/farmdas' replace />} />
         <Route path='/admin' element={<AdminMain/>}>
          
           {/* 축산 상세 페이지 */}
@@ -51,14 +51,14 @@ function App() {
         <Route path='/auth/login' element={<Login/>}/>
         <Route path='/auth/signup' element={<Signup/>}/>
 
-        {/* 쇼핑몰 웹 페이지 */}
-        <Route path='/farmdas' element={<Home /> } />
-        {/* 일반 회원처리 */}
-        <Route path='/farmdas/login' element={<UserLogin />} />
-        {/* 일반 회원가입 */}
-        <Route path='/farmdas/signup' element={<UserSignup />} />
-        {/* 고객센터 */}
-        <Route path='/farmdas/qna' element={<QnA />} />
+        <Route path='/farmdas' element={<Home /> }>
+          {/* 일반 회원처리 */}
+          <Route path='login' element={<UserLogin />} />
+          {/* 일반 회원가입 */}
+          <Route path='signup' element={<UserSignup />} />
+          {/* 고객센터 */}
+          <Route path='qna' element={<QnA />} />
+        </Route>
       </Routes>
     </>
   )

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet, useOutletContext } from 'react-router-dom'
 import AdminSideMenu from './AdminSideMenu'
 import { GET } from '../../apis/CRUD'
 import Header from './Header'
@@ -8,8 +8,11 @@ import Header from './Header'
 const baseURL = import.meta.env.VITE_API_URL;
 
 const AdminMain = () => {
-  
-  const [userAuth,setUserAuth] = useState()
+
+  const [userAuth,setUserAuth] = useState({
+    authority: '',
+    userId: ''
+  })
 
   useEffect(()=>{
     // 세션 스토리지에 accessToken이 없으면 로그인 페이지로 이동
@@ -18,8 +21,10 @@ const AdminMain = () => {
     } else {
       GET(`${baseURL}/members/me`)
         .then(res => {
-          sessionStorage.setItem('userId', res.data.userId)
-          setUserAuth(res.data.authority)
+          setUserAuth({
+            authority: res.data.authority,
+            userId: res.data.userId
+          })
         })
         .catch(err => {
           console.error(err)
@@ -29,11 +34,11 @@ const AdminMain = () => {
   
   return (
     <>
-    { userAuth !== 'ROLE_ADMIN' ?
+    { userAuth.authority !== 'ROLE_ADMIN' ?
       null
       :
       <div className='mb-5 container' style={{minWidth:'1000px', maxHeight:'700px'}}>
-        <Header/>
+        <Header />
         <div className="d-flex rounded-4 mb-5 p-3 shadow-lg" style={{
           borderWidth:'10px'
           ,borderStyle:'solid'
@@ -43,7 +48,7 @@ const AdminMain = () => {
           <AdminSideMenu/>
         </div>
         <div className="flex-grow-1 px-3">
-          <Outlet /> 
+          <Outlet context={{userAuth}}/> 
         </div>
       </div>
    </div>

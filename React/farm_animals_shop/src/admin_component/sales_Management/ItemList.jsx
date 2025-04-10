@@ -4,10 +4,13 @@ import { Button, Container, Figure, FloatingLabel, Form, InputGroup, Modal, Nav,
 import { DELETE, GET, POST } from '../../apis/CRUD';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import { useOutletContext } from 'react-router-dom';
 
 const baseURL = import.meta.env.VITE_API_URL;
 
 const ItemList = () => {
+
+  const { userAuth } = useOutletContext();
 
 // ★ 상품 관리 ★ //
   // 카테고린 관리 모달창

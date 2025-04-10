@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container } from 'react-bootstrap'
 
-const SalesInfo = () => {
+const SalesInfo = ({userAuth}) => {
   return (
     <>
       <Container className='mt-3' style={{ maxHeight: '400px', overflowY: 'auto' }}>
