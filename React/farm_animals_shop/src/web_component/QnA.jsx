@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
-import WebHeader from './WebHeader'
 import { Button, Container, Form } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
 import { POST } from '../apis/CRUD'
 import { jwtDecode } from 'jwt-decode'
 

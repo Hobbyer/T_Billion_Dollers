@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Container, Image, Nav, Navbar, Form, Row, Col, Button, Dropdown } from 'react-bootstrap'
-import WebHeader from './WebHeader'
-import { GET } from '../apis/CRUD'
-import { jwtDecode } from 'jwt-decode';
 
 const baseURL = import.meta.env.VITE_API_URL;
 
 const Home = () => {
-  
-  
 
   const [selectedDropdown, setSelectedDropdown] = useState(0);
   const dropdownItems = [{ name: "Action" }, { name: "Another action" }, { name: "Something else" }];
