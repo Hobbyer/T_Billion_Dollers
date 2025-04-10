@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Nav, Image } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { href, replace, useNavigate } from 'react-router-dom'
-import { clearMember } from '../redux/memberSlice';
 import { jwtDecode } from 'jwt-decode';
 
 const WebHeader = () => {
@@ -12,6 +11,8 @@ const WebHeader = () => {
 
   if (sessionStorage.getItem('accessToken') !== null) {
     var user = jwtDecode(sessionStorage.getItem('accessToken'));
+  } else {
+    user = "비회원"
   }
   const dispatch = useDispatch();
 
@@ -102,9 +103,9 @@ const WebHeader = () => {
           style={{ fontSize: "14px" }}
         >
           <Nav.Item>
-            <Nav.Link href="/home" className="px-2">
+            <Nav.Link href={`/farmdas/cart/${user.sub}`} className="px-2">
               <Image
-                src="/public/imgs/basket.jpg"
+                src="/imgs/basket.jpg"
                 roundedCircle
                 style={{
                   border: "1px solid black",
@@ -118,7 +119,7 @@ const WebHeader = () => {
           <Nav.Item>
             <Nav.Link eventKey="link-1" className="px-2">
               <Image
-                src="/public/imgs/recipe.jpg"
+                src="/imgs/recipe.jpg"
                 roundedCircle
                 style={{
                   border: "1px solid black",
