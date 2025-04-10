@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { GET, POST } from "../../apis/CRUD";
 
 const baseURL = import.meta.env.VITE_API_URL;
@@ -8,10 +8,12 @@ const baseURL = import.meta.env.VITE_API_URL;
 const SalesQnAForm = () => {
   const nav = useNavigate();
 
+  const { userAuth } = useOutletContext();
+
   // input 태그들에 입력한 데이터를 저장하는 변수
   const [questionData, setQuestionData] = useState({
     title: "",
-    userId: sessionStorage.getItem("userId"),
+    userId: userAuth.userId,
     content: "",
   });
 

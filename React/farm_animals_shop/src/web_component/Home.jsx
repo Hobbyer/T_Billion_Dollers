@@ -8,11 +8,11 @@ const Home = () => {
   const dropdownItems = [{ name: "Action" }, { name: "Another action" }, { name: "Something else" }];
 
   const bannerImages = [
-    "/public/imgs/animal.png",
-    "/public/imgs/customer.png",
-    "/public/imgs/black_face.jpg",
-    "/public/imgs/white_face.jpg",
-    "/public/imgs/basket.jpg",
+    "/imgs/animal.png",
+    "/imgs/customer.png",
+    "/imgs/black_face.jpg",
+    "/imgs/white_face.jpg",
+    "/imgs/basket.jpg",
   ];
 
   useEffect(() => {

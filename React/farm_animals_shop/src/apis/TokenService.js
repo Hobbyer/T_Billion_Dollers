@@ -62,6 +62,6 @@ export const refreshTokenIfNeeded = async () => {
 export const startTokenRefreshScheduler = () => {
   setInterval(() => {
     refreshTokenIfNeeded();
-  }, 5000); // 5초마다 체크
+  }, 3000); // 3초마다 체크
 }
 

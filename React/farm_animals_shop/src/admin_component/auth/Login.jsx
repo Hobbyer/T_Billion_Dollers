@@ -26,8 +26,9 @@ const Login = () => {
   const submitLogin = () => {
     axios.post(`${baseURL}/auth/login`, user)
       .then(res => {
-        sessionStorage.setItem('accessToken', res.data.accessToken)
-        sessionStorage.setItem('refreshToken', res.data.refreshToken)
+        sessionStorage.setItem('accessToken', res.data.accessToken);
+        sessionStorage.setItem('refreshToken', res.data.refreshToken);
+        console.log(res.data.accessToken);
         nav('/')
       })
       .catch(err => {

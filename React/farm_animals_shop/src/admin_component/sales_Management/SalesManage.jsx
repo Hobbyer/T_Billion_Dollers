@@ -4,10 +4,12 @@ import { Button, Container, Figure, Form, InputGroup, Modal, Nav, Navbar, Pagina
 import SalesQuestions from './SalesQuestions';
 import SalesInfo from './SalesInfo';
 import ItemList from './ItemList';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 
 const SalesManage = () => {
   const nav = useNavigate();
+
+  const { userAuth } = useOutletContext();
 
   const [activeTab, setActiveTab] = useState('salesInfo');
 
@@ -44,15 +46,15 @@ const SalesManage = () => {
       </Navbar>
 
       {activeTab === 'salesInfo' && (
-        <SalesInfo />
+        <SalesInfo userAuth={userAuth}/>
       )}
 
       {activeTab === 'itemManage' && (
-        <ItemList />
+        <ItemList userAuth={userAuth}/>
       )}
 
       {activeTab === 'QnA' && (
-        <SalesQuestions />
+        <SalesQuestions userAuth={userAuth}/>
       )}
 
     </>
