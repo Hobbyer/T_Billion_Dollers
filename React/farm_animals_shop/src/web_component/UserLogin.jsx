@@ -45,7 +45,7 @@ const UserLogin = () => {
 
   }
 
-  
+
  
   return (
     <>
@@ -73,7 +73,13 @@ const UserLogin = () => {
           </div>
           <Form style={{ width: '300px', marginTop: '20px' }} onSubmit={(e) => {
               e.preventDefault(); // 새로고침 방지
-              submitLogin();      // 로그인 함수 실행
+              submitLogin()
+
+              setLoading(true)
+                setTimeout(() => {
+                  setLoading(false)
+                }, 10000) // 10초 후에 로딩 애니메이션 종료
+              
             }
           }>
             <Form.Group className="mb-3" controlId="formGroupEmail">
@@ -89,12 +95,7 @@ const UserLogin = () => {
               }} />
             </Form.Group>
             <Stack>
-              <Button type='submit' variant="success" onClick={() => {
-                setLoading(true)
-                setTimeout(() => {
-                  setLoading(false)
-                }, 10000) // 10초 후에 로딩 애니메이션 종료
-              }}>
+              <Button type='submit' variant="success" >
                 로그인
               </Button>
             </Stack>
