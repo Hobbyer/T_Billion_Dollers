@@ -7,11 +7,25 @@ import { jwtDecode } from 'jwt-decode';
 
 const WebHeader = () => {
   const nav = useNavigate();
-  
-  const user = jwtDecode(sessionStorage.getItem('accessToken'));
+
+  const [reload, setReload] = useState(false);
+
+  if (sessionStorage.getItem('accessToken') !== null) {
+    var user = jwtDecode(sessionStorage.getItem('accessToken'));
+  }
   const dispatch = useDispatch();
 
   const [myPage, setMyPage] = useState("/public/imgs/black_face.jpg")
+
+  const userValidate = () => {
+    if (sessionStorage.getItem('accessToken') === null) {
+      alert("로그인 후 이용 가능합니다.")
+      setReload(!reload);
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   return (
     <>
@@ -39,7 +53,7 @@ const WebHeader = () => {
               <Nav.Item>
                 <Nav.Link className="px-2" onClick={() => {
                   sessionStorage.clear();
-                  dispatch(clearMember());
+                  setReload(!reload);
                 }}>
                   로그아웃
                 </Nav.Link>
@@ -60,7 +74,9 @@ const WebHeader = () => {
             </>
           }
           <Nav.Item>
-            <Nav.Link href="/farmdas/qna" className="px-2">
+            <Nav.Link className="px-2" onClick={() => {
+              userValidate() ? nav("/farmdas/qna") : setReload(!reload);
+            }}>
               고객센터
             </Nav.Link>
           </Nav.Item>
