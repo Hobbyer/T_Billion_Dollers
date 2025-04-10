@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Container, Image, Nav, Navbar, Form, Row, Col, Button, Dropdown } from 'react-bootstrap'
 import WebHeader from './WebHeader'
+import { GET } from '../apis/CRUD'
+
+const baseURL = import.meta.env.VITE_API_URL;
 
 const Home = () => {
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedDropdown, setSelectedDropdown] = useState(0);
   const dropdownItems = [{ name: "Action" }, { name: "Another action" }, { name: "Something else" }];
 
   const bannerImages = [
@@ -16,8 +19,10 @@ const Home = () => {
   ];
 
   useEffect(() => {
+
+    // 토글 드랍다운 아이템을 3초마다 변경하는 타이머 설정
     const interval = setInterval(() => {
-      setSelectedIndex((prevIndex) => (prevIndex + 1) % dropdownItems.length);
+      setSelectedDropdown((prevIndex) => (prevIndex + 1) % dropdownItems.length);
     }, 3000);
 
     return () => clearInterval(interval);
@@ -51,17 +56,17 @@ const Home = () => {
                   id="dropdown-basic"
                   style={{ minWidth: "200px" }} // Set a fixed minimum width
                 >
-                  <Image src="" alt="상품" />
-                  {dropdownItems[selectedIndex].name}
+                  <Image alt="상품" />
+                  {dropdownItems[selectedDropdown].name}
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu style={{ width: "200px" }}>
                   {dropdownItems.map((item, i) => (
                     <Dropdown.Item
                       key={i}
-                      active={i === selectedIndex}
+                      active={i === selectedDropdown}
                     >
-                      <Image src="" alt="상품" />
+                      <Image alt="상품" />
                       {item.name}
                     </Dropdown.Item>
                   ))}
@@ -94,7 +99,7 @@ const Home = () => {
         </div>
         <div className="image-container" width="100%">
           <Image
-            src={bannerImages[selectedIndex]}
+            src={bannerImages[selectedDropdown]} // 수정필요 임시 드랍다운 인덱스로 설정
             style={{
               width: "100%",
               maxHeight: "250px",

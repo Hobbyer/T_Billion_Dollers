@@ -1,9 +1,14 @@
 import React, { useState } from 'react'
 import { Nav, Image } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
+import { href, replace, useNavigate } from 'react-router-dom'
+import { clearMember } from '../redux/memberSlice';
 
 const WebHeader = () => {
   const nav = useNavigate();
+  
+  const user = useSelector((state) => state.member);
+  const dispatch = useDispatch();
 
   const [myPage, setMyPage] = useState("/public/imgs/black_face.jpg")
 
@@ -14,32 +19,45 @@ const WebHeader = () => {
           a.nav-link {
             color: black;
           }
+          a.nav-link:focus {
+            color: black;
+          }
         `}
       </style>
+
       <article className="text-end mb-4" style={{ fontSize: "13px" }}>
         <Nav className="justify-content-end">
           {
-            sessionStorage.getItem("accessToken") ? (
+            user.authority !== "guest" ? 
+            <>
               <Nav.Item>
-                <Nav.Link href="/farmdas/logout" className="px-2">
+                <Nav.Link className="px-2">
+                  {user.userName} 님
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link className="px-2" onClick={() => {
+                  sessionStorage.clear();
+                  dispatch(clearMember());
+                }}>
                   로그아웃
                 </Nav.Link>
               </Nav.Item>
-            )
-            : (
+            </>
+            : 
+            <>
               <Nav.Item>
                 <Nav.Link href="/farmdas/login" className="px-2">
                   로그인
                 </Nav.Link>
               </Nav.Item>
-            )
+              <Nav.Item>
+                <Nav.Link href="/farmdas/signup" className="px-2">
+                  회원가입
+                </Nav.Link>
+              </Nav.Item>
+            </>
           }
-          {}
-          <Nav.Item>
-            <Nav.Link href="/farmdas/signup" className="px-2">
-              회원가입
-            </Nav.Link>
-          </Nav.Item>
           <Nav.Item>
             <Nav.Link href="/farmdas/qna" className="px-2">
               고객센터

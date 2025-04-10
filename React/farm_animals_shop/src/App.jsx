@@ -16,17 +16,35 @@ import QnA from './web_component/QnA'
 import SalesManage from './admin_component/sales_Management/SalesManage'
 import { useEffect } from 'react'
 import { startTokenRefreshScheduler } from './apis/TokenService'
+import { GET } from './apis/CRUD'
+import { useDispatch } from 'react-redux'
+import { setMember } from './redux/memberSlice'
+
+const baseURL = import.meta.env.VITE_API_URL;
 
 function App() {
+  const dispatch = useDispatch();
+
   // 토큰 만료 시간 체크 및 갱신 로직을 여기에 추가할 수 있습니다.
   useEffect(() => {
     startTokenRefreshScheduler();
+
+    if (sessionStorage.getItem('accessToken')) {
+      GET(`${baseURL}/members/me`).then(res => {
+        dispatch(setMember)({
+          authority: res.data.authority,
+          userId : res.data.userId,
+          userName : res.data.name
+        })
+      })
+    }
   }, [])
   // 원래 사용한 page가지고 와야함
   return (
     <>
       <Routes>
         <Route path='/' element={<Navigate to='/farmdas' replace />} />
+
         <Route path='/admin' element={<AdminMain/>}>
          
           {/* 축산 상세 페이지 */}
@@ -51,8 +69,9 @@ function App() {
         <Route path='/auth/login' element={<Login/>}/>
         <Route path='/auth/signup' element={<Signup/>}/>
 
-        <Route path='/farmdas' element={<Home /> }>
-          {/* 일반 회원처리 */}
+        <Route path='/farmdas' >
+          <Route index element={<Home /> } />
+            {/* 일반 회원처리 */}
           <Route path='login' element={<UserLogin />} />
           {/* 일반 회원가입 */}
           <Route path='signup' element={<UserSignup />} />
