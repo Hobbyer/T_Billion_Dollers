@@ -32,4 +32,11 @@ public class CartItemEntity {
 
   @Column(name = "quantity", nullable = false)
   private Integer quantity; // 수량 (장바구니에 담긴 상품의 수량)
+
+  public Integer getPrice() {
+    return item.getPrice(); // 상품의 가격을 가져오는 메서드
+  }
+
+  @Column(name = "total_price", nullable = false)
+  private Integer totalPrice; // 총 가격 (장바구니에 담긴 상품의 총 가격)
 }

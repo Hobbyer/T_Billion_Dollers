@@ -34,8 +34,9 @@ public class OrderEntity {
   @Column(name = "order_date", nullable = false)
   private LocalDateTime orderDate; // 주문 날짜
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "order_status", nullable = false)
-  private
+  private OrderStatus orderStatus; // 주문 상태 (주문 완료, 배송 중, 배송 완료 등)
 
   @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<OrderItemEntity> orderItems; // 주문한 상품들

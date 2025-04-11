@@ -31,18 +31,21 @@ public class CartEntity {
   @JoinColumn(name = "user_id", nullable = false)
   private Member userId; // 사용자 ID
 
-  @OneToMany
-  @JoinColumn(name = "item_code", nullable = false)
+  @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<CartItemEntity> cartItems; // 장바구니에 담긴 상품들
 
-  @CreationTimestamp // 생성 시 자동으로 현재 시간 저장 (not null)
-  @Column(name = "added_at")
-  private LocalDateTime addedAt; // 추가된 시간
-
-  @UpdateTimestamp // 수정 시 자동으로 현재 시간 저장 (not null)
-  @Column(name = "updated_at")
-  private LocalDateTime updatedAt; // 수정된 시간
+  @Column(name = "total_price", nullable = false)
+  private Integer totalPrice; // 장바구니 총 결제 금액
 
   @Column(name = "is_checked", nullable = false)
   private Boolean isChecked; // 체크 여부 (장바구니에서 선택된 상품인지 여부)
+
+  @Column(name = "quantity", nullable = false)
+  private Integer quantity; // 장바구니에 담긴 상품의 수량
+
+  @Column(name = "added_at", nullable = false)
+  private LocalDateTime addedAt; // 장바구니에 추가된 날짜
+
+  @Column(name = "updated_at", nullable = false)
+  private LocalDateTime updatedAt; // 장바구니 정보가 업데이트된 날짜
 }
