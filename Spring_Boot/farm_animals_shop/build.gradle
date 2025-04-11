@@ -12,7 +12,7 @@ jar {
 }
 
 bootJar {
-	archiveFileName = 'farm_animals_shop-0.0.1-SNAPSHOT-plain.jar' // Render의 Start Command에서 사용
+	archiveFileName = 'app.jar' // Render의 Start Command에서 사용
 }
 
 java {
