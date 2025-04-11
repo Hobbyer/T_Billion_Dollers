@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "cart")
@@ -30,12 +31,9 @@ public class CartEntity {
   @JoinColumn(name = "user_id", nullable = false)
   private Member userId; // 사용자 ID
 
-  @ManyToOne
+  @OneToMany
   @JoinColumn(name = "item_code", nullable = false)
-  private ItemInfoEntity itemCode; // 상품 코드
-
-  @Column(name = "quantity", nullable = false)
-  private Integer quantity; // 수량
+  private List<CartItemEntity> cartItems; // 장바구니에 담긴 상품들
 
   @CreationTimestamp // 생성 시 자동으로 현재 시간 저장 (not null)
   @Column(name = "added_at")
