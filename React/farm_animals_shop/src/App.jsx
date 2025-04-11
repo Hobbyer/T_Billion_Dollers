@@ -13,7 +13,7 @@ import UserLogin from './web_component/UserLogin'
 import UserSignup from './web_component/UserSignup'
 import QnA from './web_component/QnA'
 import SalesManage from './admin_component/sales_Management/SalesManage'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { startTokenRefreshScheduler } from './apis/TokenService'
 import { GET } from './apis/CRUD'
 import { useDispatch } from 'react-redux'
@@ -27,6 +27,8 @@ const baseURL = import.meta.env.VITE_API_URL;
 
 function App() {
   const dispatch = useDispatch();
+
+  const [user, setUser] = useState({});
 
   // 토큰 만료 시간 체크 및 갱신 로직을 여기에 추가할 수 있습니다.
   useEffect(() => {
@@ -42,6 +44,8 @@ function App() {
             userName: res.data.name,
             authority: res.data.authority,
           }));
+
+          setUser(res.data); // 사용자 정보를 상태에 저장
         })
         .catch(() => {
           dispatch(clearMember()); // 이 부분도 마찬가지!
