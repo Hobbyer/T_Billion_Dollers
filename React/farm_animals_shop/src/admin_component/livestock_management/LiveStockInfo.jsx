@@ -2,74 +2,56 @@ import React from "react";
 import LiveStockTemperature from "./LiveStockTemperature";
 import LiveStockHumidity from "./LiveStockHumidity";
 import WeatherCard from "./WeatherCard";
-import { Card, CardBody, CardLink, Col, Row } from "react-bootstrap";
-import LiveStockManage from "./LiveStockManage";
+import {
+  Card,
+  CardBody,
+  CardTitle,
+  Col,
+  Row,
+  Container,
+} from "react-bootstrap";
 
 const LiveStockInfo = () => {
-  // 축산 환경 상세 페이지
   return (
-    <>
-      <div className="container-fuild">
-        <div className="row" style={{ width: "100%", height: "100%" }}>
-          <LiveStockManage/>
-          {/* 왼쪽 박스들 */}
-          <div className="col-md-5 flex-grow-1">
-            <Row xs={1} md={2} className="g-3 align-items-stretch">
-              <Col sm className="d-flex">
-                <Card className="h-100 w-100 shadow-sm">
-                  <Card.Text>HUMIDITY</Card.Text>
-                  <div className="w-100 h-100">
-                    <LiveStockHumidity/>
-                  </div>
-                </Card>
-              </Col>
-              <Col sm className="d-flex">
-                <Card className="h-100 w-100 shadow-sm">
-                  <Card.Text>WEATHER</Card.Text>
-                  <div className="w-100 h-100">
-                    <WeatherCard/>
-                  </div>
-                </Card>
-              </Col>
-              <Col xl className="d-flex">
-                <Card className="h-100 w-100 shadow-sm">
-                    
-                    <CardBody className="d-flex flex-column justify-content-center align-items-stretch">
-                      <LiveStockTemperature/>
-                    </CardBody>
-                   
-                </Card>
-              </Col>
-            </Row>
-          </div>
+    <Container fluid>
+      <Row>
+        <Col xs={12} md={12} className=" p-3 d-flex flex-column">
+          {/* Temperature Graph */}
+          <Card className="w-100 shadow-sm mb-4" style={{ flex: 3 }}>
+            <CardTitle>
+              <h3 className="text-center mt-3">Temperature graph</h3>
+            </CardTitle>
+            <CardBody className="d-flex flex-column justify-content-center align-items-stretch">
+              <LiveStockTemperature />
+            </CardBody>
+          </Card>
 
-          {/* 오른쪽 핵심 내용 */}
-          <div className="col-md-5 flex-grow-1">
-          <Row xs={1} md={2} className="g-3 align-items-stretch">
-              <Col sm className="d-flex">
-                <Card className="h-100 w-100 shadow-sm">
-                  <div className="w-100 h-100">
-                    부저
-                  </div>
-                </Card>
-              </Col>
-              <Col sm className="d-flex">
-                <Card className="h-100 w-100 shadow-sm">
-                  <div className="w-100 h-100">
-                    <WeatherCard/>
-                  </div>
-                </Card>
-              </Col>
-              <Col xl className="d-flex">
-                <Card className="h-100 w-100 shadow-sm">
-                    <LiveStockTemperature/>
-                </Card>
-              </Col>
-            </Row>
-          </div>
-        </div>
-      </div>
-    </>
+          {/* Humidity + Weather Cards */}
+          <Row className="g-3" style={{ flex: 2 }}>
+            <Col xs={12} md={6}>
+              <Card className="w-100 shadow-sm p-4 h-100">
+                <CardTitle>
+                  <h3 className="text-center">Humidity graph</h3>
+                </CardTitle>
+                <CardBody className="p-0">
+                  <LiveStockHumidity />
+                </CardBody>
+              </Card>
+            </Col>
+            <Col xs={12} md={6}>
+              <Card className="w-100 shadow-sm p-4 h-100">
+                <CardTitle>
+                  <h3 className="text-center">Today Weather</h3>
+                </CardTitle>
+                <CardBody className="p-0">
+                  <WeatherCard />
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
