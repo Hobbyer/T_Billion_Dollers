@@ -79,6 +79,8 @@ function App() {
           <Route path='sales-questions' element={<SalesQuestions/>}/>
           {/* Q&A 상세페이지 */}
           <Route path='sales-questions/:questionNum' element={<SalesQnADetail />} />
+          {/* Q&A 답글 작성 페이지 */}
+
         </Route>
 
         {/* 관리자 회원처리 */}

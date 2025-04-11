@@ -40,6 +40,7 @@ const SalesQuestions = () => {
 
   //검색 버튼 클릭 시 실행 함수
   const searchList = () => {
+    console.log(`${baseURL}/questions?searchKeyword=${searchData.searchKeyword}&searchValue=${searchData.searchValue}`)
     GET(
       `${baseURL}/questions?searchKeyword=${searchData.searchKeyword}&searchValue=${searchData.searchValue}`
     )
@@ -118,13 +119,15 @@ const SalesQuestions = () => {
                   <tr key={i}>
                     <td className="text-center">{questionList.length - i}</td>
                     <td>
-                      <span
-                        onClick={(e) =>
-                          nav(`/admin/sales-questions/${question.questionNum}`, {
-                            state : {userId : question.userId, title : question.title} //제목, 작성자 정보 상세보기 페이지로 넘겨주기
-                          })
-                        }
-                      >
+                      <span onClick={() => {
+                        nav(`/admin/sales-questions/${question.questionNum}`, {
+                          state: {
+                            title: question.title,
+                            content: question.content,
+                            userId: question.userId,
+                          },
+                        });
+                      }}>
                         {question.title}
                       </span>
                     </td>
@@ -140,9 +143,6 @@ const SalesQuestions = () => {
           </tbody>
         </Table>
       </div>
-
-      {/* 글쓰기 버튼 */}
-      <Button variant="warning">글등록</Button>
     </Container>
   );
 };

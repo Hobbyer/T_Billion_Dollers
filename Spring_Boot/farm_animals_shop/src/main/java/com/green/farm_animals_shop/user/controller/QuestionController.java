@@ -16,7 +16,7 @@ import java.util.List;
 public class QuestionController {
   private final QuestionService questionService;
 
-  //Q&A 게시글 목록 리스트 (+검색)
+  //Q&A 게시글 목록 리스트 (+검색, 조회수)
   @GetMapping("")
   public List<QuestionDTO> getList(SearchDTO searchDTO){
     System.out.println("searchDTO = " + searchDTO);
