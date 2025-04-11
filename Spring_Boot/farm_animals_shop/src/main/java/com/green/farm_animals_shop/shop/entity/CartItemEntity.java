@@ -39,4 +39,7 @@ public class CartItemEntity {
 
   @Column(name = "total_price", nullable = false)
   private Integer totalPrice; // 총 가격 (장바구니에 담긴 상품의 총 가격)
+
+  @Column(name = "is_checked", nullable = false)
+  private Boolean isChecked; // 개별 상품 체크 여부 (장바구니에서 선택된 상품인지 여부)
 }

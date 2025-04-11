@@ -1,9 +1,45 @@
 package com.green.farm_animals_shop.shop.controller;
 
+import com.green.farm_animals_shop.shop.dto.CartDTO;
+import com.green.farm_animals_shop.shop.service.CartService;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
-@Data
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/cart")
 public class CartController {
 
+  private final CartService cartService;
 
+  @GetMapping("/{userId}")
+  public CartDTO getCart(@PathVariable String userId) {
+    return cartService.getCartByUserId(userId);
+  }
+
+  @PostMapping("/{userId}/add")
+  public void addItem(@PathVariable String userId,
+                      @RequestParam Integer itemCode,
+                      @RequestParam Integer quantity) {
+    cartService.addItemToCart(userId, itemCode, quantity);
+  }
+
+  @PutMapping("/{userId}/{cartItemId}/update")
+  public void updateCartItem(@PathVariable String userId,
+                             @PathVariable Long cartItemId,
+                             @RequestParam Integer newQuantity) {
+    cartService.updateCartItem(userId, cartItemId, newQuantity);
+  }
+
+  @DeleteMapping("/{userId}/{cartItemId}/delete}")
+  public void removeItem(@PathVariable String userId,
+                         @PathVariable Long cartItemId) {
+    cartService.removeItemFromCart(userId, cartItemId);
+  }
+
+  @DeleteMapping("/{userId}/clear}")
+  public void clearCart(@PathVariable String userId) {
+    cartService.clearCart(userId);
+  }
 }
