@@ -34,7 +34,7 @@ public class ItemInfoEntity {
   private Integer stock;
 
   @Column(name = "seller", nullable = false, length = 50)
-  String seller;
+  private String seller;
 
   @Column(name = "description", columnDefinition = "TEXT")
   private String description;
