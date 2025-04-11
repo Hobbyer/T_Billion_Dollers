@@ -1,0 +1,33 @@
+ERD
+
+member : 	user_id(PK)
+		name
+		password
+		phone_number
+		email
+		address
+		authority
+		join_date
+
+category_info:	cate_code(PK)
+			cate_name
+
+item_info:	item_code(PK)
+		cate_code(FK)
+		item_name
+		price
+		stock
+		seller
+		description
+		image_path
+		created_at
+		updated_at
+		
+
+cart:	cart_id(PK)
+	user_id(FK)
+	item_code(FK)
+	quantity
+	added_at
+	updated_at
+	is_checked
