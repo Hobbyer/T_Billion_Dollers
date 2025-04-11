@@ -7,39 +7,18 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
 public class CartDTO {
   private Long cartId;
   private String userId;
-  private Integer itemCode;
+  private List<CartItemDTO> cartItems;
+  private Integer totalPrice;
+  private Boolean isChecked;
   private Integer quantity;
   private LocalDateTime addedAt;
   private LocalDateTime updatedAt;
-  private Boolean isChecked;
 
-  public static CartDTO fromEntity(CartEntity entity) {
-    return CartDTO.builder()
-        .cartId(entity.getCartId())
-        .userId(entity.getUserId() != null ? entity.getUserId().getUserId() : null)
-        .itemCode(entity.getItemCode() != null ? entity.getItemCode().getItemCode() : null)
-        .quantity(entity.getQuantity())
-        .addedAt(entity.getAddedAt())
-        .updatedAt(entity.getUpdatedAt())
-        .isChecked(entity.getIsChecked())
-        .build();
-  }
-
-  public CartEntity toEntity(Member user, ItemInfoEntity item) {
-    return CartEntity.builder()
-        .cartId(this.cartId)
-        .userId(user)
-        .itemCode(item)
-        .quantity(this.quantity)
-        .addedAt(this.addedAt)
-        .updatedAt(this.updatedAt)
-        .isChecked(this.isChecked)
-        .build();
-  }
 }

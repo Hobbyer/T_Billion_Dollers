@@ -30,6 +30,7 @@ public class ShippingEntity {
   @Column(name = "shipping_address", nullable = false)
   private String shippingAddress; // 배송지 주소
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "shipping_status", nullable = false)
   private ShippingStatus shippingStatus; // 배송 상태 (배송 준비 중, 배송 중, 배송 완료 등)
 

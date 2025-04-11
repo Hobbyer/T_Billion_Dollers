@@ -38,4 +38,8 @@ public class OrderItemEntity {
 
   @Column(name = "total_price", nullable = false)
   private Integer totalPrice; // 총 가격 (주문한 상품의 총 가격)
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "order_item_status", nullable = false)
+  private OrderItemStatus orderItemStatus; // 주문 아이템 상태 (주문 완료, 배송 중, 배송 완료 등)
 }
