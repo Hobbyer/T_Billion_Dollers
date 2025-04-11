@@ -32,13 +32,13 @@ public class CartController {
     cartService.updateCartItem(userId, cartItemId, newQuantity);
   }
 
-  @DeleteMapping("/{userId}/{cartItemId}/delete}")
+  @DeleteMapping("/{userId}/{cartItemId}/delete")
   public void removeItem(@PathVariable String userId,
                          @PathVariable Long cartItemId) {
     cartService.removeItemFromCart(userId, cartItemId);
   }
 
-  @DeleteMapping("/{userId}/clear}")
+  @DeleteMapping("/{userId}/clear")
   public void clearCart(@PathVariable String userId) {
     cartService.clearCart(userId);
   }
