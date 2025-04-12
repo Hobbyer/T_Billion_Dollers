@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Container, Image, Nav, Navbar, Form, Row, Col, Button, Dropdown } from 'react-bootstrap'
+import WebItemList from './WebItemList';
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -102,6 +103,9 @@ const Home = () => {
             margin: "20px 0",
           }}
         />
+      </div>
+      <div>
+        <WebItemList />
       </div>
     </>
   );
