@@ -17,41 +17,22 @@ import { useEffect, useState } from 'react'
 import { startTokenRefreshScheduler } from './apis/TokenService'
 import { GET } from './apis/CRUD'
 import { useDispatch } from 'react-redux'
-import { setMember } from './redux/memberSlice'
-import store from './redux/store'
 import FarmdasLayout from './web_component/FarmdasLayout'
-import { clearMember } from './redux/memberSlice'
 import Cart from './web_component/Cart'
+import { clearMember, setMember } from './redux/memberSlice'
 
 const baseURL = import.meta.env.VITE_API_URL;
 
 function App() {
   const dispatch = useDispatch();
 
-  const [user, setUser] = useState({});
-
   // 토큰 만료 시간 체크 및 갱신 로직을 여기에 추가할 수 있습니다.
   useEffect(() => {
-    startTokenRefreshScheduler();
-
+    
     const token = sessionStorage.getItem('accessToken');
 
     if (token) {
-      GET('/members/me')
-        .then((res) => {
-          dispatch(setMember({
-            userId: res.data.userId,
-            userName: res.data.name,
-            authority: res.data.authority,
-          }));
-
-          setUser(res.data); // 사용자 정보를 상태에 저장
-        })
-        .catch(() => {
-          dispatch(clearMember()); // 이 부분도 마찬가지!
-          sessionStorage.removeItem("accessToken");
-          sessionStorage.removeItem("refreshToken");
-        });
+      startTokenRefreshScheduler();
     } else {
       dispatch(clearMember());
     }

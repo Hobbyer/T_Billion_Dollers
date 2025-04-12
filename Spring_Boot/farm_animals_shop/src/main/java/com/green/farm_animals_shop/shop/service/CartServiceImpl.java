@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +30,18 @@ public class CartServiceImpl implements CartService {
   @Transactional(readOnly = true)
   public CartDTO getCartByUserId(String userId) {
     CartEntity cart = cartRepository.findByUserId(userId);
+    if (cart == null) {
+      // 장바구니가 없는 경우: 빈 DTO 반환
+      return CartDTO.builder()
+          .userId(userId)
+          .cartItems(List.of()) // 빈 리스트
+          .totalPrice(0)
+          .isChecked(false)
+          .quantity(0)
+          .addedAt(LocalDateTime.now())
+          .updatedAt(LocalDateTime.now())
+          .build();
+    }
     return CartMapper.toDTO(cart);
   }
 
