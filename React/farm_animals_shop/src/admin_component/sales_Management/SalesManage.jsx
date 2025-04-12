@@ -28,7 +28,7 @@ const SalesManage = () => {
 
       <Navbar bg="dark" data-bs-theme="dark">
         <Container>
-          <Nav className="me-auto" defaultActiveKey={'#salesInfo'}>
+          <Nav className="me-auto" defaultActiveKey={activeTab}>
             <Nav.Link href="#salesInfo" onClick={() => setActiveTab('salesInfo')}>매출액 정보</Nav.Link>
             <Nav.Link href="#itemManage" onClick={() => setActiveTab('itemManage')}>상품 관리</Nav.Link>
             <Nav.Link href="#3">주문 정보</Nav.Link>
