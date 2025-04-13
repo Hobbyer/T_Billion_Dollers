@@ -8,10 +8,20 @@ const WebItemList = () => {
 
   const [itemList, setItemList] = useState([]);
 
+  const cardArray = (arr, size) => {
+    const result = [];
+    for (let i = 0; i < arr.length; i += size) {
+      result.push(arr.slice(i, i + size)); // 배열의 i ~ i + size까지 잘라서 result에 추가
+    }
+    return result;
+  }
+
+  const cardList = cardArray(itemList, 4); // 4개씩 잘라서 배열로 만듦
+
   useEffect(() => {
     axios.get(`${baseURL}/farmdas/items`)
       .then(res => {
-        setItemList(res.data);
+        setItemList(res.data || []);
       })
       .catch(err => {
         console.error(err);
@@ -27,8 +37,8 @@ const WebItemList = () => {
           height: 100%;
         }
         .card img {
-          width: 100%;
-          height: 200px;
+          width: 150px;
+          height: 150px;
           object-fit: cover;
         }
         .card-title {
@@ -41,62 +51,23 @@ const WebItemList = () => {
         }
       `}
     </style>
-      <CardGroup className="mb-3 gap-5">
-        <Card>
-          <Card.Img variant="top" src='' />
-          <Card.Body>
-            <Card.Title>Card title</Card.Title>
-            <Card.Text>
-              This is a wider card with supporting text below as a natural lead-in
-              to additional content. This content is a little bit longer.
-            </Card.Text>
-          </Card.Body>
-          <Card.Footer>
-            <small className="text-muted">Last updated 3 mins ago</small>
-          </Card.Footer>
-        </Card>
-        <Card>
-          <Card.Img variant="top" src='' />
-          <Card.Body>
-            <Card.Title>Card title</Card.Title>
-            <Card.Text>
-              This is a wider card with supporting text below as a natural lead-in
-              to additional content. This content is a little bit longer.
-            </Card.Text>
-          </Card.Body>
-          <Card.Footer>
-            <small className="text-muted">Last updated 3 mins ago</small>
-          </Card.Footer>
-        </Card>
-        <Card>
-          <Card.Img variant="top" src="holder.js/100px160" />
-          <Card.Body>
-            <Card.Title>Card title</Card.Title>
-            <Card.Text>
-              This is a wider card with supporting text below as a natural lead-in
-              to additional content. This content is a little bit longer.
-            </Card.Text>
-          </Card.Body>
-          <Card.Footer>
-            <small className="text-muted">Last updated 3 mins ago</small>
-          </Card.Footer>
-        </Card>
-      </CardGroup>
-      <CardGroup className="mb-3 gap-5">
-        <Card>
-          <Card.Img variant="top" src="holder.js/100px160" />
-          <Card.Body>
-            <Card.Title>Card title</Card.Title>
-            <Card.Text>
-              This is a wider card with supporting text below as a natural lead-in
-              to additional content. This content is a little bit longer.
-            </Card.Text>
-          </Card.Body>
-          <Card.Footer>
-            <small className="text-muted">Last updated 3 mins ago</small>
-          </Card.Footer>
-        </Card>
-      </CardGroup>
+      { cardList.map((item, i) => {
+        return (
+          <CardGroup key={i} style={{ borderRadius: '0px'}}>
+            {item.map((itemData, j) => {
+              return (
+                <Card key={j}>
+                  <Card.Img variant="top" src={itemData.imagePath} />
+                  <Card.Body>
+                    <Card.Title>{itemData.name}</Card.Title>
+                    <Card.Text>{itemData.price}원</Card.Text>
+                  </Card.Body>
+                </Card>
+              )
+            })}
+          </CardGroup>
+        )
+      })}
     </>
   )
 }
