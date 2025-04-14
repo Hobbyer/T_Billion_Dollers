@@ -16,7 +16,7 @@ const WebHeader = () => {
   }
   const dispatch = useDispatch();
 
-  const [myPage, setMyPage] = useState("/public/imgs/black_face.jpg");
+  const [myPage, setMyPage] = useState("/imgs/black_face.jpg");
 
   const userValidate = () => {
     if (sessionStorage.getItem("accessToken") === null) {
@@ -152,8 +152,8 @@ const WebHeader = () => {
                   width: "40px",
                   height: "40px",
                 }}
-                onMouseOver={() => setMyPage("/public/imgs/white_face.jpg")}
-                onMouseOut={() => setMyPage("/public/imgs/black_face.jpg")}
+                onMouseOver={() => setMyPage("/imgs/white_face.jpg")}
+                onMouseOut={() => setMyPage("/imgs/black_face.jpg")}
               />
               <p>마이페이지</p>
             </Nav.Link>
