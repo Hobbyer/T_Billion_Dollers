@@ -72,7 +72,7 @@ function App() {
         {/* 일반 회원처리 */}
         <Route path='/farmdas/login' element={<UserLogin />} />
         {/* 일반 회원가입 */}
-        <Route path='signup' element={<UserSignup />} />
+        <Route path='/farmdas/signup' element={<UserSignup />} />
 
         <Route path='/farmdas' element={<FarmdasLayout />}>
           <Route index element={<Home /> } />
