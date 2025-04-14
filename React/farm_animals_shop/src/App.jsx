@@ -72,6 +72,7 @@ function App() {
         {/* 관리자 회원처리 */}
         <Route path='/auth/login' element={<Login/>}/>
         {/* <Route path='/auth/signup' element={<Signup/>}/> */}
+        <Route path='/auth/signup' element={<Signup/ >} />
 
         
         {/* 일반 회원처리 */}

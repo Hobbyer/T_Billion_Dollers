@@ -56,15 +56,15 @@ public class CartServiceImpl implements CartService {
         .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
 
     CartEntity cart = cartRepository.findByUserId(userId);
-    if(cart == null) {
+    if (cart == null) {
       cart = CartEntity.builder()
           .userId(user)
           .addedAt(LocalDateTime.now())
           .updatedAt(LocalDateTime.now())
           .isChecked(true)
-          .quantity(quantity)
-          .totalPrice(item.getPrice() * quantity)
-          .cartItems(new ) // 장바구니가 없으면 새로 생성
+          .quantity(0)
+          .totalPrice(0)
+          .cartItems(new ArrayList<>()) // ✅ 필수 초기화
           .build();
     }
 
