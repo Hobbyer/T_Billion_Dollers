@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Col, ListGroup, Row, Tab, TabPane } from "react-bootstrap";
 import OrderList from "./OrderList";
 import Refund from "./Refund";
@@ -17,18 +17,37 @@ const menuItems = [
 ];
 
 const MySidebar = () => {
+  // 기본적으로 첫 번째 탭을 활성화
+  const [activeKey, setActiveKey] = useState("#my-orders"); 
+
+  // 페이지 새로 고침 시 activeKey 상태를 localStorage에서 불러오기
+  useEffect(() => {
+    const savedTab = localStorage.getItem("selectedTab");
+    if (savedTab) {
+      // 저장된 탭이 있으면 해당 탭을 활성화
+      setActiveKey(savedTab); 
+    }
+  }, []);
+
+  // 탭 선택 시 activeKey를 업데이트하고 localStorage에 저장
+  const handleSelect = (selectedKey) => {
+    setActiveKey(selectedKey);
+    // 선택된 탭을 localStorage에 저장
+    localStorage.setItem("selectedTab", selectedKey); 
+  };
+
   return (
-    <Tab.Container id="list-group-tabs-example" defaultActiveKey="#link1">
-      <Row>
-        <Col sm={3}>
-          <ListGroup>
-            {menuItems.map((item, i) => (
-              <ListGroup.Item key={i} action href={item.href}>
-                {item.label}
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        </Col>
+    <Tab.Container id="list-group-tabs-example" activeKey={activeKey} onSelect={handleSelect}>
+    <Row>
+      <Col sm={3}>
+        <ListGroup>
+          {menuItems.map((item, i) => (
+            <ListGroup.Item key={i} action eventKey={item.href}>
+              {item.label}
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      </Col>
 
         <Col sm={9}>
           <Tab.Content>

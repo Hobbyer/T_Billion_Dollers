@@ -67,9 +67,9 @@ const UserLogin = () => {
               animation: "spin 1s linear infinite"
             }} />
             :
-            <Image src='/imgs/animal.png' width="100px" className='mb-3' />
+            <Image src='/imgs/animal.png' width="100px" className='mb-3' onClick={()=>{nav("/farmdas")}} />
           }
-            <h1>Farmdas</h1>
+            <h1 className='fw-bold'>Farmdas</h1>
           </div>
           <Form style={{ width: '300px', marginTop: '20px' }} onSubmit={(e) => {
               e.preventDefault(); // 새로고침 방지

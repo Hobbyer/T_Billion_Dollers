@@ -53,7 +53,9 @@ const WebHeader = () => {
                   className="px-2"
                   onClick={() => {
                     sessionStorage.clear();
+                    localStorage.clear();
                     setReload(!reload);
+                    nav('/farmdas')
                   }}
                 >
                   로그아웃
