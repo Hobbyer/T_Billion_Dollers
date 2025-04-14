@@ -35,7 +35,9 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-logging' // 로깅 의존성 추가
+	configurations.all {
+		exclude group : 'commons-logging', module : 'commons-logging'
+	}
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // JPA 의존성 추가
 	implementation 'org.springframework.boot:spring-boot-starter-security' // Spring Security 의존성 추가
 	implementation 'org.springframework.boot:spring-boot-starter-validation' // Validation 의존성 추가
