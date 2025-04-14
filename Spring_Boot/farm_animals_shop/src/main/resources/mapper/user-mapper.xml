@@ -13,20 +13,19 @@
             , REG_DATE
             , READ_CNT
         FROM questions
-        ORDER BY question_num DESC
         <where>
-        <if test="searchValue != null and searchValue != ''">
-            ${searchKeyword} LIKE CONCAT('%', #{searchValue}, '%')
-        </if>
+            <if test="searchValue != null and searchValue != ''">
+                ${searchKeyword} LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
         </where>
+        ORDER BY question_num DESC
     </select>
 
-    <!--페이징 처리-->
     <select id="getQuestionListCount" resultType="int">
         SELECT COUNT(*) <!-- COUNT(*)는 전체 게시글 수 -->
         FROM questions
         <if test="searchValue != null and searchValue != ''">
-            AND ${searchKeyword} LIKE CONCAT('%', #{searchValue}, '%') <!-- 검색어가 있을 경우 -->
+            ${searchKeyword} LIKE CONCAT('%', #{searchValue}, '%') <!-- 검색어가 있을 경우 -->
         </if>
     </select>
 

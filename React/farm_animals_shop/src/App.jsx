@@ -24,6 +24,7 @@ import Cart from './web_component/Cart'
 import MyPageLayout from './web_component/my_page/page/MyPageLayout'
 
 import { clearMember, setMember } from './redux/memberSlice'
+import WebItemDetail from './web_component/WebItemDetail'
 
 
 const baseURL = import.meta.env.VITE_API_URL;
@@ -72,10 +73,15 @@ function App() {
         {/* 관리자 회원처리 */}
         <Route path='/auth/login' element={<Login/>}/>
         {/* <Route path='/auth/signup' element={<Signup/>}/> */}
+        <Route path='/auth/signup' element={<Signup/ >} />
 
         
         {/* 일반 회원처리 */}
         <Route path='/farmdas/login' element={<UserLogin />} />
+
+        {/* 일반 회원가입 */}
+        <Route path='/farmdas/signup' element={<UserSignup />} />
+
 
         <Route path='/farmdas' element={<FarmdasLayout />}>
           <Route index element={<Home /> } />
@@ -83,10 +89,6 @@ function App() {
           <Route path='qna' element={<QnA />} />
           {/* 장바구니 */}
           <Route path='cart/:userId' element={<Cart />} />
-          {/* 일반 회원가입 */}
-          <Route path='signup' element={<UserSignup />} />
-
-
 
           {/* 페이지 생성 및 구현해야되는 컴포넌트들 */}
           {/* 주문내역 */}
@@ -94,11 +96,9 @@ function App() {
           {/* 마이페이지 */}
           <Route path='mypage/:userId' element={<MyPageLayout/>} />
           {/* 상품상세 */}
-          <Route path='product/:productId' element={<div>상품상세</div>} />
-          {/* 상품리스트 */}
-          <Route path='product' element={<div>상품리스트</div>} />
+          <Route path='item/:itemCode' element={<WebItemDetail />} />
           {/* 카테고리별 상품리스트 */}
-          <Route path='product/:category' element={<div>상품리스트</div>} />
+          <Route path='item/:category' element={<div>상품리스트</div>} />
 
         </Route>
       </Routes>

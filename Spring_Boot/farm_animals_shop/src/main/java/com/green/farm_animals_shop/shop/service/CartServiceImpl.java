@@ -6,6 +6,7 @@ import com.green.farm_animals_shop.shop.dto.CartDTO;
 import com.green.farm_animals_shop.shop.entity.CartEntity;
 import com.green.farm_animals_shop.shop.entity.CartItemEntity;
 import com.green.farm_animals_shop.shop.mapper.CartMapper;
+import com.green.farm_animals_shop.shop.repository.CartItemRepository;
 import com.green.farm_animals_shop.shop.repository.CartRepository;
 import com.green.farm_animals_shop.user.entity.Member;
 import com.green.farm_animals_shop.user.repository.MemberRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -22,6 +24,7 @@ import java.util.NoSuchElementException;
 public class CartServiceImpl implements CartService {
 
   private final CartRepository cartRepository;
+  private final CartItemRepository cartItemRepository;
   private final ItemInfoRepository itemInfoRepository;
   private final MemberRepository memberRepository;
 
@@ -55,23 +58,34 @@ public class CartServiceImpl implements CartService {
         .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
 
     CartEntity cart = cartRepository.findByUserId(userId);
-    if(cart == null) {
+    if (cart == null) {
       cart = CartEntity.builder()
-          .userId(user)
-          .addedAt(LocalDateTime.now())
-          .updatedAt(LocalDateTime.now())
-          .isChecked(true)
-          .quantity(0)
-          .totalPrice(0)
-          .build();
+              .userId(user)
+              .cartItems(new ArrayList<>())
+              .quantity(quantity)
+              .totalPrice(item.getPrice() * quantity)
+              .isChecked(true)
+              .addedAt(LocalDateTime.now())
+              .updatedAt(LocalDateTime.now())
+              .build();
+
+      cartRepository.save(cart); // 장바구니가 없으면 새로 생성
     }
 
     CartItemEntity newItem = CartItemEntity.builder()
-        .cart(cart)
-        .item(item)
-        .quantity(quantity)
-        .totalPrice(item.getPrice() * quantity)
-        .build();
+            .cart(cart)
+            .item(item)
+            .quantity(quantity)
+            .totalPrice(item.getPrice() * quantity)
+            .isChecked(true)
+            .build();
+
+    cartItemRepository.save(newItem); // 장바구니에 상품 추가
+
+    // 장바구니 총 수량 및 가격 업데이트
+    cart.setQuantity(cart.getQuantity() + quantity);
+    cart.setTotalPrice(cart.getTotalPrice() + newItem.getTotalPrice());
+    cart.setUpdatedAt(LocalDateTime.now());
 
     cartRepository.save(cart);
   }
