@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Form, Row, Table } from 'react-bootstrap'
-import { GET } from '../apis/CRUD';
+import { GET, PUT } from '../apis/CRUD';
 import { useSelector } from 'react-redux';
 import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -13,19 +14,13 @@ const Cart = () => {
   const token = sessionStorage.getItem('accessToken');
   const userId = jwtDecode(token).sub;
 
-  const [cartList, setCartList] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [totalDiscount, setTotalDiscount] = useState(0);
-  const [totalPayment, setTotalPayment] = useState(0);
-  const [quantity, setQuantity] = useState(1);
-  
   // 체크 박스 컨트롤
   
   const [selectedItems, setSelectedItems] = useState([]);
 
   const handleSelectAll = (e) => {
     const isChecked = e.target.checked;
-    const newSelectedItems = isChecked ? cartList.map(item => item.itemCode) : [];
+    const newSelectedItems = isChecked ? cart.map(item => item.itemCode) : [];
     setSelectedItems(newSelectedItems);
   }
 
@@ -35,16 +30,37 @@ const Cart = () => {
     setSelectedItems(newSelectedItems);
   }
 
-  useEffect(() => {
-    GET(`${baseURL}/cart/${userId}`)
-      .then( res => {
-        setCartList(res.data);
-        console.log(res.data);
+  const [cart, setCart] = useState([]);
+  const [items, setItems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalDiscount, setTotalDiscount] = useState(0);
+  const [totalPayment, setTotalPayment] = useState(0);
+  const [quantity, setQuantity] = useState({});
+
+  // 장바구니 데이터 수정
+  const handleUpdateCart = (cartItemId, newQuantity) => {
+      axios.put(`${baseURL}/farmdas/cart/${userId}/${cartItemId}/update?newQuantity=${newQuantity}`)
+      .then(res => {
+        
       })
       .catch(err => {
         console.error(err);
       })
+  }
+
+  useEffect(() => {
+    GET(`${baseURL}/farmdas/cart/${userId}`)
+      .then( res => {
+        console.log(res.data.cartItems)
+        setCart(res.data);
+        setItems(res.data.cartItems);
+        })
+      .catch(err => {
+        console.error(err);
+      })
   }, [])
+
+
 
 
   return (
@@ -159,26 +175,32 @@ const Cart = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td><Form.Check className='custom-checkbox' type='checkbox'  /></td>
-                <td>
-                  <img alt="상품 이미지" style={{ width: "50px", height: "50px" }} />
-                </td>
-                <td>상품명</td>
-                <td>50,000원</td>
-                <td>
-                  <Form.Control className='custom-number' type="number" min={0}  defaultValue={1} onChange={(e)=>{
-                    if (e.target.value < 0) {
-                      e.target.value = 0;
-                    }
-                    setQuantity(e.target.value);
-                    setTotalPrice(50000 * e.target.value);
-                  }} />
-                </td>
-                <td>10,000원</td>
-                <td>40,000원</td>
-                <td><button className='btn btn-danger'>삭제</button></td>
-              </tr>
+              { Array.isArray(items) && 
+                items.map((item, i) => {
+                  return (
+                    <tr key={i}>
+                      <td><Form.Check className='custom-checkbox' type='checkbox' defaultChecked={item.isChecked} onChange={(e) => handleSelectItem(e, item.itemCode)} /></td>
+                      <td>
+                        <img src={item.itemImagePath} alt="상품 이미지" style={{ width: "50px", height: "50px" }}  />
+                      </td>
+                      <td>{item.itemName}</td>
+                      <td>{item.price}원</td>
+                      <td>
+                        <Form.Control className='custom-number' type="number" name={item.itemCode} min={0} defaultValue={item.quantity} onChange={(e) => {
+                          if (e.target.value < 1) {
+                            e.target.value = 1;
+                          }
+                          setQuantity({ ...quantity, [e.target.name]: Number(e.target.value) });
+                          handleUpdateCart(item.cartItemId, Number(e.target.value));
+                        }} />
+                      </td>
+                      <td>-</td>
+                      <td>{item.price * (quantity[item.itemCode] ?? item.quantity)}원</td>
+                      <td><button className='btn btn-danger'>삭제</button></td>
+                    </tr>
+                  )
+                })
+              }
             </tbody>
             <tfoot>
               <tr style={{ borderBottom: "none"}}>

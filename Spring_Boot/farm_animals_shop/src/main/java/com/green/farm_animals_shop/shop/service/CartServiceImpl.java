@@ -72,22 +72,39 @@ public class CartServiceImpl implements CartService {
       cartRepository.save(cart); // 장바구니가 없으면 새로 생성
     }
 
-    CartItemEntity newItem = CartItemEntity.builder()
-            .cart(cart)
-            .item(item)
-            .quantity(quantity)
-            .totalPrice(item.getPrice() * quantity)
-            .isChecked(true)
-            .build();
+    CartItemEntity existingItem = cartItemRepository.findByUserIdAndItemCode(userId, itemCode);
 
-    cartItemRepository.save(newItem); // 장바구니에 상품 추가
+    if (existingItem != null) {
+      // 이미 장바구니에 있는 상품인 경우 수량만 업데이트
+      existingItem.setQuantity(existingItem.getQuantity() + quantity);
+      existingItem.setTotalPrice(existingItem.getTotalPrice() + (item.getPrice() * quantity));
 
-    // 장바구니 총 수량 및 가격 업데이트
-    cart.setQuantity(cart.getQuantity() + quantity);
-    cart.setTotalPrice(cart.getTotalPrice() + newItem.getTotalPrice());
-    cart.setUpdatedAt(LocalDateTime.now());
+      cartItemRepository.save(existingItem);
 
-    cartRepository.save(cart);
+      // 장바구니 총 수량 및 가격 업데이트
+      cart.setQuantity(cart.getQuantity() + existingItem.getQuantity());
+      cart.setTotalPrice(cart.getTotalPrice() + existingItem.getTotalPrice());
+      cart.setUpdatedAt(LocalDateTime.now());
+
+      cartRepository.save(cart);
+    } else {
+      CartItemEntity newItem = CartItemEntity.builder()
+          .cart(cart)
+          .item(item)
+          .quantity(quantity)
+          .totalPrice(item.getPrice() * quantity)
+          .isChecked(true)
+          .build();
+
+      cartItemRepository.save(newItem); // 장바구니에 상품 추가
+
+      // 장바구니 총 수량 및 가격 업데이트
+      cart.setQuantity(cart.getQuantity() + quantity);
+      cart.setTotalPrice(cart.getTotalPrice() + newItem.getTotalPrice());
+      cart.setUpdatedAt(LocalDateTime.now());
+
+      cartRepository.save(cart);
+    }
   }
 
   @Override
