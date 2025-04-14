@@ -80,6 +80,8 @@ const Home = () => {
             </Container>
           </Navbar>
         </div>
+
+        
         <div className="d-flex justify-content-between mt-3 mb-2">
           <div style={{ width: "50%" }}>
             <Dropdown className="d-flex">
