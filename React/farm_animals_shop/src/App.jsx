@@ -24,6 +24,7 @@ import Cart from './web_component/Cart'
 import MyPageLayout from './web_component/my_page/page/MyPageLayout'
 
 import { clearMember, setMember } from './redux/memberSlice'
+import WebItemDetail from './web_component/WebItemDetail'
 
 
 const baseURL = import.meta.env.VITE_API_URL;
@@ -95,11 +96,9 @@ function App() {
           {/* 마이페이지 */}
           <Route path='mypage/:userId' element={<MyPageLayout/>} />
           {/* 상품상세 */}
-          <Route path='product/:productId' element={<div>상품상세</div>} />
-          {/* 상품리스트 */}
-          <Route path='product' element={<div>상품리스트</div>} />
+          <Route path='item/:itemCode' element={<WebItemDetail />} />
           {/* 카테고리별 상품리스트 */}
-          <Route path='product/:category' element={<div>상품리스트</div>} />
+          <Route path='item/:category' element={<div>상품리스트</div>} />
 
         </Route>
       </Routes>
