@@ -3,20 +3,20 @@ import React, { useState } from 'react'
 import { Form, Button, Container, Stack, Col, Row, Image } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { GET } from '../apis/CRUD';
-import { useDispatch } from 'react-redux';
-import { setMember } from '../redux/memberSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { setMember } from '../redux/memberSlice.js';
 
 const baseURL = import.meta.env.VITE_API_URL;
  
  
 const UserLogin = () => {
-  const nav = useNavigate();
   sessionStorage.clear();
-
-  const dispatch = useDispatch();
+  
+  const nav = useNavigate();
 
   const [loading, setLoading] = useState(false);
  
+  
   const [user,setUser] = useState({
     userId: '',
     password: ''
@@ -33,13 +33,6 @@ const UserLogin = () => {
     const PostRes = await axios.post(`${baseURL}/auth/login`, user);
       sessionStorage.setItem('accessToken', PostRes.data.accessToken);
       sessionStorage.setItem('refreshToken', PostRes.data.refreshToken);
-
-    const userRes = await GET(`${baseURL}/members/me`);
-      dispatch(setMember({
-        authority: userRes.data.authority,
-        userId : userRes.data.userId,
-        userName : userRes.data.name
-      }));
 
     nav('/farmdas')
 

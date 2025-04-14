@@ -24,15 +24,16 @@
             </if>
             ${searchKeyword} LIKE CONCAT('%', #{searchValue}, '%')
         </if>
+
         </where>
+        ORDER BY question_num DESC
     </select>
 
-    <!--페이징 처리-->
     <select id="getQuestionListCount" resultType="int">
         SELECT COUNT(*) <!-- COUNT(*)는 전체 게시글 수 -->
         FROM questions
         <if test="searchValue != null and searchValue != ''">
-            AND ${searchKeyword} LIKE CONCAT('%', #{searchValue}, '%') <!-- 검색어가 있을 경우 -->
+            ${searchKeyword} LIKE CONCAT('%', #{searchValue}, '%') <!-- 검색어가 있을 경우 -->
         </if>
     </select>
 
@@ -75,7 +76,7 @@
         UPDATE questions
         SET
         READ_CNT = READ_CNT + 1
-        WHERE NumQUESTION_NUM = #{questionNum}
+        WHERE QUESTION_NUM = #{questionNum}
     </update>
 
     <!--답글 목록 조회-->

@@ -1,11 +1,8 @@
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container } from "react-bootstrap";
+import { Button, Container, Form, Table } from "react-bootstrap";
 import { GET } from "../../apis/CRUD";
-
-
-
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -19,12 +16,12 @@ const SalesQuestions = () => {
   //서버에서 게시글 목록 받아오기
   useEffect(() => {
     GET(`${baseURL}/questions`)
-      .then(res => {
+      .then((res) => {
         setQuestionList(res.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
-      })
+      });
   }, []);
 
   //검색창에 입력한 데이터를 저장할 변수
@@ -43,81 +40,102 @@ const SalesQuestions = () => {
 
   //검색 버튼 클릭 시 실행 함수
   const searchList = () => {
-    GET(`${baseURL}/questions?searchKeyword=${searchData.searchKeyword}&searchValue=${searchData.searchValue}`)
+    console.log(`${baseURL}/questions?searchKeyword=${searchData.searchKeyword}&searchValue=${searchData.searchValue}`)
+    GET(
+      `${baseURL}/questions?searchKeyword=${searchData.searchKeyword}&searchValue=${searchData.searchValue}`
+    )
       .then((res) => setQuestionList(res.data))
       .catch((error) => console.log(error));
   };
 
   return (
-    <Container className='mt-3' style={{ maxHeight: '400px', overflowY: 'auto' }}>
+    <Container
+      className="mt-3"
+      style={{ maxHeight: "400px", overflowY: "auto" }}
+    >
       <h2>Q&A게시판</h2>
 
       {/* 검색input단 */}
-      <div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          margin: "20px 0",
+        }}
+      >
         <div>
           <span>총 {questionList.length}개의 게시물</span>
         </div>
-        <div>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <select
             value={searchData.searchKeyword}
             name="searchKeyword"
+            className="form-select bg-warning text-dark fw-bold border-warning w-auto"
             onChange={(e) => changeSearchData(e)}
           >
             <option value="TITLE">제목</option>
             <option value="USER_ID">작성자</option>
           </select>
-          <input
-            type="text"
-            name="searchValue"
-            value={searchData.searchValue}
-            onChange={(e) => changeSearchData(e)}
-          />
-          <button type="button" onClick={(e) => searchList()}>
+          <Form>
+            <Form.Control
+              type="text"
+              id="searchInput"
+              name="searchValue"
+              value={searchData.searchValue}
+              onChange={changeSearchData}
+              placeholder="검색어를 입력하세요"
+              aria-describedby="searchHelpBlock"
+            />
+          </Form>
+          <Button variant="outline-warning text-dark" onClick={(e) => searchList()}>
             검색
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* 테이블 */}
       <div>
-        <table>
+        <Table responsive="md" className="custom-table">
           <thead>
             <tr>
-              <td>번호</td>
-              <td>제목</td>
-              <td>작성자</td>
-              <td>작성일</td>
-              <td>조회수</td>
+              <th className="text-center">번호</th>
+              <th className="text-center">제목</th>
+              <th className="text-center">작성자</th>
+              <th className="text-center">작성일</th>
+              <th className="text-center">조회수</th>
             </tr>
           </thead>
           <tbody>
             {questionList.length === 0 ? (
               <tr>
-                <td colSpan={5}>등록된 게시물이 없습니다.</td>
+                <td colSpan={5} className="text-center">
+                  등록된 게시물이 없습니다.
+                </td>
               </tr>
             ) : (
               questionList.map((question, i) => {
                 return (
                   <tr key={i}>
-                    <td>{questionList.length - i}</td>
+                    <td className="text-center">{questionList.length - i}</td>
                     <td>
-                      <span
-                        onClick={(e) =>
-                          nav(`/admin/sales-questions/${question.questionNum}`)
-                        }
-                      >
+                      <span style={{ cursor: 'pointer' }} onClick={() => {
+                        nav(`/admin/sales-questions/${question.questionNum}`);
+                      }}>
                         {question.title}
                       </span>
                     </td>
-                    <td>{question.userId}</td>
-                    <td>{dayjs(question.regDate).format("YYYY년 MM월 DD일")}</td>
-                    <td>{question.readCnt}</td>
+                    <td className="text-center">{question.userId}</td>
+                    <td className="text-center">
+                      {dayjs(question.regDate).format("YYYY년 MM월 DD일")}
+                    </td>
+                    <td className="text-center">{question.readCnt}</td>
                   </tr>
                 );
               })
             )}
           </tbody>
-        </table>
+        </Table>
       </div>
     </Container>
   );
