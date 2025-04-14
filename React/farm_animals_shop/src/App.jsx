@@ -17,9 +17,14 @@ import { useEffect, useState } from 'react'
 import { startTokenRefreshScheduler } from './apis/TokenService'
 import { GET } from './apis/CRUD'
 import { useDispatch } from 'react-redux'
+
 import FarmdasLayout from './web_component/FarmdasLayout'
 import Cart from './web_component/Cart'
+
+import MyPageLayout from './web_component/my_page/page/MyPageLayout'
+
 import { clearMember, setMember } from './redux/memberSlice'
+
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -66,13 +71,15 @@ function App() {
 
         {/* 관리자 회원처리 */}
         <Route path='/auth/login' element={<Login/>}/>
-        <Route path='/auth/signup' element={<Signup/>}/>
+        {/* <Route path='/auth/signup' element={<Signup/>}/> */}
 
         
         {/* 일반 회원처리 */}
         <Route path='/farmdas/login' element={<UserLogin />} />
+
         {/* 일반 회원가입 */}
         <Route path='/farmdas/signup' element={<UserSignup />} />
+
 
         <Route path='/farmdas' element={<FarmdasLayout />}>
           <Route index element={<Home /> } />
@@ -81,13 +88,11 @@ function App() {
           {/* 장바구니 */}
           <Route path='cart/:userId' element={<Cart />} />
 
-
-
           {/* 페이지 생성 및 구현해야되는 컴포넌트들 */}
           {/* 주문내역 */}
           <Route path='order' element={<div>주문내역</div>} />
           {/* 마이페이지 */}
-          <Route path='mypage' element={<div>마이페이지</div>} />
+          <Route path='mypage/:userId' element={<MyPageLayout/>} />
           {/* 상품상세 */}
           <Route path='product/:productId' element={<div>상품상세</div>} />
           {/* 상품리스트 */}
