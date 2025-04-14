@@ -13,15 +13,18 @@ import UserLogin from './web_component/UserLogin'
 import UserSignup from './web_component/UserSignup'
 import QnA from './web_component/QnA'
 import SalesManage from './admin_component/sales_Management/SalesManage'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { startTokenRefreshScheduler } from './apis/TokenService'
 import { GET } from './apis/CRUD'
 import { useDispatch } from 'react-redux'
-import { setMember } from './redux/memberSlice'
+
 import FarmdasLayout from './web_component/FarmdasLayout'
-import { clearMember } from './redux/memberSlice'
 import Cart from './web_component/Cart'
+
 import MyPageLayout from './web_component/my_page/page/MyPageLayout'
+
+import { clearMember, setMember } from './redux/memberSlice'
+
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -30,24 +33,11 @@ function App() {
 
   // 토큰 만료 시간 체크 및 갱신 로직을 여기에 추가할 수 있습니다.
   useEffect(() => {
-    startTokenRefreshScheduler();
-
+    
     const token = sessionStorage.getItem('accessToken');
 
     if (token) {
-      GET('/members/me')
-        .then((res) => {
-          dispatch(setMember({
-            userId: res.data.userId,
-            userName: res.data.name,
-            authority: res.data.authority,
-          }));
-        })
-        .catch(() => {
-          dispatch(clearMember()); // 이 부분도 마찬가지!
-          sessionStorage.removeItem("accessToken");
-          sessionStorage.removeItem("refreshToken");
-        });
+      startTokenRefreshScheduler();
     } else {
       dispatch(clearMember());
     }
@@ -75,6 +65,8 @@ function App() {
           <Route path='sales-questions' element={<SalesQuestions/>}/>
           {/* Q&A 상세페이지 */}
           <Route path='sales-questions/:questionNum' element={<SalesQnADetail />} />
+          {/* Q&A 답글 작성 페이지 */}
+
         </Route>
 
         {/* 관리자 회원처리 */}

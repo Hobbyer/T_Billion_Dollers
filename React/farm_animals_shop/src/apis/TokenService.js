@@ -48,7 +48,7 @@ export const refreshTokenIfNeeded = async () => {
       console.log("토큰 갱신 성공:");
 
     } catch (error) {
-      console.error("토큰 갱신 실패:", error);
+      alert("로그인 정보가 만료되었습니다. 다시 로그인 해주세요.");
 
       // 갱신 실패 시 로그아웃 처리 (예: 세션 스토리지 초기화)
       sessionStorage.removeItem("accessToken");

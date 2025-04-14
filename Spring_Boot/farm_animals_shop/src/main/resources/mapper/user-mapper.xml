@@ -13,9 +13,10 @@
             , REG_DATE
             , READ_CNT
         FROM questions
+        ORDER BY question_num DESC
         <where>
         <if test="searchValue != null and searchValue != ''">
-            #{searchKeyword} LIKE CONCAT('%', #{searchValue}, '%')
+            ${searchKeyword} LIKE CONCAT('%', #{searchValue}, '%')
         </if>
         </where>
     </select>
@@ -68,7 +69,7 @@
         UPDATE questions
         SET
         READ_CNT = READ_CNT + 1
-        WHERE NumQUESTION_NUM = #{questionNum}
+        WHERE QUESTION_NUM = #{questionNum}
     </update>
 
     <!--답글 목록 조회-->

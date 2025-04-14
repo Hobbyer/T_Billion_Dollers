@@ -1,7 +1,52 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Col, Form, Row, Table } from 'react-bootstrap'
+import { GET } from '../apis/CRUD';
+import { useSelector } from 'react-redux';
+import { jwtDecode } from 'jwt-decode';
+
+const baseURL = import.meta.env.VITE_API_URL;
+
+
 
 const Cart = () => {
+
+  const token = sessionStorage.getItem('accessToken');
+  const userId = jwtDecode(token).sub;
+
+  const [cartList, setCartList] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalDiscount, setTotalDiscount] = useState(0);
+  const [totalPayment, setTotalPayment] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  
+  // 체크 박스 컨트롤
+  
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const handleSelectAll = (e) => {
+    const isChecked = e.target.checked;
+    const newSelectedItems = isChecked ? cartList.map(item => item.itemCode) : [];
+    setSelectedItems(newSelectedItems);
+  }
+
+  const handleSelectItem = (e, itemCode) => {
+    const isChecked = e.target.checked;
+    const newSelectedItems = isChecked ? [...selectedItems, itemCode] : selectedItems.filter(item => item !== itemCode);
+    setSelectedItems(newSelectedItems);
+  }
+
+  useEffect(() => {
+    GET(`${baseURL}/cart/${userId}`)
+      .then( res => {
+        setCartList(res.data);
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.error(err);
+      })
+  }, [])
+
+
   return (
     <>
     <style>
@@ -117,13 +162,17 @@ const Cart = () => {
               <tr>
                 <td><Form.Check className='custom-checkbox' type='checkbox'  /></td>
                 <td>
-                  <img src="https://via.placeholder.com/100" alt="상품 이미지" style={{ width: "50px", height: "50px" }} />
+                  <img alt="상품 이미지" style={{ width: "50px", height: "50px" }} />
                 </td>
                 <td>상품명</td>
                 <td>50,000원</td>
                 <td>
-                  <Form.Control className='custom-number' type="number" min={1} defaultValue={1} onChange={(e)=>{
-                    if (e.target.value < 1) e.target.value = 1;
+                  <Form.Control className='custom-number' type="number" min={0}  defaultValue={1} onChange={(e)=>{
+                    if (e.target.value < 0) {
+                      e.target.value = 0;
+                    }
+                    setQuantity(e.target.value);
+                    setTotalPrice(50000 * e.target.value);
                   }} />
                 </td>
                 <td>10,000원</td>
