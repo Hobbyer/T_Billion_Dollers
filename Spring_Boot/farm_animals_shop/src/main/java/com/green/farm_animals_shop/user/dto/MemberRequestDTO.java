@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Builder // 빌더 패턴을 사용하여 객체 생성
 
 // Request 를 받을 때 사용하는 DTO
+// 사용자가 수정하고 싶은 정보를 담아서 보내는 역할
 public class MemberRequestDTO {
 
   private String userId; // 사용자 ID
