@@ -4,7 +4,7 @@ import { Form, Button, Container, Stack, Col, Row, Image } from 'react-bootstrap
 import { useNavigate } from 'react-router-dom'
 import { GET } from '../../apis/CRUD';
 import { useDispatch } from 'react-redux';
-import { setMember } from '../../redux/memberSlice';
+import { setMember } from '../../redux/memberSlice.js';
 
 const baseURL = import.meta.env.VITE_API_URL;
 

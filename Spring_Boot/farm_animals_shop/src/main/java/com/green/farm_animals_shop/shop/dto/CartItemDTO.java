@@ -19,4 +19,5 @@ public class CartItemDTO {
   private String itemName; // 상품 이름
   private String itemDescription; // 상품 설명
   private String itemImagePath; // 상품 이미지 경로
+  private Boolean isChecked; // 개별 상품 체크 여부 (장바구니에서 선택된 상품인지 여부)
 }
