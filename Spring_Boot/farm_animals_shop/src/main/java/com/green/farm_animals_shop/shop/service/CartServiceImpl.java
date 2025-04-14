@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -55,7 +56,7 @@ public class CartServiceImpl implements CartService {
         .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
 
     CartEntity cart = cartRepository.findByUserId(userId);
-    if(cart == null) {
+    if (cart == null) {
       cart = CartEntity.builder()
           .userId(user)
           .addedAt(LocalDateTime.now())
@@ -63,6 +64,7 @@ public class CartServiceImpl implements CartService {
           .isChecked(true)
           .quantity(0)
           .totalPrice(0)
+          .cartItems(new ArrayList<>()) // ✅ 필수 초기화
           .build();
     }
 
@@ -71,7 +73,15 @@ public class CartServiceImpl implements CartService {
         .item(item)
         .quantity(quantity)
         .totalPrice(item.getPrice() * quantity)
+        .isChecked(true) // 기본적으로 체크된 상태로 추가
         .build();
+
+    cart.getCartItems().add(newItem); // 장바구니에 새 상품 추가
+
+    // 장바구니 총 수량 및 가격 업데이트
+    cart.setQuantity(cart.getQuantity() + quantity);
+    cart.setTotalPrice(cart.getTotalPrice() + newItem.getTotalPrice());
+    cart.setUpdatedAt(LocalDateTime.now());
 
     cartRepository.save(cart);
   }

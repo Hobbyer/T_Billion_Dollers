@@ -72,10 +72,15 @@ function App() {
         {/* 관리자 회원처리 */}
         <Route path='/auth/login' element={<Login/>}/>
         {/* <Route path='/auth/signup' element={<Signup/>}/> */}
+        <Route path='/auth/signup' element={<Signup/ >} />
 
         
         {/* 일반 회원처리 */}
         <Route path='/farmdas/login' element={<UserLogin />} />
+
+        {/* 일반 회원가입 */}
+        <Route path='/farmdas/signup' element={<UserSignup />} />
+
 
         <Route path='/farmdas' element={<FarmdasLayout />}>
           <Route index element={<Home /> } />
@@ -83,10 +88,6 @@ function App() {
           <Route path='qna' element={<QnA />} />
           {/* 장바구니 */}
           <Route path='cart/:userId' element={<Cart />} />
-          {/* 일반 회원가입 */}
-          <Route path='signup' element={<UserSignup />} />
-
-
 
           {/* 페이지 생성 및 구현해야되는 컴포넌트들 */}
           {/* 주문내역 */}

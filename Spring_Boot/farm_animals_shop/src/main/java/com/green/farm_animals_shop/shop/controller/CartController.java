@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("farmdas/cart")
+@RequestMapping("/farmdas/cart")
 public class CartController {
 
   private final CartService cartService;
@@ -20,15 +20,15 @@ public class CartController {
 
   @PostMapping("/{userId}/add")
   public void addItem(@PathVariable("userId") String userId,
-                      @RequestParam Integer itemCode,
-                      @RequestParam Integer quantity) {
+                      @RequestParam("itemCode") Integer itemCode,
+                      @RequestParam("quantity") Integer quantity) {
     cartService.addItemToCart(userId, itemCode, quantity);
   }
 
   @PutMapping("/{userId}/{cartItemId}/update")
   public void updateCartItem(@PathVariable("userId") String userId,
                              @PathVariable("cartItemId") Long cartItemId,
-                             @RequestParam Integer newQuantity) {
+                             @RequestParam("newQuantity") Integer newQuantity) {
     cartService.updateCartItem(userId, cartItemId, newQuantity);
   }
 
