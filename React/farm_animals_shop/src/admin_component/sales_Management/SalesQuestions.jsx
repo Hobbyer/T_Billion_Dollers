@@ -119,14 +119,8 @@ const SalesQuestions = () => {
                   <tr key={i}>
                     <td className="text-center">{questionList.length - i}</td>
                     <td>
-                      <span onClick={() => {
-                        nav(`/admin/sales-questions/${question.questionNum}`, {
-                          state: {
-                            title: question.title,
-                            content: question.content,
-                            userId: question.userId,
-                          },
-                        });
+                      <span style={{ cursor: 'pointer' }} onClick={() => {
+                        nav(`/admin/sales-questions/${question.questionNum}`);
                       }}>
                         {question.title}
                       </span>

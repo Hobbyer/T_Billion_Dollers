@@ -1,10 +1,12 @@
 package com.green.farm_animals_shop.user.service;
 
 import com.green.farm_animals_shop.config.SecurityUtil;
+import com.green.farm_animals_shop.user.dto.MemberRequestDTO;
 import com.green.farm_animals_shop.user.dto.MemberResponseDTO;
 import com.green.farm_animals_shop.user.entity.Member;
 import com.green.farm_animals_shop.user.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,5 +38,27 @@ public class MemberService {
       member.setPassword(passwordEncoder.encode(newPassword)); // 비밀번호 암호화
       return MemberResponseDTO.of(memberRepository.save(member)); // 회원 정보 저장
     }
+  }
+
+  // 사용자 정보를 수정하는 메서드
+  @Transactional
+  public Member updateMemberInfo(String userId, MemberRequestDTO memberRequestDTO) {
+    // 기존 사용자 정보를 조회
+    Member existingMember = memberRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+    // 비밀번호가 변경되었을 경우만 암호화 처리
+    if (memberRequestDTO.getPassword() != null && !memberRequestDTO.getPassword().isEmpty()) {
+      existingMember.setPassword(passwordEncoder.encode(memberRequestDTO.getPassword()));
+    }
+
+    // 사용자 정보 업데이트
+    existingMember.setName(memberRequestDTO.getName());
+    existingMember.setEmail(memberRequestDTO.getEmail());
+    existingMember.setPhoneNumber(memberRequestDTO.getPhoneNumber());
+    existingMember.setAddress(memberRequestDTO.getAddress());
+
+    // 변경된 정보를 저장하고 반환
+    return memberRepository.save(existingMember);
   }
 }
