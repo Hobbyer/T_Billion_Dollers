@@ -225,7 +225,7 @@ const Cart = () => {
                   items.map((item, i) => {
                     return (
                       <tr key={i}>
-                        <td><Form.Check className='custom-checkbox' type='checkbox' defaultChecked={item.isChecked} onChange={(e) => handleSelectItem(e, item.cartItemId)} /></td>
+                        <td><Form.Check className='custom-checkbox' type='checkbox' checked={item.isChecked} onChange={(e) => handleSelectItem(e, item.cartItemId)} /></td>
                         <td>
                           <img src={item.itemImagePath} alt="상품 이미지" style={{ width: "50px", height: "50px" }}  />
                         </td>
