@@ -11,52 +11,67 @@ const baseURL = import.meta.env.VITE_API_URL;
 
 const Cart = () => {
 
+  // 로그인한 유저의 아이디
   const token = sessionStorage.getItem('accessToken');
   const userId = jwtDecode(token).sub;
 
-  // 가격 포맷팅 함수
+  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState([]);
+  const [quantity, setQuantity] = useState({});
+
+  // 상품 가격 포맷팅 함수
   const formatPrice = (price) => {
     if (!price && price !== 0) return "";
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
-  // 체크 박스 컨트롤
-  const [selectedItems, setSelectedItems] = useState([]);
 
+  // 장바구니에서 선택된 상품의 가격 계산
+  const selectedItems = items.filter(item => item?.isChecked);
+  const totalPrice = selectedItems.reduce(
+    (sum, item) => sum + item.price * (quantity[item.itemCode] ?? item.quantity),
+    0
+  );
+
+
+  // 장바구니에서 상품 수량 업데이트
+  const handleUpdateCart = (cartItemId, newQuantity) => {
+    axios.put(`${baseURL}/farmdas/cart/${userId}/${cartItemId}/update?newQuantity=${newQuantity}`)
+      .catch(console.error);
+  };
+
+  // 장바구니에서 상품 선택 상태 업데이트
+  const updatedIsChecked = (cartItemId, isChecked) => {
+    axios.put(`${baseURL}/farmdas/cart/${userId}/${cartItemId}/checked?isChecked=${isChecked}`)
+      .catch(console.error);
+  };
+
+  // 장바구니에서 모든 상품 선택 상태 업데이트
   const handleSelectAll = (e) => {
     const isChecked = e.target.checked;
-    const newSelectedItems = isChecked ? cart.map(item => item.itemCode) : [];
-    setSelectedItems(newSelectedItems);
-  }
+    const updated = items.map(item => {
+      updatedIsChecked(item.cartItemId, isChecked);
+      return { ...item, isChecked };
+    });
+    setItems(updated);
+  };
 
-  const handleSelectItem = (e, itemCode) => {
+  // 장바구니에서 개별 상품 선택 상태 업데이트
+  const handleSelectItem = (e, cartItemId) => {
     const isChecked = e.target.checked;
-    const newSelectedItems = isChecked ? [...selectedItems, itemCode] : selectedItems.filter(item => item !== itemCode);
-    setSelectedItems(newSelectedItems);
-  }
+    const updated = items.map(item =>
+      item.cartItemId === cartItemId ? { ...item, isChecked } : item
+    );
+    setItems(updated);
+    updatedIsChecked(cartItemId, isChecked);
+  };
 
-  const [cart, setCart] = useState([]);
-  const [items, setItems] = useState([]);
-  const [quantity, setQuantity] = useState({});
-
-  // 장바구니 데이터 수정
-  const handleUpdateCart = (cartItemId, newQuantity) => {
-      axios.put(`${baseURL}/farmdas/cart/${userId}/${cartItemId}/update?newQuantity=${newQuantity}`)
-      .then(res => {
-        
-      })
-      .catch(err => {
-        console.error(err);
-      })
-  }
-
-  const [loading, setLoading] = useState(true);
+  
 
   useEffect(() => {
     GET(`${baseURL}/farmdas/cart/${userId}`)
       .then( res => {
-        console.log(res.data.cartItems)
-        setCart(res.data);
+        const itemsWithChecked = res.data.cartItems.map(item => ({ ...item, isChecked: item.isChecked ?? false }))
         setItems(res.data.cartItems);
         setLoading(false);
         })
@@ -190,7 +205,12 @@ const Cart = () => {
               <thead>
                 <tr>
                   <th style={{ width: "50px" }}>
-                    <Form.Check className='custom-checkbox' type='checkbox' style={{ textAlign: "center" }} />
+                    <Form.Check className='custom-checkbox' type='checkbox' style={{ textAlign: "center" }}
+                      checked={items.length > 0 && items.every(item => item.isChecked)}
+                      onChange={(e) => {
+                        handleSelectAll(e)
+                      }}
+                    />
                   </th>
                   <th colSpan={2}>상품정보</th>
                   <th>가격</th>
@@ -205,19 +225,17 @@ const Cart = () => {
                   items.map((item, i) => {
                     return (
                       <tr key={i}>
-                        <td><Form.Check className='custom-checkbox' type='checkbox' defaultChecked={item.isChecked} onChange={(e) => handleSelectItem(e, item.itemCode)} /></td>
+                        <td><Form.Check className='custom-checkbox' type='checkbox' defaultChecked={item.isChecked} onChange={(e) => handleSelectItem(e, item.cartItemId)} /></td>
                         <td>
                           <img src={item.itemImagePath} alt="상품 이미지" style={{ width: "50px", height: "50px" }}  />
                         </td>
                         <td>{item.itemName}</td>
                         <td>{formatPrice(item.price)}원</td>
                         <td>
-                          <Form.Control className='custom-number' type="number" name={item.itemCode} min={0} defaultValue={item.quantity} onChange={(e) => {
-                            if (e.target.value < 1) {
-                              e.target.value = 1;
-                            }
-                            setQuantity({ ...quantity, [e.target.name]: Number(e.target.value) });
-                            handleUpdateCart(item.cartItemId, Number(e.target.value));
+                          <Form.Control className='custom-number' type="number" name={item.itemCode} min={1} defaultValue={item.quantity} onChange={(e) => {
+                            const newQty = Math.max(1, Number(e.target.value));
+                            setQuantity({ ...quantity, [item.itemCode]: newQty });
+                            handleUpdateCart(item.cartItemId, newQty);
                           }} />
                         </td>
                         <td>-</td>
@@ -251,7 +269,7 @@ const Cart = () => {
                   <span>총 상품금액</span>
                   <span style={{ fontWeight: "bold" }}>
                     { // 체크 박스 선택된 상품의 가격
-                      formatPrice(items.reduce((acc, item) => acc + item.price * (quantity[item.itemCode] ?? item.quantity), 0))
+                      formatPrice(totalPrice)
                     }원
                   </span>
                 </div>
@@ -269,8 +287,8 @@ const Cart = () => {
                   <span>총 결제금액</span>
                   <span style={{ fontWeight: "bold", color: "green" }}>
                     {
-
-                    }
+                      formatPrice(totalPrice)
+                    }원
                   </span>
                 </div>
               </Col>

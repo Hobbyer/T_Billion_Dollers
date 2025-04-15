@@ -9,6 +9,8 @@ public interface CartService {
   // 장바구니에 상품 추가 (상품 중복여부 체크)
   boolean addItemToCart(String userId, Integer itemCode, Integer quantity); // 장바구니에 상품 추가
 
+  void checkItem(String userId, Long cartItemId, Boolean isChecked); // 장바구니 상품 체크 여부 수정
+
   void updateCartItem(String userId, Long cartItemId, Integer newQuantity); // 장바구니 상품 수량 수정
 
   void removeItemFromCart(String userId, Long cartItemId); // 장바구니에서 상품 삭제
