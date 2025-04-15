@@ -19,19 +19,17 @@ const MyQnA = () => {
       <Table>
         <thead>
           <tr>
-            <th>NO</th>
-            <th>제목</th>
-            <th>작성자</th>
             <th>작성일</th>
-            <th>처리 여부</th>
+            <th>상품명</th>
+            <th>문의 제목</th>
+            <th>답변 여부</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>1</td>
-            <td>배송문의 드립니다.</td>
-            <td>kim</td>
             <td>2025-04-14</td>
+            <td>등심 A++</td>
+            <td>배송문의 드립니다.</td>
             <td>
               <Button>미완료</Button>{" "}
             </td>

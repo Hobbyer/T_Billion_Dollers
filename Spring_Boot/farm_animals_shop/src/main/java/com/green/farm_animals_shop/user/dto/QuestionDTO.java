@@ -13,5 +13,5 @@ public class QuestionDTO {
   private int readCnt;
   private String userId;
 
-  private String status;// 문의 완료 여부
+  private boolean answered;// 문의 완료 여부
 }
