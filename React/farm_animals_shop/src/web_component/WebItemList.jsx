@@ -15,6 +15,11 @@ const WebItemList = () => {
 
   const nav = useNavigate();
 
+  const formatPrice = (price) => {
+    if (!price && price !== 0) return "";
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   const [itemList, setItemList] = useState([]);
 
 
@@ -31,16 +36,25 @@ const WebItemList = () => {
 
   // 장바구니 담기
   const addToCart = (itemCode, quantity) => {
-    axios.post(`${baseURL}/farmdas/cart/${member}/add?itemCode=${itemCode}&quantity=${quantity}`)
-      .then(res => {
-        confirm('장바구니에 담았습니다. 확인하시겠습니까?') ?
-          nav(`/farmdas/cart/{}`) : null;
-      })
-      .catch(err => {
-        console.log(itemCode, quantity)
-        console.error(err);
-        alert('장바구니에 담기 실패!')
-      })
+    if (member === null) {
+      alert("로그인 후 장바구니에 담을 수 있습니다.");
+    } else {
+      // 장바구니에 담기 API 호출
+      axios.post(`${baseURL}/farmdas/cart/${member}/add?itemCode=${itemCode}&quantity=${quantity}`)
+        .then((res) => {
+          if(res.data === false) {
+            confirm("이미 장바구니에 담긴 상품입니다. \n장바구니로 이동하시겠습니까?") &&
+            nav("/farmdas/cart/:userId");
+          } else {
+            confirm("장바구니에 담겼습니다. \n장바구니로 이동하시겠습니까?") &&
+            nav("/farmdas/cart/:userId");
+          }
+        })
+        .catch((err) => {
+            console.error(err); // 에러 처리
+            alert("장바구니에 담기 실패했습니다.");
+        });
+    }
   }
 
   useEffect(() => {
@@ -90,18 +104,18 @@ const WebItemList = () => {
                         nav(`/farmdas/item/${itemData.itemCode}`)
                       }}
                     >{itemData.itemName}</Card.Title>
-                    <Card.Text>{itemData.price}원</Card.Text>
+                    <Card.Text>{formatPrice(itemData.price)}원</Card.Text>
                   </Card.Body>
                   <Card.Footer>
                     <ButtonGroup className='gap-1'>
                       <Button variant="outline-success" style={{ width: '50%' }}>
                         <small className="text-muted" style={{ fontSize: '10px' }}>구매하기</small>
                       </Button>
-                      <Button variant="outline-primary" style={{ width: '50%' }}>
+                      <Button variant="outline-primary" style={{ width: '50%' }}
+                        onClick={() => {
+                          addToCart(itemData.itemCode, 1)
+                        }}>
                         <small className="text-muted" style={{ fontSize: '10px' }}
-                          onClick={() => {
-                            addToCart(itemData.itemCode, 1)
-                          }}
                         >장바구니</small>
                       </Button>
                     </ButtonGroup>

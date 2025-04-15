@@ -54,6 +54,9 @@ export const refreshTokenIfNeeded = async () => {
       sessionStorage.removeItem("accessToken");
       sessionStorage.removeItem("refreshToken");
 
+      // 로그인 페이지로 리다이렉트
+      window.location.href = "/farmdas/login";
+
     }
   }
 };
