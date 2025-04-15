@@ -1,33 +1,34 @@
-import React, { useState } from 'react';
-import { Form, Button, Container, Row, Col, Image } from 'react-bootstrap';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { Form, Button, Container, Row, Col, Image } from "react-bootstrap";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const baseURL = import.meta.env.VITE_API_URL;
 
+// * 돈나감 주의 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 인증번호 발송은 1회에 20원입니다. *
 const UserSignup = () => {
   const nav = useNavigate();
 
   const [formData, setFormData] = useState({
-    userId: '',
-    password: '',
-    name: '',
-    email: '',
-    emailSecond: '@test.com',
-    phoneNumber: '',
-    phoneCheck: '',
-    address: '',
+    userId: "",
+    password: "",
+    name: "",
+    email: "",
+    emailSecond: "@test.com",
+    phoneNumber: "",
+    phoneCheck: "",
+    address: "",
     isAgreed: false,
   });
 
   const [codeSent, setCodeSent] = useState(false); // 인증번호 발송 여부
-
+  
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     const updatedFormData = {
       ...formData,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === "checkbox" ? checked : value,
     };
 
     updatedFormData.email = `${updatedFormData.emailFirst}${updatedFormData.emailSecond}`;
@@ -38,53 +39,81 @@ const UserSignup = () => {
 
   const signupSubmit = (e) => {
     if (formData.isAgreed === true) {
-    axios.post(`${baseURL}/auth/signup`, formData)
-      .then((res) => {
-        console.log(res.data);
-        alert('회원가입이 완료되었습니다.')
-        nav('/farmdas/login')
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+      axios
+        .post(`${baseURL}/auth/signup`, formData)
+        .then((res) => {
+          console.log(res.data);
+          alert("회원가입이 완료되었습니다.");
+          nav("/farmdas/login");
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     } else {
-      alert('회원가입에 대한 모든 내용을 동의해주세요.')
+      alert("회원가입에 대한 모든 내용을 동의해주세요.");
     }
-  }
+  };
 
   const sendVerificationCode = () => {
-    axios.post(`${baseURL}/auth/send`, { phoneNumber: formData.phoneNumber })
-    .then(res => {
-      alert('인증번호가 발송되었습니다')
-      setCodeSent(true); // 인증번호 발송 상태 업데이트
-    })
-    .catch(err => {
-      alert('인증번호 발송 실패!')
-      console.error(err)
-    })
-  }
+    axios
+      .post(`${baseURL}/auth/send`, { phoneNumber: formData.phoneNumber })
+      .then((res) => {
+        alert("인증번호가 발송되었습니다");
+        setCodeSent(true); // 확인창 보여주기!
+      })
+      .catch((err) => {
+        alert("인증번호 발송 실패!");
+        console.error(err);
+      });
+  };
 
+
+  const [codeCompleted, setCodeCompleted] = useState(false); // 인증번호 확인 여부
+  // 인증번호 확인
   const verifyCode = () => {
-    axios.post(`${baseURL}/auth/verify`, { phoneNumber: formData.phoneNumber, code: formData.phoneCheck })
-    .then(res => {
-      alert('인증 성공!')
-    })
-    .catch(err => {
-      alert('인증 실패')
-    })
-  }
+    axios
+      .post(`${baseURL}/auth/verify`, {
+        phoneNumber: formData.phoneNumber,
+        code: formData.phoneCheck,
+      })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.success === true) {
+          alert("인증 성공!");
+          setCodeCompleted(true); // 인증번호 확인 완료
+        }
+        else {
+          alert("인증번호가 틀립니다.");
+          setFormData({ ...formData, phoneCheck: "" }); // 인증번호 입력창 초기화
+        }
+      })
+      .catch((err) => {
+        alert("인증 실패");
+      });
+  };
 
   return (
     <>
-      <Container className='mt-5 mb-5 px-5 d-flex justify-content-center align-items-center' style={{ minHeight: '100vh' }}>
-        <div style={{ width: '100%', maxWidth: '600px' }}>
-          <div className='text-center mb-5'>
-            <Image src='/imgs/animal.png' width="100px" className='mb-3' onClick={() => { nav('/farmdas') }} style={{ cursor: 'pointer' }} />
+      <Container
+        className="mt-5 mb-5 px-5 d-flex justify-content-center align-items-center"
+        style={{ minHeight: "100vh" }}
+      >
+        <div style={{ width: "100%", maxWidth: "600px" }}>
+          <div className="text-center mb-5">
+            <Image
+              src="/imgs/animal.png"
+              width="100px"
+              className="mb-3"
+              onClick={() => {
+                nav("/farmdas");
+              }}
+              style={{ cursor: "pointer" }}
+            />
             <h1>Farmdas</h1>
           </div>
-          <Form className='w-100'>
+          <Form className="w-100">
             <Form.Label>아이디</Form.Label>
-            <Form.Group className='mb-2' controlId="formGridEmail">
+            <Form.Group className="mb-2" controlId="formGridEmail">
               <Form.Control
                 type="text"
                 placeholder="User ID"
@@ -93,7 +122,7 @@ const UserSignup = () => {
                 onChange={handleChange}
               />
             </Form.Group>
-            
+
             <Row className="mb-2">
               <Form.Group as={Col} controlId="formGridPassword">
                 <Form.Label>비밀번호</Form.Label>
@@ -102,7 +131,7 @@ const UserSignup = () => {
                   placeholder="Password"
                   name="password"
                   value={formData.password}
-                  autoComplete='off'
+                  autoComplete="off"
                   onChange={handleChange}
                 />
               </Form.Group>
@@ -114,14 +143,14 @@ const UserSignup = () => {
                   placeholder="Password Check"
                   name="passwordCheck"
                   value={formData.passwordCheck}
-                  autoComplete='off'
+                  autoComplete="off"
                   onChange={handleChange}
                 />
               </Form.Group>
             </Row>
 
             <Form.Label>이름</Form.Label>
-            <Form.Group className='mb-2' controlId="formGridName">
+            <Form.Group className="mb-2" controlId="formGridName">
               <Form.Control
                 type="text"
                 placeholder="Name"
@@ -157,8 +186,11 @@ const UserSignup = () => {
               </Form.Group>
             </Row>
 
+            {/* ------------------------------- */}
+            {/* 연락처 + 인증번호 발송 버튼 */}
             <Row className="mb-2">
               <Form.Label>연락처</Form.Label>
+
               <Form.Group as={Col} controlId="formGridPhone">
                 <Form.Control
                   type="text"
@@ -169,27 +201,55 @@ const UserSignup = () => {
                 />
               </Form.Group>
 
-              <Form.Group as={Col} controlId="formGridPhoneCheck">
-                <Form.Control
-                  type="text"
-                  placeholder="인증번호"
-                  name="phoneCheck"
-                  value={formData.phoneCheck}
-                  onChange={handleChange}
-                />
-              </Form.Group>
-              
-              <Form.Group as={Col} controlId="formGridPhoneCheckButton">
-                <Button variant='success' type="button" onClick={verifyCode}>
-                  확인
-                </Button>
-                <Button variant="success" type="button" onClick={sendVerificationCode}>
+              <Form.Group as={Col} xs="auto">
+                <Button
+                  variant="success"
+                  type="button"
+                  onClick={sendVerificationCode}
+                >
                   인증번호 발송
                 </Button>
               </Form.Group>
             </Row>
 
-            <Form.Group className='mb-2' controlId="formGridCity">
+            {/* 발송 완료 후 인증번호 입력창 + 확인 버튼 나타남 */}
+            {codeSent && (
+              <Row className="mb-2">
+                { codeCompleted === false ? (
+                  <Form.Group as={Col} controlId="formGridPhoneCheck">
+                  <Form.Control
+                    type="text"
+                    placeholder="인증번호"
+                    name="phoneCheck"
+                    value={formData.phoneCheck}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+                )
+                :
+                (
+                  <Form.Group as={Col} controlId="formGridPhoneCheck">
+                  <Form.Control
+                    disabled={true}
+                    type="text"
+                    name="phoneCheck"
+                    value={formData.phoneCheck}
+                    readOnly
+                  />
+                </Form.Group>
+                )
+                }
+                <Form.Group as={Col} xs="auto">
+                  <Button variant="success" type="button" onClick={verifyCode}>
+                    확인
+                  </Button>
+                </Form.Group>
+              </Row>
+            )}
+
+            {/* ------------------------------- */}
+
+            <Form.Group className="mb-2" controlId="formGridCity">
               <Form.Label>주소</Form.Label>
               <Form.Control
                 placeholder="도로명 주소"
@@ -208,7 +268,10 @@ const UserSignup = () => {
               />
             </Form.Group>
 
-            <Form.Group className="mb-4 d-flex justify-content-end" id="formGridCheckbox">
+            <Form.Group
+              className="mb-4 d-flex justify-content-end"
+              id="formGridCheckbox"
+            >
               <Form.Check
                 type="checkbox"
                 label="회원가입에 대한 모든 내용을 동의합니다."
