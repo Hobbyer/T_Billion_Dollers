@@ -19,6 +19,7 @@ const baseURL = import.meta.env.VITE_API_URL;
 
 const Home = () => {
   const [selectedDropdown, setSelectedDropdown] = useState(0);
+  const [isFocused, setIsFocused] = useState(false);
   const dropdownItems = [
     { name: "Action" },
     { name: "Another action" },
@@ -78,8 +79,10 @@ const Home = () => {
                 padding: "10px 20px",
                 height: "40px",
                 boxShadow:"1px 1px 3px",
-                textDecorationLine:"none"
+                border: isFocused ? "1px solid #ccc" : "none" ,  // border 없애기
               }}
+              onFocus={() => setIsFocused(true)}  // 클릭 시 border 없애기
+              onBlur={() => setIsFocused(false)}   // 클릭을 떼면 원래대로
             />
             <Image
               src="/imgs/search_icon.jpg"
@@ -95,7 +98,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="image-container mb-5 mt-5" width="100%">
+      <div className="image-container mb-5 mt-4" width="100%">
         <Carousel data-bs-theme="dark">
           <Carousel.Item>
             <img
