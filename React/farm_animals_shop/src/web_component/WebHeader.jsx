@@ -114,7 +114,7 @@ const WebHeader = () => {
           <Nav.Item>
             <Nav.Link
               onClick={() => {
-                nav(`/farmdas/cart/${user.sub}`);
+                userValidate() ? nav(`/farmdas/cart/${user.sub}`) : setReload(!reload);
               }}
               className="px-2"
             >
@@ -131,7 +131,11 @@ const WebHeader = () => {
             </Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link eventKey="link-1" className="px-2">
+            <Nav.Link eventKey="link-1" onClick={() => {
+                userValidate() ? nav(`/farmdas`) : setReload(!reload);
+              }}
+              className="px-2"
+            >
               <Image
                 src="/imgs/recipe.jpg"
                 roundedCircle
@@ -145,7 +149,11 @@ const WebHeader = () => {
             </Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link href={`/farmdas/mypage/${user.sub}`} className="px-2">
+            <Nav.Link onClick={() => {
+                userValidate() ? nav(`/farmdas/mypage/${user.sub}`) : setReload(!reload);
+              }}
+              className="px-2"
+            >
               <Image
                 src={myPage}
                 roundedCircle
