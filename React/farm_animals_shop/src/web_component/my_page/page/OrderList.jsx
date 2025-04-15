@@ -115,28 +115,28 @@ const OrderList = () => {
               <p>0건</p>
             </div>
             <div>
-              <i class="bi bi-chevron-right"></i>
+              <i className="bi bi-chevron-right"></i>
             </div>
             <div className="p-2">
               <p>결제완료</p>
               <p>0건</p>
             </div>
             <div>
-              <i class="bi bi-chevron-right"></i>
+              <i className="bi bi-chevron-right"></i>
             </div>
             <div className="p-2">
               <p>상품준비중</p>
               <p>0건</p>
             </div>
             <div>
-              <i class="bi bi-chevron-right"></i>
+              <i className="bi bi-chevron-right"></i>
             </div>
             <div className="p-2">
               <p>배송중</p>
               <p>0건</p>
             </div>
             <div>
-              <i class="bi bi-chevron-right"></i>
+              <i className="bi bi-chevron-right"></i>
             </div>
             <div className="p-2">
               <p>배송완료</p>
@@ -160,7 +160,7 @@ const OrderList = () => {
             </div>
             <div style={{ textAlign: "center", margin: "50px" }}>
               <p style={{ fontSize: "4rem", color: "lightgray" }}>
-                <i class="bi bi-exclamation-circle"></i>
+                <i className="bi bi-exclamation-circle"></i>
               </p>
               <span style={{ fontSize: "0.9rem", color: "gray" }}>
                 해당기간 내에 주문배송 <br /> 내역이 없습니다.
@@ -184,43 +184,43 @@ const OrderList = () => {
               <div className="p-2 d-flex justify-content-evenly align-items-center">
                 <div className="p-2 d-flex flex-column align-items-center">
                   <p>01</p>
-                  <i class="bi bi-hourglass"></i>
+                  <i className="bi bi-hourglass"></i>
                   <p>입금대기중</p>
                 </div>
                 <div>
-                  <i class="bi bi-chevron-right"></i>
+                  <i className="bi bi-chevron-right"></i>
                 </div>
                 <div className="p-2 d-flex flex-column align-items-center">
                   <p>02</p>
-                  <i class="bi bi-credit-card"></i>
+                  <i className="bi bi-credit-card"></i>
                   <p>결제완료</p>
                 </div>
                 <div>
-                  <i class="bi bi-chevron-right"></i>
+                  <i className="bi bi-chevron-right"></i>
                 </div>
                 <div className="p-2 d-flex flex-column align-items-center">
                   <p>03</p>
-                  <i class="bi bi-box-seam"></i>
+                  <i className="bi bi-box-seam"></i>
                   <p>상품준비중</p>
                 </div>
                 <div>
-                  <i class="bi bi-chevron-right"></i>
+                  <i className="bi bi-chevron-right"></i>
                 </div>
                 <div className="p-2 d-flex flex-column align-items-center">
                   <p>04</p>
-                  <i class="bi bi-truck"></i>
+                  <i className="bi bi-truck"></i>
                   <p>배송중</p>
                 </div>
                 <div>
-                  <i class="bi bi-chevron-right"></i>
+                  <i className="bi bi-chevron-right"></i>
                 </div>
                 <div className="p-2 d-flex flex-column align-items-center">
                   <p>05</p>
-                  <i class="bi bi-gift"></i>
+                  <i className="bi bi-gift"></i>
                   <p>배송완료</p>
                 </div>
                 <div>
-                  <i class="bi bi-chevron-right"></i>
+                  <i className="bi bi-chevron-right"></i>
                 </div>
               </div>
             </div>

@@ -131,20 +131,6 @@ const WebHeader = () => {
             </Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link eventKey="link-1" className="px-2">
-              <Image
-                src="/imgs/recipe.jpg"
-                roundedCircle
-                style={{
-                  border: "1px solid black",
-                  width: "40px",
-                  height: "40px",
-                }}
-              />
-              <p>결제내역</p>
-            </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
             <Nav.Link href={`/farmdas/mypage/${user.sub}`} className="px-2">
               <Image
                 src={myPage}

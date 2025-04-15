@@ -1,7 +1,7 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
-import { CardGroup, Card, ButtonGroup, Button, Row, Col } from "react-bootstrap";
+import { Card, ButtonGroup, Button, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const baseURL = import.meta.env.VITE_API_URL;
@@ -94,7 +94,7 @@ const WebItemList = () => {
 
       <Row className="g-4 px-3">
         {itemList.map((itemData, i) => (
-          <Col key={i} xs={6} sm={4} md={3} lg={3}>
+          <Col key={i} xs={12} sm={4} md={3} lg={3}>
             <Card className="h-100 shadow-sm">
               <Card.Img
                 variant="top"

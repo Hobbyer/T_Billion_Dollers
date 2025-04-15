@@ -95,7 +95,7 @@ const MyInfo = () => {
   }, []);
 
   return (
-    <Container className="mt-4 text-start">
+    <Container className="mt-5 mb-5 text-start">
       <h2 className="mb-4 fw-bold">회원 정보 수정</h2>
       <hr />
       <Form>
