@@ -14,8 +14,13 @@ const Cart = () => {
   const token = sessionStorage.getItem('accessToken');
   const userId = jwtDecode(token).sub;
 
+  // 가격 포맷팅 함수
+  const formatPrice = (price) => {
+    if (!price && price !== 0) return "";
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   // 체크 박스 컨트롤
-  
   const [selectedItems, setSelectedItems] = useState([]);
 
   const handleSelectAll = (e) => {
@@ -32,9 +37,6 @@ const Cart = () => {
 
   const [cart, setCart] = useState([]);
   const [items, setItems] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [totalDiscount, setTotalDiscount] = useState(0);
-  const [totalPayment, setTotalPayment] = useState(0);
   const [quantity, setQuantity] = useState({});
 
   // 장바구니 데이터 수정
@@ -48,25 +50,32 @@ const Cart = () => {
       })
   }
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     GET(`${baseURL}/farmdas/cart/${userId}`)
       .then( res => {
         console.log(res.data.cartItems)
         setCart(res.data);
         setItems(res.data.cartItems);
+        setLoading(false);
         })
       .catch(err => {
         console.error(err);
+        setLoading(false);
       })
   }, [])
-
-
 
 
   return (
     <>
     <style>
       {`
+        @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+        }
+
         .custom-checkbox .form-check-input {
           border: 2px solid gray;
         }
@@ -148,105 +157,131 @@ const Cart = () => {
         }
       `}
     </style>
-      <div style={{ padding: "0 100px", minWidth: "800px" }}>
-        <div className='d-flex justify-content-between align-items-center mb-3'>
-          <div>
-            <h3>장바구니</h3>
+      { loading ?
+        <div style={{ padding: "0 100px" }}>
+          <h3>Loading...</h3>
+          <div className='d-flex justify-content-center align-items-center'>
+          <img
+            className='loading-img mt-3'
+            src="/imgs/cow (1).png" // 원하는 로딩 이미지 경로
+            alt="로딩중"
+            style={{
+              width: "60px",
+              height: "60px",
+              animation: "spin 1s linear infinite"
+            }}
+          />
+          </div>
+        </div> 
+        :
+        <div style={{ padding: "0 100px", minWidth: "800px" }}>
+          <div className='d-flex justify-content-between align-items-center mb-3'>
+            <div>
+              <h3>장바구니</h3>
+            </div>
+            <div>
+              <span>장바구니 &gt;</span>
+              <span> 주문결제 &gt;</span>
+              <span> 주문완료</span>
+            </div>
           </div>
           <div>
-            <span>장바구니 &gt;</span>
-            <span> 주문결제 &gt;</span>
-            <span> 주문완료</span>
+            <Table className='cartList' striped bordered hover style={{ textAlign: "center" }}>
+              <thead>
+                <tr>
+                  <th style={{ width: "50px" }}>
+                    <Form.Check className='custom-checkbox' type='checkbox' style={{ textAlign: "center" }} />
+                  </th>
+                  <th colSpan={2}>상품정보</th>
+                  <th>가격</th>
+                  <th>수량</th>
+                  <th>할인금액</th>
+                  <th>구매예정금액</th>
+                  <th>선택</th>
+                </tr>
+              </thead>
+              <tbody>
+                { Array.isArray(items) && 
+                  items.map((item, i) => {
+                    return (
+                      <tr key={i}>
+                        <td><Form.Check className='custom-checkbox' type='checkbox' defaultChecked={item.isChecked} onChange={(e) => handleSelectItem(e, item.itemCode)} /></td>
+                        <td>
+                          <img src={item.itemImagePath} alt="상품 이미지" style={{ width: "50px", height: "50px" }}  />
+                        </td>
+                        <td>{item.itemName}</td>
+                        <td>{formatPrice(item.price)}원</td>
+                        <td>
+                          <Form.Control className='custom-number' type="number" name={item.itemCode} min={0} defaultValue={item.quantity} onChange={(e) => {
+                            if (e.target.value < 1) {
+                              e.target.value = 1;
+                            }
+                            setQuantity({ ...quantity, [e.target.name]: Number(e.target.value) });
+                            handleUpdateCart(item.cartItemId, Number(e.target.value));
+                          }} />
+                        </td>
+                        <td>-</td>
+                        <td>{formatPrice(item.price * (quantity[item.itemCode] ?? item.quantity))}원</td>
+                        <td><button className='btn btn-danger'>삭제</button></td>
+                      </tr>
+                    )
+                  })
+                }
+              </tbody>
+              <tfoot>
+                <tr style={{ borderBottom: "none"}}>
+                  <td colSpan={8} style={{ textAlign: "right" }}>
+                    <span>ㅁ</span>
+                    <span>선택상품 삭제</span>
+                  </td>
+                </tr>
+                <tr style={{ borderTop: "none"}}>
+                  <td colSpan={8} style={{ textAlign: "right" }}>
+                    <span>ㅁ</span>
+                    <span>전체상품 삭제</span>
+                  </td>
+                </tr>
+              </tfoot>
+            </Table>
           </div>
-        </div>
-        <div>
-          <Table className='cartList' striped bordered hover style={{ textAlign: "center" }}>
-            <thead>
-              <tr>
-                <th style={{ width: "50px" }}>
-                  <Form.Check className='custom-checkbox' type='checkbox' style={{ textAlign: "center" }} />
-                </th>
-                <th colSpan={2}>상품정보</th>
-                <th>가격</th>
-                <th>수량</th>
-                <th>할인금액</th>
-                <th>구매예정금액</th>
-                <th>선택</th>
-              </tr>
-            </thead>
-            <tbody>
-              { Array.isArray(items) && 
-                items.map((item, i) => {
-                  return (
-                    <tr key={i}>
-                      <td><Form.Check className='custom-checkbox' type='checkbox' defaultChecked={item.isChecked} onChange={(e) => handleSelectItem(e, item.itemCode)} /></td>
-                      <td>
-                        <img src={item.itemImagePath} alt="상품 이미지" style={{ width: "50px", height: "50px" }}  />
-                      </td>
-                      <td>{item.itemName}</td>
-                      <td>{item.price}원</td>
-                      <td>
-                        <Form.Control className='custom-number' type="number" name={item.itemCode} min={0} defaultValue={item.quantity} onChange={(e) => {
-                          if (e.target.value < 1) {
-                            e.target.value = 1;
-                          }
-                          setQuantity({ ...quantity, [e.target.name]: Number(e.target.value) });
-                          handleUpdateCart(item.cartItemId, Number(e.target.value));
-                        }} />
-                      </td>
-                      <td>-</td>
-                      <td>{item.price * (quantity[item.itemCode] ?? item.quantity)}원</td>
-                      <td><button className='btn btn-danger'>삭제</button></td>
-                    </tr>
-                  )
-                })
-              }
-            </tbody>
-            <tfoot>
-              <tr style={{ borderBottom: "none"}}>
-                <td colSpan={8} style={{ textAlign: "right" }}>
-                  <span>ㅁ</span>
-                  <span>선택상품 삭제</span>
-                </td>
-              </tr>
-              <tr style={{ borderTop: "none"}}>
-                <td colSpan={8} style={{ textAlign: "right" }}>
-                  <span>ㅁ</span>
-                  <span>전체상품 삭제</span>
-                </td>
-              </tr>
-            </tfoot>
-          </Table>
-        </div>
-        <div style={{ overflowX: "hidden" }}>
-          <Row className='cart-row mb-3' style={{ fontSize: "20px", alignItems: "center" }}>
-            <Col>
-              <div>
-                <span>총 상품금액</span>
-                <span style={{ fontWeight: "bold" }}>50,000원</span>
-              </div>
-            </Col>
-            <Col>
-              <span className="fs-3">-</span>
-              <div>
-                <span>총 할인금액</span>
-                <span style={{ fontWeight: "bold" }}>10,000원</span>
-              </div>
-            </Col>
-            <Col>
-              <span className="fs-4">=</span>
-              <div>
-                <span>총 결제금액</span>
-                <span style={{ fontWeight: "bold", color: "green" }}>40,000원</span>
-              </div>
-            </Col>
-          </Row>
-        </div>
-        <div className='btn-area d-flex justify-content-center align-items-center gap-3'>
-          <button className='btn btn-outline-success'>쇼핑 계속하기</button>
-          <button className='btn btn-success'>주문하기</button>
-        </div>
-      </div>  
+          <div style={{ overflowX: "hidden" }}>
+            <Row className='cart-row mb-3' style={{ fontSize: "20px", alignItems: "center" }}>
+              <Col>
+                <div>
+                  <span>총 상품금액</span>
+                  <span style={{ fontWeight: "bold" }}>
+                    { // 체크 박스 선택된 상품의 가격
+                      formatPrice(items.reduce((acc, item) => acc + item.price * (quantity[item.itemCode] ?? item.quantity), 0))
+                    }원
+                  </span>
+                </div>
+              </Col>
+              <Col>
+                <span className="fs-3">-</span>
+                <div>
+                  <span>총 할인금액</span>
+                  <span style={{ fontWeight: "bold" }}>0원</span>
+                </div>
+              </Col>
+              <Col>
+                <span className="fs-4">=</span>
+                <div>
+                  <span>총 결제금액</span>
+                  <span style={{ fontWeight: "bold", color: "green" }}>
+                    {
+
+                    }
+                  </span>
+                </div>
+              </Col>
+            </Row>
+          </div>
+          <div className='btn-area d-flex justify-content-center align-items-center gap-3'>
+            <button className='btn btn-outline-success'>쇼핑 계속하기</button>
+            <button className='btn btn-success'>주문하기</button>
+          </div>
+        </div>  
+      }
     </>
   )
 }

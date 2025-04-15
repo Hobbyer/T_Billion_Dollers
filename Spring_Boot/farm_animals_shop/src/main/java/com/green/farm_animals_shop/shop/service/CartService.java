@@ -6,7 +6,8 @@ public interface CartService {
 
   CartDTO getCartByUserId(String userId); // 사용자 ID로 장바구니 조회
 
-  void addItemToCart(String userId, Integer itemCode, Integer quantity); // 장바구니에 상품 추가
+  // 장바구니에 상품 추가 (상품 중복여부 체크)
+  boolean addItemToCart(String userId, Integer itemCode, Integer quantity); // 장바구니에 상품 추가
 
   void updateCartItem(String userId, Long cartItemId, Integer newQuantity); // 장바구니 상품 수량 수정
 
