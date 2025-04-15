@@ -6,6 +6,7 @@ import com.green.farm_animals_shop.user.dto.MemberResponseDTO;
 import com.green.farm_animals_shop.user.entity.Member;
 import com.green.farm_animals_shop.user.service.CustomUserDetailsService;
 import com.green.farm_animals_shop.user.service.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,8 +29,11 @@ public class MemberController {
   }
 
   @PostMapping("/password")
-  public ResponseEntity<MemberResponseDTO> setMemberPassword(@RequestBody ChangePasswordRequestDTO request) {
-    return ResponseEntity.ok(memberService.changeMemberPassword(request.getUserId(), request.getOldPassword(), request.getNewPassword())); // 비밀번호 변경 메서드를 호출하여 결과를 반환
+  public ResponseEntity<MemberResponseDTO> setMemberPassword(
+          @AuthenticationPrincipal User user,  // Spring Security에서 인증된 사용자
+          @RequestBody @Valid ChangePasswordRequestDTO request) {
+    // 인증된 사용자 ID로 비밀번호 변경 처리
+    return ResponseEntity.ok(memberService.changeMemberPassword(request));
   }
 
   // 회원 정보 수정 API
