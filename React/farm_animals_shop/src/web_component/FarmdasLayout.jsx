@@ -1,7 +1,7 @@
 import React from 'react'
 import WebHeader from './WebHeader'
 import { Outlet } from 'react-router-dom'
-import { Container } from 'react-bootstrap'
+import { Container, Row } from 'react-bootstrap'
 
 const FarmdasLayout = () => {
   return (

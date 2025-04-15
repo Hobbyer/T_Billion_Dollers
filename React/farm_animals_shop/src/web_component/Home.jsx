@@ -82,7 +82,7 @@ const Home = () => {
               }}
             />
             <Image
-              src="/public/imgs/search_icon.jpg"
+              src="/imgs/search_icon.jpg"
               style={{
                 position: "absolute",
                 top: "8px",

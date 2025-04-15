@@ -44,8 +44,8 @@ const OrderList = () => {
 
       <div style={{ margin: "50px 0 90px 0" }}>
         {/* 주문/배송 현황 */}
-        <Stack gap={3}>
-          <div className="p-2 d-flex align-items-end gap-3">
+        <Stack>
+          <div className="d-flex align-items-end">
             <p style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
               주문/배송 현황
             </p>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
-import { CardGroup, Card, ButtonGroup, Button } from "react-bootstrap";
+import { Card, ButtonGroup, Button, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const baseURL = import.meta.env.VITE_API_URL;
@@ -91,77 +91,52 @@ const WebItemList = () => {
         }
       `}
       </style>
-      {cardList.map((item, i) => {
-        return (
-          <CardGroup
-            className="gap-4 mt-4"
-            key={i}
-            style={{ borderRadius: "0px" }}
-          >
-            {item.map((itemData, j) => {
-              return (
-                <Card
-                  key={j}
-                  style={{
-                    height: "330px",
-                    borderRadius: "0px",
-                  }}
-                  className="shadow-sm"
+
+      <Row className="g-4 px-3">
+        {itemList.map((itemData, i) => (
+          <Col key={i} xs={12} sm={4} md={3} lg={3}>
+            <Card className="h-100 shadow-sm">
+              <Card.Img
+                variant="top"
+                src={itemData.imagePath}
+                style={{
+                  height: "270px",
+                  objectFit: "cover",
+                  cursor: "pointer",
+                }}
+                onClick={() => nav(`/farmdas/item/${itemData.itemCode}`)}
+              />
+              <Card.Body className="d-flex flex-column justify-content-between">
+                <Card.Title
+                  style={{ fontSize: "0.8rem", cursor: "pointer" }}
                 >
-                  <Card.Img
-                    variant="top"
-                    src={itemData.imagePath}
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      nav(`/farmdas/item/${itemData.itemCode}`);
-                    }}
-                  />
-                  <Card.Body className="d-flex flex-column align-items-between justify-content-between">
-                    <Card.Title
-                      style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        nav(`/farmdas/item/${itemData.itemCode}`);
-                      }}
-                    >
-                      {itemData.itemName}
-                    </Card.Title>
-                    <Card.Text>{formatPrice(itemData.price)}원</Card.Text>
-                  </Card.Body>
-                  <Card.Footer>
-                    <ButtonGroup className="gap-1">
-                      <Button
-                        variant="outline-success"
-                        style={{ width: "50%" }}
-                      >
-                        <small
-                          className="text-muted"
-                          style={{ fontSize: "10px" }}
-                        >
-                          구매하기
-                        </small>
-                      </Button>
-                      <Button
-                        variant="outline-primary"
-                        style={{ width: "50%" }}
-                        onClick={() => {
-                          addToCart(itemData.itemCode, 1);
-                        }}
-                      >
-                        <small
-                          className="text-muted"
-                          style={{ fontSize: "10px" }}
-                        >
-                          장바구니
-                        </small>
-                      </Button>
-                    </ButtonGroup>
-                  </Card.Footer>
-                </Card>
-              );
-            })}
-          </CardGroup>
-        );
-      })}
+                  {itemData.itemName}
+                </Card.Title>
+                <Card.Text style={{ fontSize: "1.2rem" }}>{formatPrice(itemData.price)}원</Card.Text>
+              </Card.Body>
+              <Card.Footer className="text-center">
+                <ButtonGroup className="w-100">
+                  <Button
+                    size="sm"
+                    variant="outline-success"
+                    style={{ fontSize: "0.75rem" }}
+                  >
+                    구매하기
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline-primary"
+                    style={{ fontSize: "0.75rem" }}
+                    onClick={() => addToCart(itemData.itemCode, 1)}
+                  >
+                    장바구니
+                  </Button>
+                </ButtonGroup>
+              </Card.Footer>
+            </Card>
+          </Col>
+        ))}
+      </Row>
     </>
   );
 };
