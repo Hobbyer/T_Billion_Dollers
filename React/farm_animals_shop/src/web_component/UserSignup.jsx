@@ -20,6 +20,8 @@ const UserSignup = () => {
     isAgreed: false,
   });
 
+  const [codeSent, setCodeSent] = useState(false); // 인증번호 발송 여부
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -54,6 +56,7 @@ const UserSignup = () => {
     axios.post(`${baseURL}/auth/send`, { phoneNumber: formData.phoneNumber })
     .then(res => {
       alert('인증번호가 발송되었습니다')
+      setCodeSent(true); // 인증번호 발송 상태 업데이트
     })
     .catch(err => {
       alert('인증번호 발송 실패!')
