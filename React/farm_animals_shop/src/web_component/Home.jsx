@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import WebItemList from './WebItemList';
-import { GET } from '../apis/CRUD';
-import { jwtDecode } from 'jwt-decode';
+import React, { useEffect, useState } from "react";
+import WebItemList from "./WebItemList";
+import { GET } from "../apis/CRUD";
+import { jwtDecode } from "jwt-decode";
 import {
   Container,
   Image,
@@ -66,47 +66,10 @@ const Home = () => {
           }
         `}
       </style>
-      <div style={{ padding: "0 100px", minWidth: "800px" }}>
-        <div>
-          <Navbar expand="lg" className="bg-body-tertiary">
-            <Container>
-              <Navbar.Brand href="#home">Category</Navbar.Brand>
-              <Navbar.Toggle aria-controls="basic-navbar-nav" />
-              <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="me-auto">
-                  <Nav.Link href="#home">Cate1</Nav.Link>
-                  <Nav.Link href="#link">Cate2</Nav.Link>
-                  <Nav.Link href="#link">Cate3</Nav.Link>
-                </Nav>
-              </Navbar.Collapse>
-            </Container>
-          </Navbar>
-        </div>
-
-        
-        <div className="d-flex justify-content-between mt-3 mb-2">
-          <div style={{ width: "50%" }}>
-            <Dropdown className="d-flex">
-              <Dropdown.Toggle
-                variant="success"
-                id="dropdown-basic"
-                style={{ minWidth: "200px" }} // Set a fixed minimum width
-              >
-                <Image alt="상품" />
-                {dropdownItems[selectedDropdown].name}
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu style={{ width: "200px" }}>
-                {dropdownItems.map((item, i) => (
-                  <Dropdown.Item key={i} active={i === selectedDropdown}>
-                    <Image alt="상품" />
-                    {item.name}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-          <div style={{ width: "50%", position: "relative" }}>
+      <div>
+        <div className="d-flex justify-content-end mt-3 mb-2">
+         
+          <div style={{ width: "38%", position: "relative" }}>
             <Form.Control
               type="text"
               size="md"
@@ -114,6 +77,8 @@ const Home = () => {
                 borderRadius: "20px",
                 padding: "10px 20px",
                 height: "40px",
+                boxShadow:"1px 1px 3px",
+                textDecorationLine:"none"
               }}
             />
             <Image

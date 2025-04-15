@@ -1,16 +1,16 @@
-import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
-import React, { useEffect, useState } from 'react'
-import { CardGroup, Card, ButtonGroup, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import React, { useEffect, useState } from "react";
+import { CardGroup, Card, ButtonGroup, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const baseURL = import.meta.env.VITE_API_URL;
 
 const WebItemList = () => {
-  if (!sessionStorage.getItem('accessToken')) {
+  if (!sessionStorage.getItem("accessToken")) {
     var member = null; // 로그인하지 않은 경우
   } else {
-    member = jwtDecode(sessionStorage.getItem('accessToken')).sub; // 로그인한 유저의 아이디
+    member = jwtDecode(sessionStorage.getItem("accessToken")).sub; // 로그인한 유저의 아이디
   }
 
   const nav = useNavigate();
@@ -22,7 +22,6 @@ const WebItemList = () => {
 
   const [itemList, setItemList] = useState([]);
 
-
   // 상품리스트 4개씩 잘라서 배열로 만드는 함수
   const cardArray = (arr, size) => {
     const result = [];
@@ -30,7 +29,7 @@ const WebItemList = () => {
       result.push(arr.slice(i, i + size)); // 배열의 i ~ i + size까지 잘라서 result에 추가
     }
     return result;
-  }
+  };
 
   const cardList = cardArray(itemList, 4); // 4개씩 잘라서 배열로 만듦
 
@@ -40,37 +39,42 @@ const WebItemList = () => {
       alert("로그인 후 장바구니에 담을 수 있습니다.");
     } else {
       // 장바구니에 담기 API 호출
-      axios.post(`${baseURL}/farmdas/cart/${member}/add?itemCode=${itemCode}&quantity=${quantity}`)
+      axios
+        .post(
+          `${baseURL}/farmdas/cart/${member}/add?itemCode=${itemCode}&quantity=${quantity}`
+        )
         .then((res) => {
-          if(res.data === false) {
-            confirm("이미 장바구니에 담긴 상품입니다. \n장바구니로 이동하시겠습니까?") &&
-            nav("/farmdas/cart/:userId");
+          if (res.data === false) {
+            confirm(
+              "이미 장바구니에 담긴 상품입니다. \n장바구니로 이동하시겠습니까?"
+            ) && nav("/farmdas/cart/:userId");
           } else {
             confirm("장바구니에 담겼습니다. \n장바구니로 이동하시겠습니까?") &&
-            nav("/farmdas/cart/:userId");
+              nav("/farmdas/cart/:userId");
           }
         })
         .catch((err) => {
-            console.error(err); // 에러 처리
-            alert("장바구니에 담기 실패했습니다.");
+          console.error(err); // 에러 처리
+          alert("장바구니에 담기 실패했습니다.");
         });
     }
-  }
+  };
 
   useEffect(() => {
-    axios.get(`${baseURL}/farmdas/items`)
-      .then(res => {
+    axios
+      .get(`${baseURL}/farmdas/items`)
+      .then((res) => {
         setItemList(res.data || []);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
-      })
-  }, [])
+      });
+  }, []);
 
   return (
     <>
-    <style>
-      {`
+      <style>
+        {`
         .card img {
           width: 100%;
           height: 150px;
@@ -86,48 +90,80 @@ const WebItemList = () => {
           text-align: center;
         }
       `}
-    </style>
-      { cardList.map((item, i) => {
+      </style>
+      {cardList.map((item, i) => {
         return (
-          <CardGroup className='gap-4' key={i} style={{ borderRadius: '0px'}}>
+          <CardGroup
+            className="gap-4 mt-4"
+            key={i}
+            style={{ borderRadius: "0px" }}
+          >
             {item.map((itemData, j) => {
               return (
-                <Card key={j} style={{ width: '150px', height: '330px', borderRadius: '0px' }} className='shadow-sm'>
-                  <Card.Img variant="top" src={itemData.imagePath} style={{ cursor: 'pointer'}}
+                <Card
+                  key={j}
+                  style={{
+                    height: "330px",
+                    borderRadius: "0px",
+                  }}
+                  className="shadow-sm"
+                >
+                  <Card.Img
+                    variant="top"
+                    src={itemData.imagePath}
+                    style={{ cursor: "pointer" }}
                     onClick={() => {
-                      nav(`/farmdas/item/${itemData.itemCode}`)
+                      nav(`/farmdas/item/${itemData.itemCode}`);
                     }}
                   />
-                  <Card.Body className='d-flex flex-column align-items-between justify-content-between'>
-                    <Card.Title style={{ cursor: 'pointer' }}
+                  <Card.Body className="d-flex flex-column align-items-between justify-content-between">
+                    <Card.Title
+                      style={{ cursor: "pointer" }}
                       onClick={() => {
-                        nav(`/farmdas/item/${itemData.itemCode}`)
+                        nav(`/farmdas/item/${itemData.itemCode}`);
                       }}
-                    >{itemData.itemName}</Card.Title>
+                    >
+                      {itemData.itemName}
+                    </Card.Title>
                     <Card.Text>{formatPrice(itemData.price)}원</Card.Text>
                   </Card.Body>
                   <Card.Footer>
-                    <ButtonGroup className='gap-1'>
-                      <Button variant="outline-success" style={{ width: '50%' }}>
-                        <small className="text-muted" style={{ fontSize: '10px' }}>구매하기</small>
+                    <ButtonGroup className="gap-1">
+                      <Button
+                        variant="outline-success"
+                        style={{ width: "50%" }}
+                      >
+                        <small
+                          className="text-muted"
+                          style={{ fontSize: "10px" }}
+                        >
+                          구매하기
+                        </small>
                       </Button>
-                      <Button variant="outline-primary" style={{ width: '50%' }}
+                      <Button
+                        variant="outline-primary"
+                        style={{ width: "50%" }}
                         onClick={() => {
-                          addToCart(itemData.itemCode, 1)
-                        }}>
-                        <small className="text-muted" style={{ fontSize: '10px' }}
-                        >장바구니</small>
+                          addToCart(itemData.itemCode, 1);
+                        }}
+                      >
+                        <small
+                          className="text-muted"
+                          style={{ fontSize: "10px" }}
+                        >
+                          장바구니
+                        </small>
                       </Button>
                     </ButtonGroup>
                   </Card.Footer>
                 </Card>
-              )
+              );
             })}
           </CardGroup>
-        )
+        );
       })}
     </>
-  )
-}
+  );
+};
 
-export default WebItemList
+export default WebItemList;
