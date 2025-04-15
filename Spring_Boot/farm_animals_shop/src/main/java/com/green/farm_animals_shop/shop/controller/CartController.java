@@ -19,10 +19,10 @@ public class CartController {
   }
 
   @PostMapping("/{userId}/add")
-  public void addItem(@PathVariable("userId") String userId,
+  public boolean addItem(@PathVariable("userId") String userId,
                       @RequestParam("itemCode") Integer itemCode,
                       @RequestParam("quantity") Integer quantity) {
-    cartService.addItemToCart(userId, itemCode, quantity);
+    return cartService.addItemToCart(userId, itemCode, quantity);
   }
 
   @PutMapping("/{userId}/{cartItemId}/update")

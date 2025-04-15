@@ -16,14 +16,20 @@ const baseURL = import.meta.env.VITE_API_URL; // API URL
 
 const WebItemDetail = () => {
   const nav = useNavigate(); // 네비게이션 훅
-
   const params = useParams(); // URL 파라미터 가져오기
+
+  const [loading, setLoading] = useState(true); // 로딩 상태
 
   if (sessionStorage.getItem("accessToken")) {
     var member = jwtDecode(sessionStorage.getItem("accessToken")).sub; // JWT 디코딩
   } else {
     member = null;
   }
+
+  const formatPrice = (price) => {
+    if (!price && price !== 0) return "";
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
 
   const [itemCount, setItemCount] = useState(1); // 상품 수량 상태
 
@@ -34,12 +40,17 @@ const WebItemDetail = () => {
       // 장바구니에 담기 API 호출
       axios.post(`${baseURL}/farmdas/cart/${member}/add?itemCode=${params.itemCode}&quantity=${itemCount}`)
         .then((res) => {
-          confirm("장바구니에 담겼습니다. \n장바구니로 이동하시겠습니까?") &&
-          nav("/farmdas/cart/:userId");
+          if(res.data === false) {
+            confirm("이미 장바구니에 담긴 상품입니다. \n장바구니로 이동하시겠습니까?") &&
+            nav("/farmdas/cart/:userId");
+          } else {
+            confirm("장바구니에 담겼습니다. \n장바구니로 이동하시겠습니까?") &&
+            nav("/farmdas/cart/:userId");
+          }
         })
         .catch((err) => {
-          console.error(err); // 에러 처리
-          alert("장바구니에 담기 실패했습니다.");
+            console.error(err); // 에러 처리
+            alert("장바구니에 담기 실패했습니다.");
         });
     }
   };
@@ -67,22 +78,24 @@ const WebItemDetail = () => {
     GET(`${baseURL}/farmdas/items/${itemCode}`)
       .then((res) => {
         setItemData(res.data); // 상품 데이터 설정
+        setLoading(false); // 로딩 완료
       })
       .catch((err) => {
         console.error(err); // 에러 처리
+        setLoading(false); // 로딩 완료
       });
   }, []);
-
-  const formatPrice = (price) => {
-    if (!price && price !== 0) return "";
-    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
 
 
   return (
     <>
       <style>
         {`
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
       .login {
         color: #FB9B2A;
       }
@@ -114,7 +127,25 @@ const WebItemDetail = () => {
 
       `}
       </style>
-
+      
+      { loading ? (
+      <div style={{ padding: "0 100px" }}>
+        <h3>Loading...</h3>
+        <div className='d-flex justify-content-center align-items-center'>
+          <img
+            className='loading-img mt-3'
+            src="/imgs/cow (1).png" // 원하는 로딩 이미지 경로
+            alt="로딩중"
+            style={{
+              width: "60px",
+              height: "60px",
+              animation: "spin 1s linear infinite"
+            }}
+          />
+        </div>
+      </div>
+      ) 
+      : 
       <div
         style={{
           width: "100%",
@@ -332,6 +363,7 @@ const WebItemDetail = () => {
           </div>
         </div>
       </div>
+      }
     </>
   );
 };
