@@ -5,4 +5,4 @@ export const position = {
   ,lon:129.338187 //경도
 }
 
-export const WEATHER_KEY = import.meta.env.VITE_WEATHER_API_KEY
+export const WEATHER_KEY = import.meta.env.VITE_WEATHER_KEY;
