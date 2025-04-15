@@ -5,26 +5,18 @@
 <!-- namespace에는 xml파일과 연결할 Mapper interface 파일명을 패키지를 포함하여 적어주세요 -->
 <mapper namespace="com.green.farm_animals_shop.user.mapper.QuestionMapper">
 
-    <!--검색 버튼 클릭 시 게시글 목록 조회 / userId가 동일한 사람만 조회가능 쿼리-->
+    <!--검색 버튼 클릭 시 게시글 목록 조회 -->
     <select id="getQuestionList" resultType="QuestionDTO">
         SELECT QUESTION_NUM
             , TITLE
             , USER_ID
             , REG_DATE
             , READ_CNT
-            , STATUS
         FROM questions
         <where>
-        <if test="userId != null and userId != ''">
-            USER_ID = #{userId}
-        </if>
         <if test="searchValue != null and searchValue != ''">
-            <if test="userId != null and userId != ''">
-                AND
-            </if>
             ${searchKeyword} LIKE CONCAT('%', #{searchValue}, '%')
         </if>
-
         </where>
         ORDER BY question_num DESC
     </select>
