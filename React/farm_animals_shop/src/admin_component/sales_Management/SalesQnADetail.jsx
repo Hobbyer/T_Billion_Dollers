@@ -19,6 +19,8 @@ const SalesQnADetail = () => {
   const { questionNum } = useParams();
   const location = useLocation(); //이전 페이지에서 전달된 상태를 가져오기 위한 useLocation 훅 사용
 
+  const [loading, setLoading] = useState(true); //로딩 상태를 관리하기 위한 state 변수
+
   //조회한 상세 정보를 저장할 state 변수
   const [question, setQuestion] = useState({});
 
@@ -34,9 +36,11 @@ const SalesQnADetail = () => {
     GET(`${baseURL}/questions/${questionNum}`)
       .then((res) => {
         setQuestion(res.data);
+        setLoading(false); //로딩 완료
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false); //로딩 완료
       });
   }, [])
 
@@ -56,7 +60,33 @@ const SalesQnADetail = () => {
 
   return (
     <>
-      <Container
+      <style>
+        {`
+          @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+          }
+        `}
+      </style>
+
+      { loading ? 
+        <div style={{ padding: "0 100px" }}>
+          <h3>Loading...</h3>
+          <div className='d-flex justify-content-center align-items-center'>
+          <img
+            className='loading-img mt-3'
+            src="/imgs/cow (1).png" // 원하는 로딩 이미지 경로
+            alt="로딩중"
+            style={{
+              width: "60px",
+              height: "60px",
+              animation: "spin 1s linear infinite"
+            }}
+          />
+          </div>
+        </div>
+        :
+        <Container
         style={{
           border: "none",
           margin: "0",
@@ -65,55 +95,56 @@ const SalesQnADetail = () => {
           justifyContent: "center"
         }}
       >
-        <Form style={{ padding: "30px", width: "100%", maxWidth: "600px" }}>
+          <Form style={{ padding: "30px", width: "100%", maxWidth: "600px" }}>
 
-          {/* 제목 */}
-          <Form.Group className="mb-3" controlId="formTitle" style={{marginBottom: "20px", borderBottom: "1px solid #000"}}>
-            <FormText
-              style={{ fontWeight: "bold", fontSize: "24px", color: "#000"}}
-            >
-              {location.state?.title || question.title || "제목이 없습니다."} 
-            </FormText>
-          </Form.Group>
+            {/* 제목 */}
+            <Form.Group className="mb-3" controlId="formTitle" style={{marginBottom: "20px", borderBottom: "1px solid #000"}}>
+              <FormText
+                style={{ fontWeight: "bold", fontSize: "24px", color: "#000"}}
+              >
+                {location.state?.title || question.title || "제목이 없습니다."} 
+              </FormText>
+            </Form.Group>
 
-          {/* 작성자 */}
-          <Form.Group className="mb-3" controlId="formAuthor">
-            <FormLabel style={{ fontWeight: "bold", fontSize: "20px", }}>
-            작성자
-            </FormLabel>
-            <FormText
-              style={{
-                display: "block",
-                fontSize: "16px",
-                marginBottom: "10px",
-              }}
-            >
-              {location.state?.userId || question.userId || "작성자 정보 없음"}
-            </FormText>
-          </Form.Group>
+            {/* 작성자 */}
+            <Form.Group className="mb-3" controlId="formAuthor">
+              <FormLabel style={{ fontWeight: "bold", fontSize: "20px", }}>
+              작성자
+              </FormLabel>
+              <FormText
+                style={{
+                  display: "block",
+                  fontSize: "16px",
+                  marginBottom: "10px",
+                }}
+              >
+                {location.state?.userId || question.userId || "작성자 정보 없음"}
+              </FormText>
+            </Form.Group>
 
-          {/* 내용 */}
-          <Form.Group className="mb-3" controlId="formContent">
-            <FormLabel style={{ fontWeight: "bold", fontSize: "20px" }}>
-              내용
-            </FormLabel>
-            <FormText
-              style={{
-                display: "block",
-                fontSize: "16px",
-                marginBottom: "10px",
-              }}
-            >
-              {question.content || "내용이 없습니다."}
-            </FormText>
-          </Form.Group>
-          <div className="d-flex justify-content-end mt-5">
-            <Button type="button" variant="danger" onClick={deleteQuestion}>
-                삭제
-            </Button>
-          </div>
-        </Form>
-      </Container>
+            {/* 내용 */}
+            <Form.Group className="mb-3" controlId="formContent">
+              <FormLabel style={{ fontWeight: "bold", fontSize: "20px" }}>
+                내용
+              </FormLabel>
+              <FormText
+                style={{
+                  display: "block",
+                  fontSize: "16px",
+                  marginBottom: "10px",
+                }}
+              >
+                {question.content || "내용이 없습니다."}
+              </FormText>
+            </Form.Group>
+            <div className="d-flex justify-content-end mt-5">
+              <Button type="button" variant="danger" onClick={deleteQuestion}>
+                  삭제
+              </Button>
+            </div>
+          </Form>
+        </Container>
+      }
     </>
   );
 };

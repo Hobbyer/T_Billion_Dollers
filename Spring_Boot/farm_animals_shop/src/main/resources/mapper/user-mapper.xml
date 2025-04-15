@@ -14,9 +14,9 @@
             , READ_CNT
         FROM questions
         <where>
-        <if test="searchValue != null and searchValue != ''">
-            ${searchKeyword} LIKE CONCAT('%', #{searchValue}, '%')
-        </if>
+            <if test="searchValue != null and searchValue != ''">
+                ${searchKeyword} LIKE CONCAT('%', #{searchValue}, '%')
+            </if>
         </where>
         ORDER BY question_num DESC
     </select>

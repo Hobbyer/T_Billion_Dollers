@@ -25,6 +25,13 @@ public class CartController {
     return cartService.addItemToCart(userId, itemCode, quantity);
   }
 
+  @PutMapping("/{userId}/{cartItemId}/checked")
+  public void checkItem(@PathVariable("userId") String userId,
+                        @PathVariable("cartItemId") Long cartItemId,
+                        @RequestParam("isChecked") Boolean isChecked) {
+    cartService.checkItem(userId, cartItemId, isChecked);
+  }
+
   @PutMapping("/{userId}/{cartItemId}/update")
   public void updateCartItem(@PathVariable("userId") String userId,
                              @PathVariable("cartItemId") Long cartItemId,

@@ -101,6 +101,31 @@ public class CartServiceImpl implements CartService {
 
   @Override
   @Transactional
+  public void checkItem(String userId, Long cartItemId, Boolean isChecked) {
+    CartItemEntity itemToCheck = cartItemRepository.findById(cartItemId)
+        .orElseThrow(() -> new RuntimeException("장바구니에서 아이템을 찾을 수 없습니다."));
+
+    if (!itemToCheck.getCart().getUserId().getUserId().equals(userId)) {
+      throw new RuntimeException("사용자 정보가 일치하지 않습니다.");
+    }
+
+    itemToCheck.setIsChecked(isChecked);
+    cartItemRepository.save(itemToCheck);
+
+    CartEntity cart = itemToCheck.getCart();
+    cart.setTotalPrice(cart.getCartItems().stream()
+        .filter(CartItemEntity::getIsChecked)
+        .mapToInt(CartItemEntity::getQuantity)
+        .sum()
+    );
+
+    cart.setUpdatedAt(LocalDateTime.now());
+
+    cartRepository.save(cart);
+  }
+
+  @Override
+  @Transactional
   public void updateCartItem(String userId, Long cartItemId, Integer newQuantity) {
     CartEntity cart = cartRepository.findByUserId(userId);
     if (cart == null) {
