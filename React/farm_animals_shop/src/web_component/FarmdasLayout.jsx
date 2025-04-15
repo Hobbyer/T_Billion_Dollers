@@ -10,7 +10,9 @@ const FarmdasLayout = () => {
         <div className="shadow-sm rounded" style={{ padding: "0 100px", minWidth: "800px" }}>
           <WebHeader />
         </div>
-        <Outlet />
+        <div>
+         <Outlet />
+        </div>
       </Container>
     </>
   )

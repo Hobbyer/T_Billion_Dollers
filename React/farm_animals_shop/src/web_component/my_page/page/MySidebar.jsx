@@ -39,7 +39,7 @@ const MySidebar = () => {
   return (
     <Tab.Container id="list-group-tabs-example" activeKey={activeKey} onSelect={handleSelect}>
     <Row>
-      <Col sm={3}>
+      <Col sm={3} style={{ margin : "50px 0 70px 0"}}>
         <ListGroup>
           {menuItems.map((item, i) => (
             <ListGroup.Item key={i} action eventKey={item.href}>
