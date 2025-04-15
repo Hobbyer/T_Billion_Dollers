@@ -1,7 +1,7 @@
 import React from 'react'
 import WebHeader from './WebHeader'
 import { Outlet } from 'react-router-dom'
-import { Container } from 'react-bootstrap'
+import { Container, Row } from 'react-bootstrap'
 
 const FarmdasLayout = () => {
   return (
@@ -10,7 +10,7 @@ const FarmdasLayout = () => {
         <div className="shadow-sm rounded" style={{ padding: "0 100px", minWidth: "800px" }}>
           <WebHeader />
         </div>
-        <div>
+        <div className=''>
          <Outlet />
         </div>
       </Container>

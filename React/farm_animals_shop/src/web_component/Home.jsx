@@ -66,7 +66,7 @@ const Home = () => {
           }
         `}
       </style>
-      <div style={{ padding: "0 100px", minWidth: "800px" }}>
+      <div style={{  maxWidth: "100%", width: "100%", padding: "0 16px", margin: "0 auto", }}>
         <div>
           <Navbar expand="lg" className="bg-body-tertiary">
             <Container>
@@ -117,7 +117,7 @@ const Home = () => {
               }}
             />
             <Image
-              src="/public/imgs/search_icon.jpg"
+              src="/imgs/search_icon.jpg"
               style={{
                 position: "absolute",
                 top: "8px",
