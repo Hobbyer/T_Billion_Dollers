@@ -30,4 +30,10 @@ public class CategoryInfoEntity {
   // 즉, 부모 객체에서 자식 객체를 remove() 했을 때, JPA가 해당 자식을 고아(orphan)로 보고 삭제하는 기능.
   private List<ItemInfoEntity> items;
 
+
+  //추천 여부 컬럼
+  @Column(name = "is_recommended")
+  private Boolean recommended;
+
+
 }
