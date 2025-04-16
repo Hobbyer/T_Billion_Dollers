@@ -14,12 +14,13 @@ import {
   Dropdown,
   Carousel,
 } from "react-bootstrap";
+import Menu from "./search/page/Menu";
+import SearchBar from "./search/page/SearchBar";
 
 const baseURL = import.meta.env.VITE_API_URL;
 
 const Home = () => {
   const [selectedDropdown, setSelectedDropdown] = useState(0);
-  const [isFocused, setIsFocused] = useState(false);
   const dropdownItems = [
     { name: "Action" },
     { name: "Another action" },
@@ -69,33 +70,8 @@ const Home = () => {
       </style>
       <div>
         <div className="d-flex justify-content-end mt-3 mb-2">
-         
-          <div style={{ width: "38%", position: "relative" }}>
-            <Form.Control
-              type="text"
-              size="md"
-              style={{
-                borderRadius: "20px",
-                padding: "10px 20px",
-                height: "40px",
-                boxShadow:"1px 1px 3px",
-                border: isFocused ? "1px solid #ccc" : "none" ,  // border 없애기
-              }}
-              onFocus={() => setIsFocused(true)}  // 클릭 시 border 없애기
-              onBlur={() => setIsFocused(false)}   // 클릭을 떼면 원래대로
-            />
-            <Image
-              src="/imgs/search_icon.jpg"
-              style={{
-                position: "absolute",
-                top: "8px",
-                right: "16px",
-                width: "20px",
-                cursor: "pointer",
-              }}
-              onClick={() => {}}
-            />
-          </div>
+          <Menu/>
+          <SearchBar/>
         </div>
       </div>
       <div className="image-container mb-5 mt-4" width="100%">

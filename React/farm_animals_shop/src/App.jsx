@@ -15,7 +15,6 @@ import QnA from './web_component/QnA'
 import SalesManage from './admin_component/sales_Management/SalesManage'
 import { useEffect, useState } from 'react'
 import { startTokenRefreshScheduler } from './apis/TokenService'
-import { GET } from './apis/CRUD'
 import { useDispatch } from 'react-redux'
 
 import FarmdasLayout from './web_component/FarmdasLayout'
@@ -25,6 +24,7 @@ import MyPageLayout from './web_component/my_page/page/MyPageLayout'
 
 import { clearMember, setMember } from './redux/memberSlice'
 import WebItemDetail from './web_component/WebItemDetail'
+import ItemListPage from "./web_component/cate_detail/page/ItemListPage";
 
 
 const baseURL = import.meta.env.VITE_API_URL;
@@ -95,7 +95,7 @@ function App() {
           {/* 상품상세 */}
           <Route path='item/:itemCode' element={<WebItemDetail />} />
           {/* 카테고리별 상품리스트 */}
-          <Route path='item/:category' element={<div>상품리스트</div>} />
+          <Route path='item/:category?' element={<ItemListPage/>} />
 
         </Route>
       </Routes>
