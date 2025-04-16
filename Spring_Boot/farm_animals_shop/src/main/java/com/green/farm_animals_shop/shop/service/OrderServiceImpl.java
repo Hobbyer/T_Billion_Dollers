@@ -34,6 +34,12 @@ public class OrderServiceImpl implements OrderService {
     Member user = memberRepository.findByUserId(dto.getUserId())
         .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
 
+    // 배송지 주소가 null이거나 공백일 경우 Member의 기본 회원 주소로 세팅
+    if (dto.getShippingAddress() == null || dto.getShippingAddress().isBlank()) {
+      dto.setShippingAddress(user.getAddress());
+    }
+
+
     // 주문 생성
     OrderEntity order = OrderEntity.builder()
         .user(user)

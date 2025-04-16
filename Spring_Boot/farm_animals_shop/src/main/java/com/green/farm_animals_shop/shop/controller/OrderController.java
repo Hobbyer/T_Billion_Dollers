@@ -14,16 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/farmdas/orders")
+@RequestMapping("/orders")
 
 public class OrderController {
 
   private final OrderService orderService;
   private final MemberRepository memberRepository;
 
-  @PostMapping
+  @PostMapping("")
   public ResponseEntity<?> createOrder(@RequestBody OrderRequestDTO dto) {
+
     OrderEntity order = orderService.createOrder(dto);
+
     return ResponseEntity.ok(order);
   }
 }
