@@ -26,6 +26,8 @@ const Home = () => {
   ];
 
   const bannerImages = [
+    "/imgs/banner5.jpg",
+    "/imgs/banner4.jpg",
     "/imgs/banner1.jpg",
     "/imgs/banner2.jpg",
     "/imgs/banner3.jpg",
@@ -68,7 +70,6 @@ const Home = () => {
       </style>
       <div>
         <div className="d-flex justify-content-end mt-3 mb-2">
-         
           <div style={{ width: "38%", position: "relative" }}>
             <Form.Control
               type="text"
@@ -77,8 +78,8 @@ const Home = () => {
                 borderRadius: "20px",
                 padding: "10px 20px",
                 height: "40px",
-                boxShadow:"1px 1px 3px",
-                textDecorationLine:"none"
+                boxShadow: "1px 1px 3px",
+                textDecorationLine: "none",
               }}
             />
             <Image
@@ -97,27 +98,13 @@ const Home = () => {
       </div>
       <div className="image-container mb-5 mt-5" width="100%">
         <Carousel data-bs-theme="dark">
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src={bannerImages[0]}
-              alt="First slide"
-            />
-          </Carousel.Item>
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src={bannerImages[1]}
-              alt="Second slide"
-            />
-          </Carousel.Item>
-          <Carousel.Item>
-            <img
-              className="d-block w-100"
-              src={bannerImages[2]}
-              alt="Third slide"
-            />
-          </Carousel.Item>
+          {bannerImages.map((image, i) => {
+            return (
+              <Carousel.Item key={i}>
+                <img className="d-block w-100" src={image} />
+              </Carousel.Item>
+            );
+          })}
         </Carousel>
       </div>
       <div>
