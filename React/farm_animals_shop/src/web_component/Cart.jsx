@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Form, Row, Table } from 'react-bootstrap'
-import { GET, PUT } from '../apis/CRUD';
+import { DELETE, GET, PUT } from '../apis/CRUD';
 import { useSelector } from 'react-redux';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const baseURL = import.meta.env.VITE_API_URL;
 
 
 
 const Cart = () => {
+  const nav = useNavigate();
 
   // 로그인한 유저의 아이디
   const token = sessionStorage.getItem('accessToken');
@@ -64,6 +66,61 @@ const Cart = () => {
     );
     setItems(updated);
     updatedIsChecked(cartItemId, isChecked);
+  };
+
+  const handleDeleteItem = (cartItemId, itemName) => {
+    confirm(`${itemName}을 정말 삭제하시겠습니까?`) &&
+    DELETE(`${baseURL}/farmdas/cart/${userId}/${cartItemId}/delete`)
+      .then(res => {
+        setItems(items.filter(item => item.cartItemId !== cartItemId));
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  };
+
+  const handleSelectDelete = () => {
+    const selectedItems = items.filter(item => item.isChecked);
+    if (selectedItems.length === 0) {
+      alert("삭제할 상품을 선택해주세요.");
+      return;
+    }
+    if (!confirm(`${selectedItems.length}개의 상품을 삭제하시겠습니까?`)) return;
+    const deleteRequests = selectedItems.map(item => {
+      DELETE(`${baseURL}/farmdas/cart/${userId}/${item.cartItemId}/delete`)
+    });
+    Promise.all(deleteRequests)
+      .then(() => {
+        setItems(items.filter(item => !item.isChecked));
+        alert("선택한 상품이 삭제되었습니다.");
+        if (items.length === 0){
+          DELETE(`${baseURL}/farmdas/cart/${userId}/clear`)
+            .then(() => {
+              setItems([]);
+            })
+            .catch(err => {
+              console.error(err);
+            });
+        }
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  };
+
+  const handleAllDelete = () => {
+    if (items.length === 0) {
+      alert("삭제할 상품이 없습니다.");
+      return;
+    }
+    if (!confirm("장바구니를 비우시겠습니까?")) return;
+    DELETE(`${baseURL}/farmdas/cart/${userId}/clear`)
+      .then(() => {
+        setItems([]);
+      })
+      .catch(err => {
+        console.error(err);
+      });
   };
 
   
@@ -240,7 +297,11 @@ const Cart = () => {
                         </td>
                         <td>-</td>
                         <td>{formatPrice(item.price * (quantity[item.itemCode] ?? item.quantity))}원</td>
-                        <td><button className='btn btn-danger'>삭제</button></td>
+                        <td>
+                          <button className='btn btn-danger'
+                            onClick={() => handleDeleteItem(item.cartItemId, item.itemName)}
+                          >삭제</button>
+                        </td>
                       </tr>
                     )
                   })
@@ -249,13 +310,22 @@ const Cart = () => {
               <tfoot>
                 <tr style={{ borderBottom: "none"}}>
                   <td colSpan={8} style={{ textAlign: "right" }}>
-                    <span>ㅁ</span>
+                    <span
+                      style={{ cursor: "pointer", color: "red" }}
+                      onClick={() => {
+                        handleSelectDelete()
+                      }}
+                    >ㅁ</span>
                     <span>선택상품 삭제</span>
                   </td>
                 </tr>
                 <tr style={{ borderTop: "none"}}>
                   <td colSpan={8} style={{ textAlign: "right" }}>
-                    <span>ㅁ</span>
+                    <span 
+                      style={{ cursor: "pointer", color: "red" }}
+                      onClick={() => {
+                      handleAllDelete()
+                    }}>ㅁ</span>
                     <span>전체상품 삭제</span>
                   </td>
                 </tr>
@@ -295,7 +365,11 @@ const Cart = () => {
             </Row>
           </div>
           <div className='btn-area d-flex justify-content-center align-items-center gap-3'>
-            <button className='btn btn-outline-success'>쇼핑 계속하기</button>
+            <button className='btn btn-outline-success'
+              onClick={() => {
+                nav(-1)
+              }}
+            >쇼핑 계속하기</button>
             <button className='btn btn-success'>주문하기</button>
           </div>
         </div>  

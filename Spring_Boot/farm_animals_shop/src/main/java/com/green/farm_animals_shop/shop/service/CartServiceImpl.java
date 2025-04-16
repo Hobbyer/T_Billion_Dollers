@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -167,20 +168,21 @@ public class CartServiceImpl implements CartService {
       throw new RuntimeException("장바구니가 존재하지 않습니다.");
     }
 
-    List<CartItemEntity> updatedItems = cart.getCartItems().stream()
-        .filter(item -> item.getCartItemId().equals(cartItemId))
-        .toList();
+    // 기존 카트 리스트를 유지한 채, 내부에서 항목 제거(removeIf 사용)
+    cart.getCartItems().removeIf(item -> item.getCartItemId().equals(cartItemId));
 
-    cart.setCartItems(updatedItems);
-    cart.setTotalPrice(updatedItems.stream().mapToInt(CartItemEntity::getTotalPrice).sum());
-    cart.setQuantity(updatedItems.stream().mapToInt(CartItemEntity::getQuantity).sum());
+    cart.setTotalPrice(cart.getCartItems().stream().mapToInt(CartItemEntity::getTotalPrice).sum());
+    cart.setQuantity(cart.getCartItems().stream().mapToInt(CartItemEntity::getQuantity).sum());
     cart.setUpdatedAt(LocalDateTime.now());
 
     cartRepository.save(cart);
   }
 
   @Override
-  public void clearCart(String uesrId) {
-
+  public void clearCart(String userId) {
+    CartEntity cart = cartRepository.findByUserId(userId);
+    if (cart != null) {
+      cartRepository.delete(cart);
+    } 
   }
 }
