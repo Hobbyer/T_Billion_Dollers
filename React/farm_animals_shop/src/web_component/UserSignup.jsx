@@ -12,7 +12,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Postcode from "react-daum-postcode";
 
-
 const baseURL = import.meta.env.VITE_API_URL;
 
 // * 돈나감 주의 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 인증번호 발송은 1회에 20원입니다. *
@@ -50,7 +49,7 @@ const UserSignup = () => {
   const handlePostCodeComplete = (data) => {
     setFormData((prevData) => ({
       ...prevData,
-      emailFirst: data.roadAddress, // 선택된 주소를 formData에 저장
+      firstAddress: data.roadAddress, // 선택된 주소를 formData에 저장
       address: data.roadAddress,
     }));
     closePostCode(); // 모달 닫기
@@ -414,23 +413,24 @@ const UserSignup = () => {
               </Row>
             )}
 
-            {/* ------------------------------- */}
-
-            <Form.Group as={Col} className="mb-2" controlId="formGridCity">
+            {/* 주소 검색 + 상세주소 입력창 */}
+            <Row className="mb-2">
               <Form.Label>주소</Form.Label>
-              <Form.Control
-                placeholder="도로명 주소"
-                name="firstAddress"
-                value={formData.firstAddress}
-                onChange={handleChange}
-              />
-            </Form.Group>
-
-            <Form.Group as={Col} xs="auto">
-              <Button variant="outline-success" onClick={openPostCode}>
-                주소찾기
-              </Button>
-            </Form.Group>
+              <Col xs={8}>
+                <Form.Control
+                  placeholder="주소를 입력해주세요."
+                  name="firstAddress"
+                  value={formData.firstAddress}
+                  onChange={handleChange}
+                  readOnly
+                />
+              </Col>
+              <Col xs="auto">
+                <Button variant="outline-success" onClick={openPostCode}>
+                  주소찾기
+                </Button>
+              </Col>
+            </Row>
 
             {/* 주소 검색 모달창 */}
             <Modal
@@ -450,7 +450,9 @@ const UserSignup = () => {
                 {/* 주소 검색 컴포넌트 */}
               </Modal.Body>
               <Modal.Footer>
-                <Button variant="outline-success" onClick={closePostCode}>확인</Button>
+                <Button variant="outline-success" onClick={closePostCode}>
+                  확인
+                </Button>
               </Modal.Footer>
             </Modal>
 
