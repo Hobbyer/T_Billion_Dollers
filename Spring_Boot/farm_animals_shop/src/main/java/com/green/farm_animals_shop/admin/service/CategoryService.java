@@ -11,4 +11,5 @@ public interface CategoryService {
   CategoryDTO save(CategoryDTO categoryDTO);
   CategoryDTO update(Integer cateCode, CategoryDTO categoryDTO);
   void delete(Integer cateCode);
+  List<CategoryDTO> getRecommendedCategories();
 }

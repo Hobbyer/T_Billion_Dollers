@@ -1,7 +1,16 @@
 import React, { useState } from "react";
-import { Form, Button, Container, Row, Col, Image } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  Container,
+  Row,
+  Col,
+  Image,
+  Modal,
+} from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Postcode from "react-daum-postcode";
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -24,6 +33,27 @@ const UserSignup = () => {
   });
 
   const [codeSent, setCodeSent] = useState(false); // 인증번호 발송 여부
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // 팝업창 열기 여부
+
+  // 주소 검색 팝업창 열기
+  const openPostCode = () => {
+    setIsPopupOpen(true); // 모달 열기
+  };
+
+  // 주소 검색 팝업창 닫기
+  const closePostCode = () => {
+    setIsPopupOpen(false); // 모달 닫기
+  };
+
+  // 주소 검색 완료 후 선택된 주소를 formData에 저장
+  const handlePostCodeComplete = (data) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      firstAddress: data.roadAddress, // 선택된 주소를 formData에 저장
+      address: data.roadAddress,
+    }));
+    closePostCode(); // 모달 닫기
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -160,6 +190,8 @@ const UserSignup = () => {
     return Object.values(newErrors).every(Boolean); // 모든 유효성 검사 통과 여부
   };
 
+  // 주소 검색
+
   return (
     <>
       <Container
@@ -234,16 +266,15 @@ const UserSignup = () => {
                   onChange={(e) => {
                     handleChange(e);
 
-                    (formData.password === e.target.value) ?
-                      setValidation((prevValidation) => ({
-                        ...prevValidation,
-                        passwordCheck: true,
-                      })) :
-                      setValidation((prevValidation) => ({
-                        ...prevValidation,
-                        passwordCheck: false,
-                      }));
-
+                    formData.password === e.target.value
+                      ? setValidation((prevValidation) => ({
+                          ...prevValidation,
+                          passwordCheck: true,
+                        }))
+                      : setValidation((prevValidation) => ({
+                          ...prevValidation,
+                          passwordCheck: false,
+                        }));
                   }}
                   isValid={
                     formData.password === formData.passwordCheck &&
@@ -292,7 +323,9 @@ const UserSignup = () => {
                     tagCheck(e);
                   }}
                   isValid={validation.emailFirst && formData.email.length > 0}
-                  isInvalid={!validation.emailFirst && formData.email.length > 0}
+                  isInvalid={
+                    !validation.emailFirst && formData.email.length > 0
+                  }
                 />
               </Form.Group>
 
@@ -380,17 +413,48 @@ const UserSignup = () => {
               </Row>
             )}
 
-            {/* ------------------------------- */}
+            {/* 주소 검색 + 상세주소 입력창 */}
+            <Row className="mb-2">
+              <Form.Label>주소</Form.Label>
+              <Col xs={8}>
+                <Form.Control
+                  placeholder="주소를 입력해주세요."
+                  name="firstAddress"
+                  value={formData.firstAddress}
+                  onChange={handleChange}
+                  readOnly
+                />
+              </Col>
+              <Col xs="auto">
+                <Button variant="outline-success" onClick={openPostCode}>
+                  주소찾기
+                </Button>
+              </Col>
+            </Row>
 
-            <Form.Group className="mb-2" controlId="formGridCity">
-              <Form.Label >주소</Form.Label>
-              <Form.Control
-                placeholder="도로명 주소"
-                name="firstAddress"
-                value={formData.firstAddress}
-                onChange={handleChange}
-              />
-            </Form.Group>
+            {/* 주소 검색 모달창 */}
+            <Modal
+              show={isPopupOpen}
+              onHide={closePostCode}
+              size="lg"
+              aria-labelledby="contained-modal-title-vcenter"
+              centered
+            >
+              <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">
+                  주소 검색
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Postcode onComplete={handlePostCodeComplete} />{" "}
+                {/* 주소 검색 컴포넌트 */}
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="outline-success" onClick={closePostCode}>
+                  확인
+                </Button>
+              </Modal.Footer>
+            </Modal>
 
             <Form.Group className="mb-4" controlId="formGridAddress2">
               <Form.Label>상세 주소</Form.Label>

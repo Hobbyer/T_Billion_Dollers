@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
     CategoryInfoEntity category = categoryInfoRepository.findById(cateCode)
         .orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다."));
     category.setCateName(categoryDTO.getCateName());
+    category.setRecommended(categoryDTO.getRecommended());
     return CategoryDTO.fromEntity(categoryInfoRepository.save(category));
   }
 
@@ -55,4 +57,15 @@ public class CategoryServiceImpl implements CategoryService {
   public void delete(Integer cateCode) {
     categoryInfoRepository.deleteByCateCode(cateCode);
   }
+
+  //추천 카테고리
+  @Override
+  public List<CategoryDTO> getRecommendedCategories() {
+    return categoryInfoRepository.findTop6ByRecommendedTrueOrderByCateName()
+            .stream()
+            .map(CategoryDTO::fromEntity)
+            .collect(Collectors.toList());
+  }
+
+
 }

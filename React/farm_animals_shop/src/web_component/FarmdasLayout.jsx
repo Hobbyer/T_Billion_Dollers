@@ -2,6 +2,8 @@ import React from 'react'
 import WebHeader from './WebHeader'
 import { Outlet } from 'react-router-dom'
 import { Container, Row } from 'react-bootstrap'
+import Menu from './search/page/Menu'
+import SearchBar from './search/page/SearchBar'
 
 const FarmdasLayout = () => {
   return (
