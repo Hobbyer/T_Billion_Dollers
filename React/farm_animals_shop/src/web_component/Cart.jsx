@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Form, Row, Table } from 'react-bootstrap'
-import { DELETE, GET, PUT } from '../apis/CRUD';
+import { DELETE, GET, POST, PUT } from '../apis/CRUD';
 import { useSelector } from 'react-redux';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
@@ -122,8 +122,52 @@ const Cart = () => {
         console.error(err);
       });
   };
-
   
+  const [userAddress, setUserAddress] = useState({});
+  // 주문하기
+  const handleOrderSubmit = () => {
+    if (selectedItems.length === 0) {
+      alert("주문할 상품을 선택해주세요.");
+    } else {
+      if (!confirm(`${selectedItems.length}개의 상품을 주문하시겠습니까?`)) return;
+    }
+
+    GET(`${baseURL}/members/me`)
+      .then(res => {
+        setUserAddress(res.data.address);
+      })
+      .catch(err => {
+        console.error(err);
+        alert("배송지 정보를 가져오는 중 오류가 발생했습니다.");
+      });
+
+    const orderItems = selectedItems.map(item => ({
+      itemCode: item.itemCode,
+      quantity: quantity[item.itemCode] ?? item.quantity,
+      price: item.price,
+      totalPrice: item.price * (quantity[item.itemCode] ?? item.quantity)
+    }));
+
+
+    const orderData = {
+      userId: userId,
+      orderItems: orderItems,
+      totalPrice: totalPrice,
+      shippingAddress: userAddress,
+      paymentMethod: "CREDIT_CARD", // 예시로 카드 결제 방식 사용
+    };
+
+    POST(`${baseURL}/farmdas/orders`, orderData)
+      .then(res => {
+        alert("주문이 완료되었습니다.");
+        // nav("/order/complete", { state: { orderId: res.data.orderId } });
+      })
+      .catch(err => {
+        console.error(err);
+        alert("주문 처리 중 오류가 발생했습니다.");
+      });
+    };
+
 
   useEffect(() => {
     GET(`${baseURL}/farmdas/cart/${userId}`)
@@ -370,7 +414,14 @@ const Cart = () => {
                 nav(-1)
               }}
             >쇼핑 계속하기</button>
-            <button className='btn btn-success'>주문하기</button>
+            <button className='btn btn-success'
+              onClick={() => {
+                if (items.length === 0) {
+                  return;
+                }
+                handleOrderSubmit();
+              }}
+            >주문하기</button>
           </div>
         </div>  
       }
