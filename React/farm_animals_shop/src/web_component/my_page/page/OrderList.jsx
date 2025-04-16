@@ -1,7 +1,17 @@
-import React, { useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import React, { useEffect, useState } from "react";
 import { Button, Form, Stack } from "react-bootstrap";
+import { useLocation } from "react-router-dom";
+import { GET } from "../../../apis/CRUD";
+
+const baseURL = import.meta.env.VITE_API_URL;
 
 const OrderList = () => {
+
+  const userId = jwtDecode(sessionStorage.getItem("accessToken")).sub;
+  const location = useLocation();
+  const orderId = location.state?.orderId || {}; // orderId가 없을 경우 빈 객체로 초기화
+
   // 오늘 날짜를 YYYY-MM-DD 형식으로 설정
   const today = new Date().toISOString().split("T")[0];
 
@@ -19,6 +29,21 @@ const OrderList = () => {
     setStartDate(format(start));
     setEndDate(format(end));
   };
+
+
+  const [orders, setOrders] = useState([]);
+  // 주문 내역 가져오기
+  useEffect(() => {
+    GET(`${baseURL}/orders/${userId}`)
+      .then((res) => {
+        console.log(res.data);
+        setOrders(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
   return (
     <>
       <style>
@@ -146,6 +171,7 @@ const OrderList = () => {
         </Stack>
 
         {/* 주문내역 */}
+
         <div>
           <Stack gap={3}>
             <div
@@ -158,6 +184,34 @@ const OrderList = () => {
                 있습니다.
               </p>
             </div>
+
+            { orders.length > 0 ? 
+              orders.map(order => (
+                <div style={{ textAlign: "center", margin: "50px" }}>
+                  <div key={order.orderId}>
+                  <h4>주문번호: {order.orderId}</h4>
+                  <p>총 금액: {order.totalPrice.toLocaleString()}원</p>
+                  <p>주문일자: {order.orderDate}</p>
+                  <table>
+                    <thead>
+                      <tr><th>상품명</th><th>수량</th><th>가격</th></tr>
+                    </thead>
+                    <tbody>
+                      {order.orderItems.map((item, idx) => (
+                        <tr key={idx}>
+                          <td>{item.itemName}</td>
+                          <td>{item.quantity}</td>
+                          <td>{item.totalPrice.toLocaleString()}원</td>
+                        </tr>
+                      ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ))
+
+              : 
+
             <div style={{ textAlign: "center", margin: "50px" }}>
               <p style={{ fontSize: "4rem", color: "lightgray" }}>
                 <i className="bi bi-exclamation-circle"></i>
@@ -166,6 +220,7 @@ const OrderList = () => {
                 해당기간 내에 주문배송 <br /> 내역이 없습니다.
               </span>
             </div>
+          }
           </Stack>
         </div>
 

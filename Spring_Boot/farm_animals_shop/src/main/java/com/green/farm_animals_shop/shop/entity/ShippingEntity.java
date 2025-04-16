@@ -1,5 +1,6 @@
 package com.green.farm_animals_shop.shop.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,7 @@ public class ShippingEntity {
 
   @OneToOne
   @JoinColumn(name = "order_id", nullable = false)
+  @JsonBackReference
   private OrderEntity order; // 주문 ID (주문과 연관)
 
   @Column(name = "shipping_address", nullable = false)
