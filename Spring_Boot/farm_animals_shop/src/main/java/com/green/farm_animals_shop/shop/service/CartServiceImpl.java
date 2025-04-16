@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -50,7 +50,7 @@ public class CartServiceImpl implements CartService {
 
   @Override
   @Transactional
-  public void addItemToCart(String userId, Integer itemCode, Integer quantity) {
+  public boolean addItemToCart(String userId, Integer itemCode, Integer quantity) {
     Member user = memberRepository.findByUserId(userId)
         .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
 
@@ -72,19 +72,54 @@ public class CartServiceImpl implements CartService {
       cartRepository.save(cart); // 장바구니가 없으면 새로 생성
     }
 
+    // 장바구니에 이미 존재하는 아이템이라면 false 넘기기
+    boolean itemExists = cart.getCartItems().stream()
+        .anyMatch(cartItem -> cartItem.getItem().getItemCode().equals(itemCode));
+
+    if (itemExists) {
+      return false; // 이미 장바구니에 존재하는 경우
+    }
+
     CartItemEntity newItem = CartItemEntity.builder()
-            .cart(cart)
-            .item(item)
-            .quantity(quantity)
-            .totalPrice(item.getPrice() * quantity)
-            .isChecked(true)
-            .build();
+        .cart(cart)
+        .item(item)
+        .quantity(quantity)
+        .totalPrice(item.getPrice() * quantity)
+        .isChecked(true)
+        .build();
 
     cartItemRepository.save(newItem); // 장바구니에 상품 추가
 
     // 장바구니 총 수량 및 가격 업데이트
     cart.setQuantity(cart.getQuantity() + quantity);
     cart.setTotalPrice(cart.getTotalPrice() + newItem.getTotalPrice());
+    cart.setUpdatedAt(LocalDateTime.now());
+
+    cartRepository.save(cart);
+
+    return true; // 장바구니에 추가 성공
+  }
+
+  @Override
+  @Transactional
+  public void checkItem(String userId, Long cartItemId, Boolean isChecked) {
+    CartItemEntity itemToCheck = cartItemRepository.findById(cartItemId)
+        .orElseThrow(() -> new RuntimeException("장바구니에서 아이템을 찾을 수 없습니다."));
+
+    if (!itemToCheck.getCart().getUserId().getUserId().equals(userId)) {
+      throw new RuntimeException("사용자 정보가 일치하지 않습니다.");
+    }
+
+    itemToCheck.setIsChecked(isChecked);
+    cartItemRepository.save(itemToCheck);
+
+    CartEntity cart = itemToCheck.getCart();
+    cart.setTotalPrice(cart.getCartItems().stream()
+        .filter(CartItemEntity::getIsChecked)
+        .mapToInt(CartItemEntity::getQuantity)
+        .sum()
+    );
+
     cart.setUpdatedAt(LocalDateTime.now());
 
     cartRepository.save(cart);
@@ -133,20 +168,21 @@ public class CartServiceImpl implements CartService {
       throw new RuntimeException("장바구니가 존재하지 않습니다.");
     }
 
-    List<CartItemEntity> updatedItems = cart.getCartItems().stream()
-        .filter(item -> item.getCartItemId().equals(cartItemId))
-        .toList();
+    // 기존 카트 리스트를 유지한 채, 내부에서 항목 제거(removeIf 사용)
+    cart.getCartItems().removeIf(item -> item.getCartItemId().equals(cartItemId));
 
-    cart.setCartItems(updatedItems);
-    cart.setTotalPrice(updatedItems.stream().mapToInt(CartItemEntity::getTotalPrice).sum());
-    cart.setQuantity(updatedItems.stream().mapToInt(CartItemEntity::getQuantity).sum());
+    cart.setTotalPrice(cart.getCartItems().stream().mapToInt(CartItemEntity::getTotalPrice).sum());
+    cart.setQuantity(cart.getCartItems().stream().mapToInt(CartItemEntity::getQuantity).sum());
     cart.setUpdatedAt(LocalDateTime.now());
 
     cartRepository.save(cart);
   }
 
   @Override
-  public void clearCart(String uesrId) {
-
+  public void clearCart(String userId) {
+    CartEntity cart = cartRepository.findByUserId(userId);
+    if (cart != null) {
+      cartRepository.delete(cart);
+    } 
   }
 }

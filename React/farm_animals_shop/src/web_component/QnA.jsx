@@ -8,6 +8,7 @@ const baseURL = import.meta.env.VITE_API_URL;
 
 const QnA = () => {
   const nav = useNavigate();
+  
   if (sessionStorage.getItem('accessToken') === null) {
     alert("로그인 후 이용 가능합니다.")
     nav('/farmdas/login')
@@ -70,12 +71,13 @@ const QnA = () => {
                 style={{ width: "100%", height: "300px", margin: "0 auto" }}
                 onChange={(e) => {saveHandler(e)}} />
             </Form.Group>
-            <div className='d-flex justify-content-center'>
+            <div className='d-flex justify-content-center gap-2'>
               <Button variant="success" type="button" className='mb-3' onClick={()=>{
                 submitHandler()
                 }} >
                 문의하기
               </Button>
+              <Button variant="success" type="button" className='mb-3' onClick={()=>{nav('/farmdas')}}>취소</Button>
             </div>
           </div>
         </div>

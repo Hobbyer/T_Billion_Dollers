@@ -15,4 +15,9 @@ public interface ItemInfoRepository extends JpaRepository<ItemInfoEntity, Intege
     List<ItemInfoEntity> findAllASC(); // 상품 코드 오름차순으로 조회
 
     void deleteByItemCode(Integer itemCode); // 상품 코드로 삭제
+
+    List<ItemInfoEntity> findByItemNameContaining(String keyword);//자동완성 기능
+
+    List<ItemInfoEntity> findByCategory_CateCode(Integer cateCode);// 카테고리별 상품 조회
+
 }

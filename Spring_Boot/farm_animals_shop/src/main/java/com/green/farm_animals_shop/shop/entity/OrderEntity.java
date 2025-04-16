@@ -1,5 +1,6 @@
 package com.green.farm_animals_shop.shop.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.green.farm_animals_shop.user.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -39,12 +40,15 @@ public class OrderEntity {
   private OrderStatus orderStatus; // 주문 상태 (주문 완료, 배송 중, 배송 완료 등)
 
   @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
   private List<OrderItemEntity> orderItems; // 주문한 상품들
 
   @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+  @JsonManagedReference
   private PaymentEntity payment; // 결제 정보
 
   @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+  @JsonManagedReference
   private ShippingEntity shipping; // 배송 정보
 
 }

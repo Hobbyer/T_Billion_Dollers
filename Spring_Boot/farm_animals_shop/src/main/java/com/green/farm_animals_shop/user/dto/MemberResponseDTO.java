@@ -12,6 +12,7 @@ import lombok.*;
 @Builder // Builder 어노테이션: 빌더 패턴을 사용하여 객체 생성
 
 // Response 를 보낼 때 사용하는 DTO
+// DB의 정보를 클라이언트에게 전달
 public class MemberResponseDTO {
   private String userId; // 사용자 ID
   private String name; // 이름

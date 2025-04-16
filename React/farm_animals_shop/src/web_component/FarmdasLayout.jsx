@@ -1,16 +1,20 @@
 import React from 'react'
 import WebHeader from './WebHeader'
 import { Outlet } from 'react-router-dom'
-import { Container } from 'react-bootstrap'
+import { Container, Row } from 'react-bootstrap'
+import Menu from './search/page/Menu'
+import SearchBar from './search/page/SearchBar'
 
 const FarmdasLayout = () => {
   return (
     <>
-      <Container className="text-center mt-3 mx-auto ">
-        <div className="shadow-sm rounded" style={{ padding: "0 100px", minWidth: "800px" }}>
+      <Container className="text-center mt-3">
+        <div style={{ width:"100%",borderBottom:"1px solid lightgray" }}>
           <WebHeader />
         </div>
-        <Outlet />
+        <div style={{width:"100%"}}>
+         <Outlet />
+        </div>
       </Container>
     </>
   )

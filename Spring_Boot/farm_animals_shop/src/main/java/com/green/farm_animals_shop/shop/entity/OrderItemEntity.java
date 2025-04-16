@@ -1,5 +1,6 @@
 package com.green.farm_animals_shop.shop.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.green.farm_animals_shop.admin.entity.ItemInfoEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ public class OrderItemEntity {
 
   @ManyToOne
   @JoinColumn(name = "order_id", nullable = false)
+  @JsonBackReference
   private OrderEntity order; // 주문 ID (주문과 연관)
 
   @ManyToOne
