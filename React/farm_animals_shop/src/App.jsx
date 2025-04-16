@@ -85,7 +85,7 @@ function App() {
           <Route element={<Home /> }>
             <Route index element={<HomeBody/>}/>
             {/* 카테고리별 상품리스트 */}
-            <Route path='item/:category?' element={<ItemListPage/>} />
+            <Route path=':category?' element={<ItemListPage/>} />
           </Route>
           {/* 고객센터 */}
           <Route path="qna" element={<QnA />} />

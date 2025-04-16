@@ -123,7 +123,6 @@ const Cart = () => {
       });
   };
   
-  const [userAddress, setUserAddress] = useState({});
   // 주문하기
   const handleOrderSubmit = () => {
     if (selectedItems.length === 0) {
@@ -132,15 +131,6 @@ const Cart = () => {
       if (!confirm(`${selectedItems.length}개의 상품을 주문하시겠습니까?`)) return;
     }
 
-    GET(`${baseURL}/members/me`)
-      .then(res => {
-        setUserAddress(res.data.address);
-      })
-      .catch(err => {
-        console.error(err);
-        alert("배송지 정보를 가져오는 중 오류가 발생했습니다.");
-      });
-
     const orderItems = selectedItems.map(item => ({
       itemCode: item.itemCode,
       quantity: quantity[item.itemCode] ?? item.quantity,
@@ -148,19 +138,36 @@ const Cart = () => {
       totalPrice: item.price * (quantity[item.itemCode] ?? item.quantity)
     }));
 
-
     const orderData = {
       userId: userId,
       orderItems: orderItems,
       totalPrice: totalPrice,
-      shippingAddress: userAddress,
       paymentMethod: "CREDIT_CARD", // 예시로 카드 결제 방식 사용
     };
 
-    POST(`${baseURL}/farmdas/orders`, orderData)
+    POST(`${baseURL}/orders`, orderData)
       .then(res => {
         alert("주문이 완료되었습니다.");
-        // nav("/order/complete", { state: { orderId: res.data.orderId } });
+        nav(`/farmdas/mypage/${userId}`, { state: { orderId: res.data.orderId } });
+        const deleteRequests = selectedItems.map(item => {
+          DELETE(`${baseURL}/farmdas/cart/${userId}/${item.cartItemId}/delete`)
+        });
+        Promise.all(deleteRequests)
+          .then(() => {
+            setItems(items.filter(item => !item.isChecked));
+            if (items.length === 0){
+              DELETE(`${baseURL}/farmdas/cart/${userId}/clear`)
+                .then(() => {
+                  setItems([]);
+                })
+                .catch(err => {
+                  console.error(err);
+                });
+            }
+          })
+          .catch(err => {
+            console.error(err);
+          });
       })
       .catch(err => {
         console.error(err);
@@ -171,7 +178,7 @@ const Cart = () => {
 
   useEffect(() => {
     GET(`${baseURL}/farmdas/cart/${userId}`)
-      .then( res => {
+      .then(res => {
         const itemsWithChecked = res.data.cartItems.map(item => ({ ...item, isChecked: item.isChecked ?? false }))
         setItems(res.data.cartItems);
         setLoading(false);
