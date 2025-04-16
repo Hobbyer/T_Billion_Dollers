@@ -17,4 +17,6 @@ public interface CategoryInfoRepository extends JpaRepository<CategoryInfoEntity
     CategoryInfoEntity findByCateName(String cateName); // 카테고리 이름으로 조회
 
     void deleteByCateCode(Integer cateCode); // 카테고리 코드로 삭제
+
+    List<CategoryInfoEntity> findTop6ByRecommendedTrueOrderByCateName(); // 추천 카테고리
 }

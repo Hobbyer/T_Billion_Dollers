@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -87,4 +88,24 @@ public class ItemServiceImpl implements ItemService{
   public void delete(Integer itemCode) {
     itemInfoRepository.deleteByItemCode(itemCode);
   }
+
+  // 자동완성 기능
+  @Override
+  public List<ItemDTO> autoComplete(String keyword) {
+    return itemInfoRepository.findByItemNameContaining(keyword)
+            .stream()
+            .map(ItemDTO::fromEntity)
+            .collect(Collectors.toList());
+  }
+
+  // 카테고리별 상품 조회
+  @Override
+  public List<ItemDTO> findByCategory_CateCode(Integer cateCode) {
+    return itemInfoRepository.findByCategory_CateCode(cateCode)
+            .stream()
+            .map(ItemDTO::fromEntity)
+            .collect(Collectors.toList());
+  }
+
+
 }

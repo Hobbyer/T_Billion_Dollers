@@ -22,6 +22,7 @@ public class CategoryController {
   // 카테고리 수정
   @PutMapping("/update")
   public ResponseEntity<?> updateCategory(@RequestBody CategoryDTO categoryDTO) {
+
     return ResponseEntity.ok(categoryService.update(categoryDTO.getCateCode(), categoryDTO));
   }
 
