@@ -9,6 +9,7 @@ const WeatherCard = () => {
   useEffect(() => {
     GET(`/weather?lat=${position.lat}&lon=${position.lon}&appid=${WEATHER_KEY}&units=metric&lang=kr`)
       .then(res => {
+        console.log(WEATHER_KEY);
         console.log(res.data);
         setWeatherData(res.data);
       })
