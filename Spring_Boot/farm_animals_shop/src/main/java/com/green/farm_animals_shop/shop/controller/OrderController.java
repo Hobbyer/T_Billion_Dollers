@@ -1,5 +1,6 @@
 package com.green.farm_animals_shop.shop.controller;
 
+import com.green.farm_animals_shop.shop.dto.OrderDTO;
 import com.green.farm_animals_shop.shop.dto.OrderRequestDTO;
 import com.green.farm_animals_shop.shop.entity.OrderEntity;
 import com.green.farm_animals_shop.shop.service.OrderService;
@@ -7,10 +8,9 @@ import com.green.farm_animals_shop.user.entity.Member;
 import com.green.farm_animals_shop.user.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,5 +27,11 @@ public class OrderController {
     OrderEntity order = orderService.createOrder(dto);
 
     return ResponseEntity.ok(order);
+  }
+
+  @GetMapping("/{userId}")
+  public ResponseEntity<?> getOrdersByUserId(@PathVariable("userId") String userId) {
+    List<OrderDTO> orders = orderService.getOrdersByUserId(userId);
+    return ResponseEntity.ok(orders);
   }
 }

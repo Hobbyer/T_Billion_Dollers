@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 // 주문 상품 DTO
 public class OrderItemDTO {
   private Integer itemCode;
+  private String itemName;
   private Integer quantity;
   private Integer price;
   private Integer totalPrice;
