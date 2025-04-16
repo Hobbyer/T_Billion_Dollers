@@ -2,12 +2,16 @@
 import React, { useEffect, useState } from 'react';
 import { GET } from '../../apis/CRUD';
 import { position, WEATHER_KEY } from '../../constant/mapData';
+import axios from 'axios';
+
+const baseURL = import.meta.env.VITE_BASE_URL;
+const weatherURL = import.meta.env.VITE_WEATHER_API_URL;
 
 const WeatherCard = () => {
   const [weatherData, setWeatherData] = useState(null);
 
   useEffect(() => {
-    GET(`/weather?lat=${position.lat}&lon=${position.lon}&appid=${WEATHER_KEY}&units=metric&lang=kr`)
+    axios.get(`${weatherURL}?lat=${position.lat}&lon=${position.lon}&appid=${WEATHER_KEY}&units=metric&lang=kr`)
       .then(res => {
         console.log(res.data);
         setWeatherData(res.data);

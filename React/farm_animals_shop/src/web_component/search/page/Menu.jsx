@@ -7,7 +7,7 @@ const Menu = () => {
     <Container>
       <Nav activeKey="/home">
         <Nav.Item>
-          <Nav.Link as={Link} to="/farmdas/all-products">전체 상품</Nav.Link>
+          <Nav.Link as={Link} to="/items/:category?">전체 상품</Nav.Link>
         </Nav.Item>
         <Nav.Item>
           <Nav.Link eventKey="link-1">Link</Nav.Link>
