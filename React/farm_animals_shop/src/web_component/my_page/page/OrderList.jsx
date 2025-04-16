@@ -9,8 +9,8 @@ const baseURL = import.meta.env.VITE_API_URL;
 const OrderList = () => {
 
   const userId = jwtDecode(sessionStorage.getItem("accessToken")).sub;
-  const location = useLocation();
-  const orderId = location.state?.orderId || {}; // orderId가 없을 경우 빈 객체로 초기화
+
+  const [loading, setLoading] = useState(true);
 
   // 오늘 날짜를 YYYY-MM-DD 형식으로 설정
   const today = new Date().toISOString().split("T")[0];
@@ -38,6 +38,7 @@ const OrderList = () => {
       .then((res) => {
         console.log(res.data);
         setOrders(res.data);
+        setLoading(false);
       })
       .catch((err) => {
         console.error(err);
@@ -47,23 +48,29 @@ const OrderList = () => {
   return (
     <>
       <style>
-        {`.date-btn {
-            border-radius: 50px;
-            width: 90px;
-            color: black;
-            font-weight: bold;
-            border: 1px solid rgb(7, 218, 60);
-            margin-left: 10px;
-            }
-            .date-btn:hover {
-              color: black;
-            }
+        {`
+          @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+          }
 
-            .date-input {
-              width: 150px;
-              height: 40px;
-              margin-left: 10px;
-            }
+          .date-btn {
+          border-radius: 50px;
+          width: 90px;
+          color: black;
+          font-weight: bold;
+          border: 1px solid rgb(7, 218, 60);
+          margin-left: 10px;
+          }
+          .date-btn:hover {
+            color: black;
+          }
+
+          .date-input {
+            width: 150px;
+            height: 40px;
+            margin-left: 10px;
+          }
             `}
       </style>
 
@@ -185,10 +192,27 @@ const OrderList = () => {
               </p>
             </div>
 
-            { orders.length > 0 ? 
+            { loading ? 
+              <div style={{ padding: "0 100px" }}>
+                <h3>Loading...</h3>
+                <div className='d-flex justify-content-center align-items-center'>
+                <img
+                  className='loading-img mt-3'
+                  src="/imgs/cow (1).png" // 원하는 로딩 이미지 경로
+                  alt="로딩중"
+                  style={{
+                    width: "60px",
+                    height: "60px",
+                    animation: "spin 1s linear infinite"
+                  }}
+                />
+                </div>
+              </div>
+              :
+             orders.length > 0 ? 
               orders.map(order => (
-                <div style={{ textAlign: "center", margin: "50px" }}>
-                  <div key={order.orderId}>
+                <div key={order.orderId} style={{ textAlign: "center", margin: "50px" }}>
+                  <div>
                   <h4>주문번호: {order.orderId}</h4>
                   <p>총 금액: {order.totalPrice.toLocaleString()}원</p>
                   <p>주문일자: {order.orderDate}</p>
