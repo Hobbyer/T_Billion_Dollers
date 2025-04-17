@@ -90,15 +90,22 @@ const UserSignup = () => {
       return; // 아이디가 비어있으면 중복확인 요청을 보내지 않음
     }
 
+    // 아이디 중복 확인 API 요청
     axios
-      .post(`${baseURL}/auth/check-user-id`, { userId: formData.userId})
+      .post(`${baseURL}/auth/check-user-id`, { userId: formData.userId })
       .then((res) => {
-        if (res.data.exists){
+        if (res.data.exists) {
           alert("이미 사용중인 아이디입니다.");
-          setIsUserIdValid(false);
+          setValidation((prevValidation) => ({
+            ...prevValidation,
+            userId: true, // 아이디 중복시 유효성 검사 실패
+          }));
         } else {
           alert("사용 가능한 아이디입니다.");
-          setIsUserIdValid(true);
+          setValidation((prevValidation) => ({
+            ...prevValidation,
+            userId: true, // 아이디가 사용 가능하면 유효성 검사 성공
+          }));
         }
       })
       .catch((err) => {
@@ -211,29 +218,10 @@ const UserSignup = () => {
     }
   };
 
-  const validate = () => {
-    const newErrors = { ...validation };
+  const idValid = !validation.userId || formData.userId.length < 0
 
-    // 아이디 유효성 검사
-    newErrors.userId = idRegex.test(formData.userId);
-    // 비밀번호 유효성 검사
-    newErrors.password = pwRegex.test(formData.password);
-    // 비밀번호 확인 일치 검사
-    newErrors.passwordCheck = formData.password === formData.passwordCheck;
-    // 이름 유효성 검사
-    newErrors.name = nameRegex.test(formData.name);
-    // 휴대폰 번호 유효성 검사
-    newErrors.phoneNumber = phoneRegex.test(formData.phoneNumber);
-    // 주소 유효성 검사
-    newErrors.firstAddress = formData.firstAddress.length > 0;
-    newErrors.detailedAddress = formData.detailedAddress.length > 0;
-    // 동의 체크
-    newErrors.isAgreed = formData.isAgreed;
-
-    setValidation(newErrors);
-    return Object.values(newErrors).every(Boolean); // 모든 유효성 검사 통과 여부
-  };
-
+  console.log(formData);
+  console.log(validation);
 
   return (
     <>
@@ -255,34 +243,45 @@ const UserSignup = () => {
             <h1>Farmdas</h1>
           </div>
 
-              {/* 아이디 */}
+          {/* 아이디 */}
           <Form className="w-100">
             <Form.Label>아이디</Form.Label>
-              <Row className="mb-2">
-                <Col xs={9}>
-                  <Form.Control
-                    type="text"
-                    placeholder="ID"
-                    name="userId"
-                    value={formData.userId}
-                    onChange={(e) => {
-                      handleChange(e);
-                      tagCheck(e);
-                    }}
-                    isValid={validation.userId && formData.userId.length > 0}
-                    isInvalid={!validation.userId && formData.userId.length > 0}
-                  />
-                </Col>
-                <Col xs={3} className="d-flex justify-content-end">
-                  <Button variant="outline-success" type="button" style={{ width: "100px"}} onClick={validateUserId}>
-                    중복확인
-                  </Button>
-                </Col>
-              
-                <Form.Control.Feedback type="invalid" className="px-3">
-                  4~12자 영문 소문자, 숫자 조합
-                </Form.Control.Feedback>
-              </Row>
+            <Row className="mb-2">
+              <Col xs={9}>
+                <Form.Control
+                  type="text"
+                  placeholder="ID"
+                  name="userId"
+                  value={formData.userId}
+                  onChange={(e) => {
+                    handleChange(e);
+                    tagCheck(e);
+                  }}
+                  isValid={validation.userId && formData.userId.length > 0} // validation.userId를 사용
+                  isInvalid={!validation.userId && formData.userId.length > 0} // validation.userId가 false일 경우 invalid
+                />
+              </Col>
+              <Col xs={3} className="d-flex justify-content-end">
+                <Button
+                  variant="outline-success"
+                  type="button"
+                  style={{ 
+                    backgroundColor:( idValid ? "#fff" : "#198754" ) 
+                    , color: ( idValid ? "#3B755F" : "#fff" )
+                  }}
+                  onClick={validateUserId}
+                  disabled={
+                    idValid
+                  }
+                >
+                  중복확인
+                </Button>
+              </Col>
+
+              <Form.Control.Feedback type="invalid" className="px-3">
+                4~12자 영문 소문자, 숫자 조합
+              </Form.Control.Feedback>
+            </Row>
 
             <Row className="mb-2">
               <Form.Group as={Col} controlId="formGridPassword">
@@ -374,7 +373,9 @@ const UserSignup = () => {
                     handleChange(e);
                     tagCheck(e);
                   }}
-                  isValid={validation.emailFirst && formData.emailFirst.length > 0}
+                  isValid={
+                    validation.emailFirst && formData.emailFirst.length > 0
+                  }
                   isInvalid={
                     !validation.emailFirst && formData.emailFirst.length > 0
                   }
@@ -422,12 +423,16 @@ const UserSignup = () => {
                 </Form.Control.Feedback>
               </Form.Group>
 
-              <Form.Group xs={3} as={Col} className="d-flex justify-content-end">
+              <Form.Group
+                xs={3}
+                as={Col}
+                className="d-flex justify-content-end"
+              >
                 <Button
                   variant="success"
                   type="button"
                   onClick={sendVerificationCode}
-                  style={{ width: "100%"}}
+                  style={{ width: "100%" }}
                 >
                   인증번호
                 </Button>
@@ -458,7 +463,11 @@ const UserSignup = () => {
                     />
                   </Form.Group>
                 )}
-                <Form.Group xs={3} as={Col} className="d-flex justify-content-end">
+                <Form.Group
+                  xs={3}
+                  as={Col}
+                  className="d-flex justify-content-end"
+                >
                   <Button variant="success" type="button" onClick={verifyCode}>
                     확인
                   </Button>
@@ -478,9 +487,9 @@ const UserSignup = () => {
                     handleChange(e);
                   }}
                   readOnly
-                  isValid={validation.firstAddress}
+                  isValid={validation.firstAddress && formData.firstAddress.length > 0}
                   isInvalid={
-                    !validation.firstAddress && formData.address.length > 0
+                    !validation.firstAddress && formData.firstAddress.length > 0
                   }
                 />
               </Col>

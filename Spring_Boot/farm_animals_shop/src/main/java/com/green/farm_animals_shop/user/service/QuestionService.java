@@ -22,4 +22,7 @@ public interface QuestionService {
   //Q&A 게시글 수정
   public void updateQuestion(QuestionDTO questionDTO);
 
+  //답글 목록 조회
+
+
 }

@@ -1,5 +1,6 @@
 package com.green.farm_animals_shop.user.mapper;
 
+import com.green.farm_animals_shop.user.dto.AnswerDTO;
 import com.green.farm_animals_shop.user.dto.QuestionDTO;
 import com.green.farm_animals_shop.user.dto.SearchDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -27,10 +28,16 @@ public interface QuestionMapper {
   //Q&A 조회수 증가
   public void updateReadCnt(int questionNum);
 
+
+  //-----------답글-------------------------------------
+
   //답글 목록 조회
+  public List<AnswerDTO> getAnswerList(int questionNum);
 
   //답글 등록
+  public void insertAnswer(AnswerDTO answerDTO);
 
   //답글 삭제
+  public void deleteAnswer(int answerNum);
 
 }

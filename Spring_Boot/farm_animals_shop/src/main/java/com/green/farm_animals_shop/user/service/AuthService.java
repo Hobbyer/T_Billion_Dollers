@@ -33,6 +33,10 @@ public class AuthService {
     return MemberResponseDTO.of(memberRepository.save(member)); // 회원 정보 저장
   }
 
+  public boolean checkUserIdExists(String userId) { // 사용자 ID 중복 체크
+    return memberRepository.existsByUserId(userId); // 사용자 ID 존재 여부 반환
+  }
+
   // 기존 로그인 메서드 (액세스 토큰 사용)
   public TokenDTO login(MemberRequestDTO requestDTO) { // 로그인 요청 처리
     UsernamePasswordAuthenticationToken authenticationToken = requestDTO.toAuthentication(); // 사용자 인증 정보 생성
