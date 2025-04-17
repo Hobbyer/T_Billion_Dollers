@@ -45,11 +45,9 @@ const SearchBar = () => {
     fetchPopularKeywords();
   }, []);
 
-
   // 검색어가 있을 경우 추천 카테고리는 숨기고, 검색 결과만 표시
   const renderSearchResults = () => {
-    console.log("호출됨");
-    
+
     if (searchText) {
       // 검색어가 있으면 검색 결과만 보여줌
       return (
@@ -63,46 +61,45 @@ const SearchBar = () => {
       return (
         <>
           <div>
-            <p>추천 카테고리</p>
-            <ListGroup variant="flush">
-              {recommendedCategories.map((category, i) =>{
-                console.log("렌더링",category);
-                
-                return(
+            <p className="border">추천 카테고리</p>
+            <ListGroup variant="flush" style={{overflow:"hidden"}}>
+              {recommendedCategories.map((category, i) => {
+                console.log("렌더링", category);
+
+                return (
                   <ListGroup.Item
-                  key={i}
-                  action
-                  onClick={(e) => {
-                    e.preventDefault();  // 혹시 모를 기본 이벤트 방지
-                    e.stopPropagation(); // 부모 이벤트 전파 방지
-                
-                    console.log("카테고리 클릭됨", category);
-                
-                    const reverseCategoryMap = {
-                      1: "beef",
-                      2: "pork",
-                      3: "set"
-                    };
-                
-                    const categoryPath = reverseCategoryMap[category.cateCode];
-                    nav(`/farmdas/cate/${categoryPath}`)
-                  }}
-                >
-                  {category.cateName}
-                </ListGroup.Item>
-                )
+                    action
+                    key={i}
+                    onMouseDown={(e) => {
+                      e.preventDefault(); // 혹시 모를 기본 이벤트 방지
+                      e.stopPropagation(); // 부모 이벤트 전파 방지
+
+                      const reverseCategoryMap = {
+                        1: "beef",
+                        2: "pork",
+                        3: "set",
+                      };
+
+                      const categoryPath =
+                        reverseCategoryMap[category.cateCode];
+                      nav(`/farmdas/cate/${categoryPath}`);
+                    }}
+                  >
+                    {category.cateName}
+                  </ListGroup.Item>
+                );
               })}
             </ListGroup>
           </div>
           <div>
             <p>인기 검색어</p>
-            <ListGroup variant="flush">
+            <ListGroup variant="flush" className="rounded">
               {popularKeywords.map((keyword, i) => (
                 <ListGroup.Item
                   key={i}
                   action
-                  onClick={() => {
-                    nav(`/search/${keyword}`);
+                  onMouseDown={() => {
+                    nav(`/farmdas/search/${keyword}`);
                   }}
                 >
                   {keyword}
@@ -139,8 +136,10 @@ const SearchBar = () => {
             boxShadow: "1px 1px 3px",
             border: isFocused ? "1px solid #ccc" : "none", // border 없애기
           }}
-          onFocus={() => {console.log("검색창 ");
-           setIsFocused(true)}} // 클릭 시 border 없애기
+          onFocus={() => {
+            console.log("검색창 ");
+            setIsFocused(true);
+          }} // 클릭 시 border 없애기
           onBlur={() => setIsFocused(false)} // 클릭을 떼면 원래대로
           onChange={handleSearchTextChange}
           onKeyDown={Enter}
