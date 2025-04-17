@@ -13,19 +13,19 @@ const HomeBody = () => {
   return (
     <>
      <div className="image-container mb-5 mt-4" width="100%">
-          <Carousel data-bs-theme="dark">
-            {bannerImages.map((image, i) => {
-              return (
-                <Carousel.Item key={i}>
-                  <img className="d-block w-100" src={image} />
-                </Carousel.Item>
-              );
-            })}
-          </Carousel>
-        </div>
-        <div>
-          <WebItemList />
-        </div>
+        <Carousel data-bs-theme="dark">
+          {bannerImages.map((image, i) => {
+            return (
+              <Carousel.Item key={i}>
+                <img className="d-block w-100" src={image} />
+              </Carousel.Item>
+            );
+          })}
+        </Carousel>
+      </div>
+      <div>
+        <WebItemList />
+      </div>
     </>
   )
 }

@@ -1,8 +1,9 @@
 import React from 'react'
+import WebItemList from '../../WebItemList'
 
 const ItemListPage = () => {
   return (
-    <div>ItemListPage</div>
+    <WebItemList/> // 상품 리스트
   )
 }
 

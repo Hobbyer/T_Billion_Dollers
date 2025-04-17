@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class ItemInfoEntity {
 
   @Id
@@ -51,7 +50,7 @@ public class ItemInfoEntity {
   private LocalDateTime updatedAt;
 
   // 외래키 : category_info(cate_code)
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "cate_code", nullable = false)
   private CategoryInfoEntity category; // 카테고리 정보
 }

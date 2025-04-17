@@ -26,7 +26,7 @@ import { clearMember, setMember } from './redux/memberSlice'
 import WebItemDetail from './web_component/WebItemDetail'
 import ItemListPage from "./web_component/cate_detail/page/ItemListPage";
 import HomeBody from "./web_component/main_home/page/HomeBody";
-import OrdersInfo from "./admin_component/sales_Management/OrdersInfo";
+import SearchResultPage from "./web_component/search/page/SearchResultPage";
 
 
 const baseURL = import.meta.env.VITE_API_URL;
@@ -83,20 +83,17 @@ function App() {
 
 
         <Route path='/farmdas' element={<FarmdasLayout />}>
-          <Route element={<Home /> }>
-            <Route index element={<HomeBody/>}/>
-            {/* 카테고리별 상품리스트 */}
-            <Route path=':category?' element={<ItemListPage/>} />
-          </Route>
+          <Route index element={<HomeBody/>}/>
+          {/* 카테고리별 상품리스트 */}
+          <Route path='cate/:category?' element={<ItemListPage/>} />
           {/* 고객센터 */}
           <Route path="qna" element={<QnA />} />
           {/* 장바구니 */}
           <Route path='cart/:userId' element={<Cart />} />
-
+          <Route path="search/:keyword" element={<SearchResultPage />} />
 
           {/* 페이지 생성 및 구현해야되는 컴포넌트들 */}
-          {/* 주문내역 */}
-          <Route path="order" element={<div>주문내역</div>} />
+          
           {/* 마이페이지 */}
           <Route path="mypage/:userId" element={<MyPageLayout />} />
           {/* 상품상세 */}

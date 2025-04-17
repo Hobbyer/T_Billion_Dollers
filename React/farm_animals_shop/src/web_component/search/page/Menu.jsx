@@ -5,19 +5,19 @@ import { Link } from "react-router-dom";
 const Menu = () => {
   return (
     <Container>
-      <Nav activeKey="/home">
+      <Nav activeKey="/farmdas/cate">
         <Nav.Item>
-          <Nav.Link as={Link} to="/items/:category?">전체 상품</Nav.Link>
+          <Nav.Link as={Link} to="/farmdas/cate">전체 상품</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="link-1">Link</Nav.Link>
+          <Nav.Link as={Link} to="/farmdas/cate/beef">한우</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="link-2">Link</Nav.Link>
+          <Nav.Link as={Link} to="/farmdas/cate/pork">양돈</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="link-3">
-            Disabled
+          <Nav.Link as={Link} to="/farmdas/cate/set">
+            세트 상품
           </Nav.Link>
         </Nav.Item>
       </Nav>
