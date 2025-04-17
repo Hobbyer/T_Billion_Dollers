@@ -5,6 +5,8 @@ import SalesQuestions from './SalesQuestions';
 import SalesInfo from './SalesInfo';
 import ItemList from './ItemList';
 import { useNavigate, useOutletContext } from 'react-router-dom';
+import OrdersInfo from './OrdersInfo';
+import MembersInfo from './MembersInfo';
 
 
 
@@ -46,9 +48,9 @@ const SalesManage = () => {
         <Container>
           <Nav className="me-auto">
             <Nav.Link href="#salesInfo" onClick={() => handleTabChange('salesInfo')} active = {activeTab === 'salesInfo'}>매출액 정보</Nav.Link>
-            <Nav.Link href="#itemManage" onClick={() => handleTabChange('itemManage')}>상품 관리</Nav.Link>
-            <Nav.Link href="#3">주문 정보</Nav.Link>
-            <Nav.Link href="#4">회원 정보</Nav.Link>
+            <Nav.Link href="#itemManage" onClick={() => handleTabChange('itemManage')} >상품 관리</Nav.Link>
+            <Nav.Link href="#ordersInfo" onClick={() => handleTabChange('ordersInfo')} >주문 정보</Nav.Link>
+            <Nav.Link href="#membersInfo" onClick={() => handleTabChange('membersInfo')}>회원 정보</Nav.Link>
             <Nav.Link href="#QnA" onClick={() => handleTabChange('QnA')} >QnA</Nav.Link>
           </Nav>
           <Nav className="ml-auto">
@@ -62,15 +64,23 @@ const SalesManage = () => {
       </Navbar>
 
       {activeTab === 'salesInfo' && (
-        <SalesInfo/>
+        <SalesInfo />
       )}
 
       {activeTab === 'itemManage' && (
-        <ItemList/>
+        <ItemList />
       )}
 
       {activeTab === 'QnA' && (
-        <SalesQuestions/>
+        <SalesQuestions />
+      )}
+
+      {activeTab === 'ordersInfo' && (
+        <OrdersInfo />
+      )}
+
+      {activeTab === 'membersInfo' && (
+        <MembersInfo />
       )}
 
     </>

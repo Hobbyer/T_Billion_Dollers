@@ -38,6 +38,7 @@ const data = {
       data: temp.reverse().map(t => t.temp), // 데이터 수치
       borderColor: 'rgba(75, 192, 192, 1)',
       backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      fill: true, // 선 아래 색칠 여부
     },
   ],
 };
@@ -52,13 +53,16 @@ const options = {
     },
     title: {
       display: true,
-      text: '실시간 온도 데이터',
     },
    
   },
 };
 
-return <Line data={data} options={options} />;
+return (
+  <div style={{ width: '100%', height: '300px' }}>
+    <Line data={data} options={options} />
+  </div>
+);
 
 };
 

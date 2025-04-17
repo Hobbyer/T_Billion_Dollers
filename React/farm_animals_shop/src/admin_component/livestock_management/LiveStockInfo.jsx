@@ -19,7 +19,7 @@ const LiveStockInfo = () => {
           {/* Temperature Graph */}
           <Card className="w-100 shadow-sm mb-4" style={{ flex: 3 }}>
             <CardTitle>
-              <h3 className="text-center mt-3">Temperature graph</h3>
+              <h3 className="text-center mt-3">온도 데이터 (실시간)</h3>
             </CardTitle>
             <CardBody className="d-flex flex-column justify-content-center align-items-stretch">
               <LiveStockTemperature />
@@ -31,9 +31,9 @@ const LiveStockInfo = () => {
             <Col xs={12} md={6}>
               <Card className="w-100 shadow-sm p-4 h-100">
                 <CardTitle>
-                  <h3 className="text-center">Humidity graph</h3>
+                  <h3 className="text-center">습도 (실시간)</h3>
                 </CardTitle>
-                <CardBody className="p-0">
+                <CardBody className="p-2 d-flex justify-content-center align-items-center">
                   <LiveStockHumidity />
                 </CardBody>
               </Card>
@@ -41,9 +41,9 @@ const LiveStockInfo = () => {
             <Col xs={12} md={6}>
               <Card className="w-100 shadow-sm p-4 h-100">
                 <CardTitle>
-                  <h3 className="text-center">Today Weather</h3>
+                  <h3 className="text-center">현재 날씨</h3>
                 </CardTitle>
-                <CardBody className="p-0">
+                <CardBody className="p-2 d-flex justify-content-center align-items-center">
                   <WeatherCard />
                 </CardBody>
               </Card>

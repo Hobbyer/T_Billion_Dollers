@@ -31,4 +31,15 @@ public class MemberResponseDTO {
         .authority(member.getAuthority())
         .build();
   }
+
+  public static MemberResponseDTO fromEntity(Member member) {
+    return MemberResponseDTO.builder()
+        .userId(member.getUserId())
+        .name(member.getName())
+        .email(member.getEmail())
+        .phoneNumber(member.getPhoneNumber())
+        .address(member.getAddress())
+        .authority(member.getAuthority())
+        .build();
+  }
 }
