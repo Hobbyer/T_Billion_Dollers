@@ -2,11 +2,13 @@ package com.green.farm_animals_shop.shop.service;
 
 import com.green.farm_animals_shop.admin.entity.ItemInfoEntity;
 import com.green.farm_animals_shop.admin.repository.ItemInfoRepository;
+import com.green.farm_animals_shop.shop.dto.OrderDTO;
 import com.green.farm_animals_shop.shop.dto.OrderRequestDTO;
 import com.green.farm_animals_shop.shop.entity.OrderEntity;
 import com.green.farm_animals_shop.shop.entity.OrderItemEntity;
 import com.green.farm_animals_shop.shop.entity.OrderItemStatus;
 import com.green.farm_animals_shop.shop.entity.OrderStatus;
+import com.green.farm_animals_shop.shop.mapper.OrderMapper;
 import com.green.farm_animals_shop.shop.repository.OrderItemRepository;
 import com.green.farm_animals_shop.shop.repository.OrderRepository;
 import com.green.farm_animals_shop.user.entity.Member;
@@ -34,6 +36,12 @@ public class OrderServiceImpl implements OrderService {
     Member user = memberRepository.findByUserId(dto.getUserId())
         .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
 
+    // 배송지 주소가 null이거나 공백일 경우 Member의 기본 회원 주소로 세팅
+    if (dto.getShippingAddress() == null || dto.getShippingAddress().isBlank()) {
+      dto.setShippingAddress(user.getAddress());
+    }
+
+
     // 주문 생성
     OrderEntity order = OrderEntity.builder()
         .user(user)
@@ -60,5 +68,15 @@ public class OrderServiceImpl implements OrderService {
     order.setOrderItems(orderItems); // order <-> orderItems 연결
 
     return orderRepository.save(order); // cascade로 orderItems도 저장됨
+  }
+
+  @Override
+  public List<OrderDTO> getOrdersByUserId(String userId) {
+
+    List<OrderEntity> orders = orderRepository.findByUser_UserId(userId);
+
+    return orders.stream()
+        .map(OrderMapper::toOrderDTO)
+        .toList();
   }
 }

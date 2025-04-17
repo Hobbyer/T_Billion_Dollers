@@ -1,7 +1,17 @@
-import React, { useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import React, { useEffect, useState } from "react";
 import { Button, Form, Stack } from "react-bootstrap";
+import { useLocation } from "react-router-dom";
+import { GET } from "../../../apis/CRUD";
+
+const baseURL = import.meta.env.VITE_API_URL;
 
 const OrderList = () => {
+
+  const userId = jwtDecode(sessionStorage.getItem("accessToken")).sub;
+
+  const [loading, setLoading] = useState(true);
+
   // 오늘 날짜를 YYYY-MM-DD 형식으로 설정
   const today = new Date().toISOString().split("T")[0];
 
@@ -19,26 +29,48 @@ const OrderList = () => {
     setStartDate(format(start));
     setEndDate(format(end));
   };
+
+
+  const [orders, setOrders] = useState([]);
+  // 주문 내역 가져오기
+  useEffect(() => {
+    GET(`${baseURL}/orders/${userId}`)
+      .then((res) => {
+        console.log(res.data);
+        setOrders(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
   return (
     <>
       <style>
-        {`.date-btn {
-            border-radius: 50px;
-            width: 90px;
-            color: black;
-            font-weight: bold;
-            border: 1px solid rgb(7, 218, 60);
-            margin-left: 10px;
-            }
-            .date-btn:hover {
-              color: black;
-            }
+        {`
+          @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+          }
 
-            .date-input {
-              width: 150px;
-              height: 40px;
-              margin-left: 10px;
-            }
+          .date-btn {
+          border-radius: 50px;
+          width: 90px;
+          color: black;
+          font-weight: bold;
+          border: 1px solid rgb(7, 218, 60);
+          margin-left: 10px;
+          }
+          .date-btn:hover {
+            color: black;
+          }
+
+          .date-input {
+            width: 150px;
+            height: 40px;
+            margin-left: 10px;
+          }
             `}
       </style>
 
@@ -146,6 +178,7 @@ const OrderList = () => {
         </Stack>
 
         {/* 주문내역 */}
+
         <div>
           <Stack gap={3}>
             <div
@@ -158,6 +191,51 @@ const OrderList = () => {
                 있습니다.
               </p>
             </div>
+
+            { loading ? 
+              <div style={{ padding: "0 100px" }}>
+                <h3>Loading...</h3>
+                <div className='d-flex justify-content-center align-items-center'>
+                <img
+                  className='loading-img mt-3'
+                  src="/imgs/cow (1).png" // 원하는 로딩 이미지 경로
+                  alt="로딩중"
+                  style={{
+                    width: "60px",
+                    height: "60px",
+                    animation: "spin 1s linear infinite"
+                  }}
+                />
+                </div>
+              </div>
+              :
+             orders.length > 0 ? 
+              orders.map(order => (
+                <div key={order.orderId} style={{ textAlign: "center", margin: "50px" }}>
+                  <div>
+                  <h4>주문번호: {order.orderId}</h4>
+                  <p>총 금액: {order.totalPrice.toLocaleString()}원</p>
+                  <p>주문일자: {order.orderDate}</p>
+                  <table>
+                    <thead>
+                      <tr><th>상품명</th><th>수량</th><th>가격</th></tr>
+                    </thead>
+                    <tbody>
+                      {order.orderItems.map((item, idx) => (
+                        <tr key={idx}>
+                          <td>{item.itemName}</td>
+                          <td>{item.quantity}</td>
+                          <td>{item.totalPrice.toLocaleString()}원</td>
+                        </tr>
+                      ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ))
+
+              : 
+
             <div style={{ textAlign: "center", margin: "50px" }}>
               <p style={{ fontSize: "4rem", color: "lightgray" }}>
                 <i className="bi bi-exclamation-circle"></i>
@@ -166,6 +244,7 @@ const OrderList = () => {
                 해당기간 내에 주문배송 <br /> 내역이 없습니다.
               </span>
             </div>
+          }
           </Stack>
         </div>
 

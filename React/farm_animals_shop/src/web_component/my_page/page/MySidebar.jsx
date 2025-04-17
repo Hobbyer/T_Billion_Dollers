@@ -37,7 +37,7 @@ const MySidebar = () => {
   };
 
   return (
-    <Tab.Container id="list-group-tabs-example" activeKey={activeKey} onSelect={handleSelect}>
+    <Tab.Container id="list-group-tabs-example" defaultActiveKey={"#my-orders"} onSelect={handleSelect}>
     <Row>
       <Col sm={3} style={{ margin : "50px 0 70px 0"}}>
         <ListGroup>
