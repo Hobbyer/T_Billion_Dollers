@@ -1,9 +1,11 @@
 // AdminSideMenu.jsx
 import React, { useState, useEffect } from 'react';
 import { Offcanvas } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const AdminSideMenu = ({ show, onClose, isMobile }) => {
+  const nav = useNavigate();
+
   const [activeMenu, setActiveMenu] = useState('stock');
   const location = useLocation();
 
@@ -45,7 +47,10 @@ const AdminSideMenu = ({ show, onClose, isMobile }) => {
         backgroundColor: "#3D8D7A",
       }}>
         {menuItems.map((item) => (
-          <div key={item.id} className="btn mb-3 p-3" onClick={() => setActiveMenu(item.id)}>
+          <div key={item.id} className="btn mb-3 p-3" onClick={() => {
+            setActiveMenu(item.id);
+            nav(item.to);
+            }}>
             <Link to={item.to} style={{ textDecoration: 'none', color: 'inherit' }}>
               <img src={activeMenu === item.id ? item.activeImg : item.defaultImg} alt="" width={50} height={50} />
               <div>{item.label}</div>

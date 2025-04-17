@@ -26,6 +26,7 @@ import { clearMember, setMember } from './redux/memberSlice'
 import WebItemDetail from './web_component/WebItemDetail'
 import ItemListPage from "./web_component/cate_detail/page/ItemListPage";
 import HomeBody from "./web_component/main_home/page/HomeBody";
+import OrdersInfo from "./admin_component/sales_Management/OrdersInfo";
 
 
 const baseURL = import.meta.env.VITE_API_URL;
