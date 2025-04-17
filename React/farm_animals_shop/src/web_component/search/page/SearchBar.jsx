@@ -72,7 +72,7 @@ const SearchBar = () => {
                   <ListGroup.Item
                   key={i}
                   action
-                  onClick={(e) => {
+                  onMouseDown={(e) => {
                     e.preventDefault();  // 혹시 모를 기본 이벤트 방지
                     e.stopPropagation(); // 부모 이벤트 전파 방지
                 
@@ -101,8 +101,8 @@ const SearchBar = () => {
                 <ListGroup.Item
                   key={i}
                   action
-                  onClick={() => {
-                    nav(`/search/${keyword}`);
+                  onMouseDown={() => {
+                    nav(`/farmdas/search/${keyword}`);
                   }}
                 >
                   {keyword}
