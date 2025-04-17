@@ -1,5 +1,6 @@
 package com.green.farm_animals_shop.shop.controller;
 
+import com.green.farm_animals_shop.admin.service.ItemService;
 import com.green.farm_animals_shop.shop.service.SearchLogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/farmdas/search")
 public class SearchController {
   private final SearchLogService searchLogService;
+  private final ItemService itemService;
+
+
+  // 검색 기능
+  @GetMapping("")
+  public ResponseEntity<?> search(@RequestParam("keyword") String keyword) {
+    return ResponseEntity.ok(itemService.searchByKeyword(keyword));
+  }
 
   // 인기 검색어 10개 조회
   @GetMapping("/popular")

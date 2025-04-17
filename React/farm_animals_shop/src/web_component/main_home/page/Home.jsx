@@ -52,10 +52,7 @@ const Home = () => {
       </style>
       <div>
         {/* 헤더 및 메뉴 검색바 */}
-        <div className="d-flex justify-content-end mt-3 mb-2">
-          <Menu />
-          <SearchBar />
-        </div>
+        
         <div>
           <Outlet/>
         </div>

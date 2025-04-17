@@ -37,4 +37,6 @@ public interface ItemService {
   // 카테고리별 상품 조회
   List<ItemDTO> findByCategory_CateCode(Integer cateCode);
 
+  // 검색 기능
+  List<ItemDTO> searchByKeyword(String keyword);
 }

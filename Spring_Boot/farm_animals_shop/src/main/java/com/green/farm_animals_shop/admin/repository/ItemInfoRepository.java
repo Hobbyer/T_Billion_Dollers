@@ -3,6 +3,7 @@ package com.green.farm_animals_shop.admin.repository;
 import com.green.farm_animals_shop.admin.entity.ItemInfoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -19,5 +20,9 @@ public interface ItemInfoRepository extends JpaRepository<ItemInfoEntity, Intege
     List<ItemInfoEntity> findByItemNameContaining(String keyword);//자동완성 기능
 
     List<ItemInfoEntity> findByCategory_CateCode(Integer cateCode);// 카테고리별 상품 조회
+
+    // 검색 조회
+    @Query("SELECT i FROM ItemInfoEntity i WHERE i.itemName LIKE %:keyword% OR i.category.cateName LIKE %:keyword%")
+    List<ItemInfoEntity> searchByKeyword(@Param("keyword") String keyword);
 
 }

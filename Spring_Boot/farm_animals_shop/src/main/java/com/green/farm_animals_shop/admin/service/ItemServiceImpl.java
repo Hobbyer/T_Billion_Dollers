@@ -5,6 +5,8 @@ import com.green.farm_animals_shop.admin.entity.CategoryInfoEntity;
 import com.green.farm_animals_shop.admin.entity.ItemInfoEntity;
 import com.green.farm_animals_shop.admin.repository.CategoryInfoRepository;
 import com.green.farm_animals_shop.admin.repository.ItemInfoRepository;
+import com.green.farm_animals_shop.shop.entity.SearchLogEntity;
+import com.green.farm_animals_shop.shop.repository.SearchLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ public class ItemServiceImpl implements ItemService{
 
   private final ItemInfoRepository itemInfoRepository;
   private final CategoryInfoRepository categoryInfoRepository;
+  private final SearchLogRepository searchLogRepository;
 
   @Override
   public List<ItemDTO> findAll() {
@@ -103,6 +106,20 @@ public class ItemServiceImpl implements ItemService{
   public List<ItemDTO> findByCategory_CateCode(Integer cateCode) {
     return itemInfoRepository.findByCategory_CateCode(cateCode)
             .stream()
+            .map(ItemDTO::fromEntity)
+            .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<ItemDTO> searchByKeyword(String keyword) {
+    SearchLogEntity log = new SearchLogEntity();// 검색기록남기기 위한 객체생성
+    log.setKeyword(keyword);// 검색창에 기록한 내용으로 변경
+    log.setCreatedAt(LocalDateTime.now());// 검색했을때 시간으로 변경
+    searchLogRepository.save(log);//저장된 검색기록을 search log 저장
+
+    List<ItemInfoEntity> result = itemInfoRepository.searchByKeyword(keyword);
+
+    return result.stream()
             .map(ItemDTO::fromEntity)
             .collect(Collectors.toList());
   }

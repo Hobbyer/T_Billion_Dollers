@@ -41,10 +41,12 @@ public class ShopItemController {
     return ResponseEntity.ok(itemService.findByCategory_CateCode(cateCode));
   }
 
-  // 카테고리 추천 여부
+  // 카테고리 추천
   @GetMapping("/categories/recommended")
   public ResponseEntity<?> getRecommendedCategories(){
     return ResponseEntity.ok(categoryService.getRecommendedCategories());
   }
+
+
 
 }

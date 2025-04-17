@@ -2,7 +2,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { Card, ButtonGroup, Button, Row, Col } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -60,16 +60,41 @@ const WebItemList = () => {
     }
   };
 
+  const {category} = useParams(); 
+  //상품을 불러와야하기 때문에 url매핑 필요
+  const categoryMap = {
+    beef: 1,
+    pork: 2,
+    set: 3,
+  };
+  const cateCode = categoryMap[category];
+
+   // 카테고리 이름을 화면에 표시하기 위한 매핑
+   const categoryNames = {
+    beef: "한우",
+    pork: "양돈",
+    set: "세트",
+  };
+  
+
   useEffect(() => {
-    axios
-      .get(`${baseURL}/farmdas/items`)
-      .then((res) => {
+    const fetchItems = async () => {
+      try {
+        const res = category
+          ? await axios.get(`${baseURL}/farmdas/items/category/${cateCode}`)
+          : await axios.get(`${baseURL}/farmdas/items`);
         setItemList(res.data || []);
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error(err);
-      });
-  }, []);
+      }
+    };
+  
+    fetchItems();
+  }, [category]);
+
+const location = useLocation();
+const isHome = location.pathname === "/farmdas" || location.pathname === "/farmdas/";
+
 
   return (
     <>
@@ -92,51 +117,58 @@ const WebItemList = () => {
       `}
       </style>
 
-      <Row className="g-4 px-3">
-        {itemList.map((itemData, i) => (
-          <Col key={i} xs={12} sm={4} md={3} lg={3}>
-            <Card className="h-100 shadow-sm">
-              <Card.Img
-                variant="top"
-                src={itemData.imagePath}
-                style={{
-                  height: "270px",
-                  objectFit: "cover",
-                  cursor: "pointer",
-                }}
-                onClick={() => nav(`/farmdas/item/${itemData.itemCode}`)}
-              />
-              <Card.Body className="d-flex flex-column justify-content-between">
-                <Card.Title
-                  style={{ fontSize: "0.8rem", cursor: "pointer" }}
-                >
-                  {itemData.itemName}
-                </Card.Title>
-                <Card.Text style={{ fontSize: "1.2rem" }}>{formatPrice(itemData.price)}원</Card.Text>
-              </Card.Body>
-              <Card.Footer className="text-center">
-                <ButtonGroup className="w-100">
-                  <Button
-                    size="sm"
-                    variant="outline-success"
-                    style={{ fontSize: "0.75rem" }}
+<div >
+        {/* 카테고리 이름과 상품 갯수 표시 */}
+        {!isHome&&<div className="d-flex mt-3 fw-semibold border p-3 rounded">
+          {categoryNames[category]} 전체 상품 ({itemList.length})
+        </div>}
+        <Row className="g-4 pt-4">
+          {itemList.map((itemData, i) => (
+            <Col key={i} xs={12} sm={4} md={3} lg={3}>
+              <Card className="h-100 shadow-sm">
+                <Card.Img
+                  variant="top"
+                  src={itemData.imagePath}
+                  style={{
+                    height: "270px",
+                    objectFit: "cover",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => nav(`/farmdas/item/${itemData.itemCode}`)}
+                />
+                <Card.Body className="d-flex flex-column justify-content-between">
+                  <Card.Title
+                    style={{ fontSize: "0.8rem", cursor: "pointer" }}
+                    onClick={() => nav(`/farmdas/item/${itemData.itemCode}`)}
                   >
-                    구매하기
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline-primary"
-                    style={{ fontSize: "0.75rem" }}
-                    onClick={() => addToCart(itemData.itemCode, 1)}
-                  >
-                    장바구니
-                  </Button>
-                </ButtonGroup>
-              </Card.Footer>
-            </Card>
-          </Col>
-        ))}
-      </Row>
+                    {itemData.itemName}
+                  </Card.Title>
+                  <Card.Text style={{ fontSize: "1.2rem" }}>{formatPrice(itemData.price)}원</Card.Text>
+                </Card.Body>
+                <Card.Footer className="text-center">
+                  <ButtonGroup className="w-100">
+                    <Button
+                      size="sm"
+                      variant="outline-success"
+                      style={{ fontSize: "0.75rem" }}
+                    >
+                      구매하기
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline-primary"
+                      style={{ fontSize: "0.75rem" }}
+                      onClick={() => addToCart(itemData.itemCode, 1)}
+                    >
+                      장바구니
+                    </Button>
+                  </ButtonGroup>
+                </Card.Footer>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+</div>
     </>
   );
 };
