@@ -68,6 +68,7 @@ const SearchBar = () => {
 
                 return (
                   <ListGroup.Item
+
                     action
                     key={i}
                     onMouseDown={(e) => {
@@ -88,6 +89,7 @@ const SearchBar = () => {
                     {category.cateName}
                   </ListGroup.Item>
                 );
+
               })}
             </ListGroup>
           </div>
