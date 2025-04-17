@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController // 이 클래스가 RESTful 웹 서비스의 컨트롤러임을 나타냄
@@ -25,6 +26,17 @@ public class AuthController {
   @PostMapping("/signup")
   public ResponseEntity<MemberResponseDTO> signup(@RequestBody MemberRequestDTO requestDTO) {
     return ResponseEntity.ok(authService.signup(requestDTO)); // 회원가입 요청 처리
+  }
+
+  @PostMapping("/check-user-id")
+  public ResponseEntity<Map<String, Boolean>> checkUserId(@RequestBody Map<String, String> requestBody) {
+    String userId = requestBody.get("userId"); // 클라이언트에서 보낸 userId 가져오기
+
+    boolean exists = authService.checkUserIdExists(userId); // 아이디 중복 체크
+    Map<String, Boolean> response = new HashMap<>();
+    response.put("exists", exists); // exists가 true이면 아이디 중복, false이면 사용 가능
+
+    return ResponseEntity.ok(response); // 결과 반환
   }
 
   @PostMapping("/login")
