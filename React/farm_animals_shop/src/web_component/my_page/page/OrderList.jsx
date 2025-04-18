@@ -198,57 +198,61 @@ const OrderList = () => {
                 <div className='d-flex justify-content-center align-items-center'>
                 <img
                   className='loading-img mt-3'
-                  src="/imgs/cow (1).png" // 원하는 로딩 이미지 경로
+                  // 원하는 로딩 이미지 경로
                   alt="로딩중"
                   style={{
-                    width: "60px",
-                    height: "60px",
-                    animation: "spin 1s linear infinite"
+                  width: "60px",
+                  height: "60px",
+                  animation: "spin 1s linear infinite"
                   }}
                 />
                 </div>
-              </div>
-              :
-             orders.length > 0 ? 
-              orders.map(order => (
-                <div key={order.orderId} style={{ textAlign: "center", margin: "50px" }}>
-                  <div>
-                  <h4>주문번호: {order.orderId}</h4>
-                  <p>총 금액: {order.totalPrice.toLocaleString()}원</p>
-                  <p>주문일자: {order.orderDate}</p>
-                  <table>
-                    <thead>
-                      <tr><th>상품명</th><th>수량</th><th>가격</th></tr>
+                </div>
+                :
+                orders.length > 0 ? 
+                orders.map(order => (
+                <div key={order.orderId} className="card mb-4 shadow-sm">
+                  <div className="card-header bg-primary text-white">
+                  <h5 className="mb-0">주문번호: {order.orderId}</h5>
+                  </div>
+                  <div className="card-body">
+                  <p><strong>총 금액:</strong> {order.totalPrice.toLocaleString()}원</p>
+                  <p><strong>주문일자:</strong> {order.orderDate}</p>
+                  <table className="table table-bordered">
+                    <thead className="table-light">
+                    <tr>
+                      <th>상품명</th>
+                      <th>수량</th>
+                      <th>가격</th>
+                    </tr>
                     </thead>
                     <tbody>
-                      {order.orderItems.map((item, idx) => (
-                        <tr key={idx}>
-                          <td>{item.itemName}</td>
-                          <td>{item.quantity}</td>
-                          <td>{item.totalPrice.toLocaleString()}원</td>
-                        </tr>
-                      ))}
-                      </tbody>
-                    </table>
+                    {order.orderItems.map((item, idx) => (
+                      <tr key={idx}>
+                      <td>{item.itemName}</td>
+                      <td>{item.quantity}</td>
+                      <td>{item.totalPrice.toLocaleString()}원</td>
+                      </tr>
+                    ))}
+                    </tbody>
+                  </table>
                   </div>
                 </div>
-              ))
-
-              : 
-
-            <div style={{ textAlign: "center", margin: "50px" }}>
-              <p style={{ fontSize: "4rem", color: "lightgray" }}>
-                <i className="bi bi-exclamation-circle"></i>
-              </p>
-              <span style={{ fontSize: "0.9rem", color: "gray" }}>
-                해당기간 내에 주문배송 <br /> 내역이 없습니다.
-              </span>
+                ))
+                : 
+                <div className="text-center my-5">
+                <p style={{ fontSize: "4rem", color: "lightgray" }}>
+                  <i className="bi bi-exclamation-circle"></i>
+                </p>
+                <span style={{ fontSize: "0.9rem", color: "gray" }}>
+                  해당기간 내에 주문배송 <br /> 내역이 없습니다.
+                </span>
+                </div>
+              }
+              </Stack>
             </div>
-          }
-          </Stack>
-        </div>
 
-        {/* 배송 단계 안내 */}
+            {/* 배송 단계 안내 */}
         <div style={{ marginTop: "50px", textAlign: "start" }}>
           <Stack gap={3}>
             <div>
