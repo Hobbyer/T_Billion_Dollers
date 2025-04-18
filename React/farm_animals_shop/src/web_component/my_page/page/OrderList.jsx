@@ -218,7 +218,7 @@ const OrderList = () => {
                 orders.length > 0 ? 
                 orders.map(order => (
                 <div key={order.orderId} className="card mb-4 shadow-sm">
-                  <div className="card-header bg-primary text-white">
+                  <div className="card-header text-white" style={{backgroundColor:"#73c8a9"}}>
                   <h5 className="mb-0">주문번호: {order.orderId}</h5>
                   </div>
                   <div className="card-body">

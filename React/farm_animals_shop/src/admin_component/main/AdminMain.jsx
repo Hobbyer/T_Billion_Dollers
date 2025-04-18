@@ -69,7 +69,7 @@ const AdminMain = () => {
             style={{
               borderWidth: "10px",
               borderStyle: "solid",
-              borderColor: "#3F7D58",
+              borderColor: "#5D9B4D",
             }}
           >
             {/* PC에서는 항상 보이기, 모바일은 menuVisible이 true일 때만 보이기 */}

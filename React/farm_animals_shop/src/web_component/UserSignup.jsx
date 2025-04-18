@@ -240,7 +240,7 @@ const UserSignup = () => {
               }}
               style={{ cursor: "pointer" }}
             />
-            <h1>Farmdas</h1>
+            <h1>회원 가입</h1>
           </div>
 
           {/* 아이디 */}
