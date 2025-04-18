@@ -27,6 +27,7 @@ import WebItemDetail from './web_component/WebItemDetail'
 import ItemListPage from "./web_component/cate_detail/page/ItemListPage";
 import HomeBody from "./web_component/main_home/page/HomeBody";
 import SearchResultPage from "./web_component/search/page/SearchResultPage";
+import Refund from "./web_component/my_page/page/Refund";
 
 
 const baseURL = import.meta.env.VITE_API_URL;
@@ -98,6 +99,8 @@ function App() {
           <Route path="mypage/:userId" element={<MyPageLayout />} />
           {/* 상품상세 */}
           <Route path='item/:itemCode' element={<WebItemDetail />} />
+          {/* 취소, 환불 내역 */}
+          <Route path="mypage/:userId/refund" element={<Refund />}></Route>
          
 
         </Route>
