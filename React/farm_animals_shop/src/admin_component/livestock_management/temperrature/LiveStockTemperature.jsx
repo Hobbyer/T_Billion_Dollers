@@ -59,7 +59,7 @@ const options = {
 };
 
 return (
-  <div style={{ width: '100%', height: '300px' }}>
+  <div style={{ width: '100%', height: '400px',marginBottom:"15px" }}>
     <Line data={data} options={options} />
   </div>
 );

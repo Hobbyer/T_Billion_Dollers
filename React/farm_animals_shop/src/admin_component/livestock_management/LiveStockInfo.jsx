@@ -27,11 +27,11 @@ const LiveStockInfo = () => {
       <Row>
         <Col xs={12} md={12} className="p-3 d-flex flex-column">
           <Row>
-            <Col xs={12} md={8}>
+            <Col xs={12} md={8} className="mb-4">
               {/* 온도 그래프 */}
-              <Card className="w-100 shadow mb-4" style={commonCardStyle}>
+              <Card className="w-100 h-100 shadow" style={commonCardStyle}>
                 <CardTitle>
-                  <h3 className="text-center mt-3">온도 데이터 (실시간)</h3>
+                  <h3 className="text-center mt-3" style={{marginBottom:"none"}}>온도 데이터 (실시간)</h3>
                 </CardTitle>
                 <CardBody className="d-flex flex-column justify-content-center align-items-stretch">
                   <LiveStockTemperature />
@@ -40,9 +40,11 @@ const LiveStockInfo = () => {
             </Col>
 
             <Col xs={12} md={4}>
-              <h3>축사의 현재 상태</h3>
-              <TemperatureCard />
-              <HumidityCard />
+              <div>
+                <h3>축사의 현재 상태</h3>
+                <TemperatureCard />
+                <HumidityCard />
+              </div>
             </Col>
           </Row>
 

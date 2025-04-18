@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 
 const StatusCard = ({
   title,
@@ -56,6 +56,20 @@ const StatusCard = ({
             {tooltipMessage}
           </div>
         )}
+        {/* 앱으로 가는 버튼 이후 native와 연동*/}
+        <div className="d-flex justify-content-end">
+          <Button
+            style={{
+              marginTop: "20px",
+              width: "35%",
+              borderRadius: "8px",
+              backgroundColor:"#A3D1C6",
+              border:"none"
+            }}
+          >
+            앱으로 가기
+          </Button>
+        </div>
       </Card.Body>
     </Card>
   );
