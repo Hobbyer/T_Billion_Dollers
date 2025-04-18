@@ -96,7 +96,7 @@ const SearchBar = () => {
           </div>
           <div>
             <p>인기 검색어</p>
-            <ListGroup variant="flush">
+            <ListGroup variant="flush" className="rounded">
               {popularKeywords.map((keyword, i) => (
                 <ListGroup.Item
                   key={i}
