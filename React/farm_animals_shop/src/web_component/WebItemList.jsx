@@ -119,13 +119,13 @@ const isHome = location.pathname === "/farmdas" || location.pathname === "/farmd
 
 <div >
         {/* 카테고리 이름과 상품 갯수 표시 */}
-        {!isHome&&<div className="d-flex mt-3 fw-semibold border p-3 rounded">
+        {!isHome&&<div className="d-flex mt-3 border p-3 rounded">
           {categoryNames[category]} 전체 상품 ({itemList.length})
         </div>}
         <Row className="g-4 pt-4">
           {itemList.map((itemData, i) => (
             <Col key={i} xs={12} sm={4} md={3} lg={3}>
-              <Card className="h-100 shadow-sm">
+              <Card className="h-100 shadow-sm" style={{overflow:"hidden"}}>
                 <Card.Img
                   variant="top"
                   src={itemData.imagePath}

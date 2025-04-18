@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2';
 import ChartJS from 'chart.js/auto';
 import { CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import { GET } from '../../apis/CRUD';
 import dayjs from 'dayjs';
+import { GET } from '../../../apis/CRUD';
 
 const baseURL = import.meta.env.VITE_API_URL;
 

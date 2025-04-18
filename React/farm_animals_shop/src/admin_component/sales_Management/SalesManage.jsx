@@ -44,7 +44,7 @@ const SalesManage = () => {
       `}
     </style>
 
-      <Navbar bg="dark" data-bs-theme="dark">
+      <Navbar data-bs-theme="dark" className="rounded"style={{backgroundColor:"#B3D9A0"}}>
         <Container>
           <Nav className="me-auto">
             <Nav.Link href="#salesInfo" onClick={() => handleTabChange('salesInfo')} active = {activeTab === 'salesInfo'}>매출액 정보</Nav.Link>
@@ -54,7 +54,7 @@ const SalesManage = () => {
             <Nav.Link href="#QnA" onClick={() => handleTabChange('QnA')} >QnA</Nav.Link>
           </Nav>
           <Nav className="ml-auto">
-            <Button variant="outline-success" className='mx-2' onClick={()=>{
+            <Button className='mx-2'style={{backgroundColor:"#E3F6D6",border:"none",color:"#5D9B4D"}} onClick={()=>{
               nav('/farmdas/')
             }} >
               쇼핑몰 바로가기

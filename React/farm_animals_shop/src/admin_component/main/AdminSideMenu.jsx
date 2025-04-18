@@ -44,7 +44,7 @@ const AdminSideMenu = ({ show, onClose, isMobile }) => {
       <div className="d-flex flex-column align-items-center text-white rounded-4 shadow" style={{
         width: "100px",
         padding: "50px",
-        backgroundColor: "#3D8D7A",
+        backgroundColor: "#8EBE6A",
       }}>
         {menuItems.map((item) => (
           <div key={item.id} className="btn mb-3 p-3" onClick={() => {
