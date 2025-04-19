@@ -49,28 +49,34 @@ const OrderList = () => {
     <>
       <style>
         {`
-          @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-          }
+          
 
           .date-btn {
           border-radius: 50px;
           width: 90px;
           color: black;
           font-weight: bold;
-          border: 1px solid rgb(7, 218, 60);
+          border: 1px solid #198754;
           margin-left: 10px;
           }
           .date-btn:hover {
             color: black;
           }
 
+          .date-btn:focus, .date-btn:active {
+            outline: none !important;
+            box-shadow: none !important;  /* 클릭 시 파란색 테두리 없애기 */
+          }
           .date-input {
             width: 150px;
             height: 40px;
             margin-left: 10px;
           }
+            /* 버튼 클릭 시 배경색이나 색상 바뀌지 않게 하기 */
+            .date-btn:focus, .date-btn:active, .date-btn:hover {
+              background-color: #198754 !important;  /* 배경색 없애기 */
+              color: white !important;  /* 글씨색 유지 */
+            }
             `}
       </style>
 
@@ -78,7 +84,7 @@ const OrderList = () => {
         {/* 주문/배송 현황 */}
         <Stack>
           <div className="d-flex align-items-end">
-            <p style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
+            <p style={{ fontSize: "1.3rem", fontWeight: "bold", marginRight: "10px" }}>
               주문/배송 현황
             </p>
             <p>
@@ -212,7 +218,7 @@ const OrderList = () => {
                 orders.length > 0 ? 
                 orders.map(order => (
                 <div key={order.orderId} className="card mb-4 shadow-sm">
-                  <div className="card-header bg-primary text-white">
+                  <div className="card-header text-white" style={{backgroundColor:"#73c8a9"}}>
                   <h5 className="mb-0">주문번호: {order.orderId}</h5>
                   </div>
                   <div className="card-body">

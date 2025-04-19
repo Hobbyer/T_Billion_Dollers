@@ -55,7 +55,7 @@ const WebHeader = () => {
                     sessionStorage.clear();
                     localStorage.clear();
                     setReload(!reload);
-                    nav('/farmdas')
+                    nav("/farmdas");
                   }}
                 >
                   로그아웃
@@ -88,7 +88,8 @@ const WebHeader = () => {
           </Nav.Item>
         </Nav>
       </article>
-      <header className="mb-3 d-flex align-items-center justify-content-between">
+
+      <header className="mb-2 d-flex align-items-center justify-content-between">
         <div className="display-6 align-items-center d-flex">
           <img
             alt=""
@@ -102,7 +103,7 @@ const WebHeader = () => {
             style={{ cursor: "pointer" }}
           />
           <span
-            style={{ fontWeight: "bold", color: "#3D8D7A",cursor:"pointer"}}
+            style={{ fontWeight: "bold", color: "#3D8D7A", cursor: "pointer",marginTop:"10px" }}
             onClick={() => {
               nav("/farmdas/");
             }}
@@ -110,49 +111,53 @@ const WebHeader = () => {
             FARMDAS
           </span>
         </div>
-        <Nav className="justify-content-end" style={{ fontSize: "14px" }}>
-          <Nav.Item>
-            <Nav.Link
-              onClick={() => {
-                userValidate() ? nav(`/farmdas/cart/${user.sub}`) : setReload(!reload);
-              }}
-              className="px-2"
-            >
-              <Image
-                src="/imgs/basket.jpg"
-                roundedCircle
-                style={{
-                  border: "1px solid black",
-                  width: "40px",
-                  height: "40px",
+        <div>
+          <Nav className="justify-content-end" style={{ fontSize: "14px" }}>
+            <Nav.Item>
+              <Nav.Link
+                onClick={() => {
+                  userValidate()
+                    ? nav(`/farmdas/cart/${user.sub}`)
+                    : setReload(!reload);
                 }}
-              />
-              <p>장바구니</p>
-            </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link onClick={() => {
-                userValidate() ? nav(`/farmdas/mypage/${user.sub}`) : setReload(!reload);
-              }}
-              className="px-2"
-            >
-              <Image
-                src={myPage}
-                roundedCircle
-                style={{
-                  border: "1px solid black",
-                  width: "40px",
-                  height: "40px",
+                className="px-2"
+              >
+                <Image
+                  src="/imgs/basket.jpg"
+                  roundedCircle
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                  }}
+                />
+                <p style={{margin:0}}>장바구니</p>
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                onClick={() => {
+                  userValidate()
+                    ? nav(`/farmdas/mypage/${user.sub}`)
+                    : setReload(!reload);
                 }}
-                onMouseOver={() => setMyPage("/imgs/white_face.jpg")}
-                onMouseOut={() => setMyPage("/imgs/black_face.jpg")}
-              />
-              <p>마이페이지</p>
-            </Nav.Link>
-          </Nav.Item>
-        </Nav>
+                className="px-2"
+              >
+                <Image
+                  src={myPage}
+                  roundedCircle
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                  }}
+                  onMouseOver={() => setMyPage("/imgs/white_face.jpg")}
+                  onMouseOut={() => setMyPage("/imgs/black_face.jpg")}
+                />
+                <p style={{margin:0}}>마이페이지</p>
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+        </div>
       </header>
-      
     </>
   );
 };

@@ -37,30 +37,45 @@ const MySidebar = () => {
   };
 
   return (
-    <Tab.Container id="list-group-tabs-example" defaultActiveKey={"#my-orders"} onSelect={handleSelect}>
-    <Row>
-      <Col sm={3} style={{ margin : "50px 0 70px 0"}}>
-        <ListGroup>
-          {menuItems.map((item, i) => (
-            <ListGroup.Item key={i} action eventKey={item.href}>
-              {item.label}
-            </ListGroup.Item>
-          ))}
-        </ListGroup>
-      </Col>
+    <>
+       <style>
+          {`
+            .custom-nav-link.active {
+              background-color: #339f8b !important;
+              color: white !important;
+              border-color: #339f8b !important;
+            }
 
-        <Col sm={9}>
-          <Tab.Content>
+            .custom-nav-link:hover {
+              color: #339f8b !important;
+            }
+          `}
+        </style>
+      <Tab.Container id="list-group-tabs-example" defaultActiveKey={"#my-orders"} onSelect={handleSelect}>
+      <Row>
+        <Col sm={3} style={{ margin : "50px 0 70px 0"}}>
+          <ListGroup>
             {menuItems.map((item, i) => (
-              <Tab.Pane key={i} eventKey={item.href}>
-                {/*  */}
-                {item.content} 
-              </Tab.Pane>
+              <ListGroup.Item key={i} className="custom-nav-link" action eventKey={item.href}>
+                {item.label}
+              </ListGroup.Item>
             ))}
-          </Tab.Content>
+          </ListGroup>
         </Col>
-      </Row>
-    </Tab.Container>
+  
+          <Col sm={9}>
+            <Tab.Content>
+              {menuItems.map((item, i) => (
+                <Tab.Pane key={i} eventKey={item.href}>
+                  {/*  */}
+                  {item.content} 
+                </Tab.Pane>
+              ))}
+            </Tab.Content>
+          </Col>
+        </Row>
+      </Tab.Container>
+    </>
   );
 };
 

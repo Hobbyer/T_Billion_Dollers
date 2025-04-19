@@ -206,14 +206,14 @@ const MyInfo = () => {
         {!isEditing ? (
           <Button
             className="w-100"
-            variant="primary"
+            variant="success"
             onClick={() => setEditing(true)}
           >
             수정
           </Button>
         ) : (
           <div className="d-flex gap-4">
-            <Button className="w-100" onClick={handleSave}>
+            <Button className="w-100" variant="success" onClick={handleSave}>
               저장
             </Button>
             <Button
