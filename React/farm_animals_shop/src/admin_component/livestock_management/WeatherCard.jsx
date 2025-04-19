@@ -5,13 +5,12 @@ import { position, WEATHER_KEY } from '../../constant/mapData';
 import axios from 'axios';
 
 const baseURL = import.meta.env.VITE_BASE_URL;
-const weatherURL = import.meta.env.VITE_WEATHER_API_URL;
 
 const WeatherCard = () => {
   const [weatherData, setWeatherData] = useState(null);
 
   useEffect(() => {
-    axios.get(`${weatherURL}?lat=${position.lat}&lon=${position.lon}&appid=${WEATHER_KEY}&units=metric&lang=kr`)
+    axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${position.lat}&lon=${position.lon}&appid=${WEATHER_KEY}&units=metric&lang=kr`)
       .then(res => {
         console.log(res.data);
         setWeatherData(res.data);
