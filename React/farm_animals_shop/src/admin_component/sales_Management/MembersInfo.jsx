@@ -20,10 +20,8 @@ const MembersInfo = () => {
       .then((res) => {
         console.log(res.data)
         setMembers(res.data)
-        setLoading(false)
       })
       .catch((err) => {
-        console.error(err)
         setLoading(false)
       })
   }
