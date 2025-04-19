@@ -115,7 +115,7 @@ const UserSignup = () => {
   };
 
   const signupSubmit = (e) => {
-    if (formData.isAgreed === true && validation) {
+    if (formData.isAgreed && validation) {
       axios
         .post(`${baseURL}/auth/signup`, formData)
         .then((res) => {
@@ -126,8 +126,10 @@ const UserSignup = () => {
         .catch((err) => {
           console.error(err);
         });
-    } else {
+    } else if (formData.isAgreed === false) {
       alert("회원가입에 대한 모든 내용을 동의해주세요.");
+    } else {
+      alert("회원가입 처리중 오류가 발생했습니다.");
     }
   };
 
