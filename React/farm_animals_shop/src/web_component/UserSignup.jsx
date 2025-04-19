@@ -115,7 +115,7 @@ const UserSignup = () => {
   };
 
   const signupSubmit = (e) => {
-    if (formData.isAgreed === true && isUserIdValid) {
+    if (formData.isAgreed === true && validation) {
       axios
         .post(`${baseURL}/auth/signup`, formData)
         .then((res) => {
