@@ -33,10 +33,10 @@ export const refreshTokenIfNeeded = async () => {
   // 토큰이 없으면 아무 작업도 하지 않음.
   if (!accessToken || !refreshToken) return;
 
-  const remaingTime = getTokenRemainingTime(accessToken);
+  const remainingTime = getTokenRemainingTime(accessToken);
 
   // 남은 시간이 임계치보다 적으면 갱신 시도
-  if (remaingTime < ACCESS_TOKEN_EXPIRATION_THRESHOLD) {
+  if (remainingTime < ACCESS_TOKEN_EXPIRATION_THRESHOLD) {
     try {
       // 리프레시 토큰 API 호출
       const response = await axios.post("/api/auth/refresh", {refreshToken});
