@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row, Stack } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import { GET } from "../../../apis/CRUD";
+import dayjs from "dayjs";
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -229,7 +230,7 @@ const OrderList = () => {
                   </div>
                   <div className="card-body">
                   <p><strong>총 금액:</strong> {order.totalPrice.toLocaleString()}원</p>
-                  <p><strong>주문일자:</strong> {order.orderDate}</p>
+                  <p><strong>주문일자:</strong> {dayjs(order.orderDate).format('YYYY-MM-DD HH:mm:ss')}</p>
                   <table className="table table-bordered">
                     <thead className="table-light">
                     <tr>
