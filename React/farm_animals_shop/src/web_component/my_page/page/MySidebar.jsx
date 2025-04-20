@@ -45,10 +45,6 @@ const MySidebar = () => {
               color: white !important;
               border-color: #339f8b !important;
             }
-
-            .custom-nav-link:hover {
-              color: #339f8b !important;
-            }
           `}
         </style>
       <Tab.Container id="list-group-tabs-example" defaultActiveKey={"#my-orders"} onSelect={handleSelect}>

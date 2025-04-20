@@ -4,6 +4,7 @@ import {
   Accordion,
   Button,
   Col,
+  Container,
   Form,
   Nav,
   Row,
@@ -131,43 +132,46 @@ const Refund = () => {
           </Accordion>
 
           {/* 달력 */}
-          <div
-            className="d-flex justify-content-between align-items-center"
+          <Container
             style={{ margin: "70px 0" }}
           >
-            <div className="p-2">
-              <Button className="date-btn" onClick={() => handleDateRange(7)}>
-                1주일
-              </Button>
-              <Button className="date-btn" onClick={() => handleDateRange(15)}>
-                15일
-              </Button>
-              <Button className="date-btn" onClick={() => handleDateRange(30)}>
-                1개월
-              </Button>
-              <Button className="date-btn" onClick={() => handleDateRange(90)}>
-                3개월
-              </Button>
-              <Button className="date-btn" onClick={() => handleDateRange(180)}>
-                6개월
-              </Button>
-            </div>
-            <div className="p-2 d-flex align-items-center">
-              <Form.Control
-                className="date-input"
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />{" "}
-              <span style={{ color: "gray" }}>-</span>
-              <Form.Control
-                className="date-input"
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-            </div>
-          </div>
+            <Row className="p-2">
+              <Col>
+                <Button className="date-btn" onClick={() => handleDateRange(7)}>
+                  1주일
+                </Button>
+                <Button className="date-btn" onClick={() => handleDateRange(15)}>
+                  15일
+                </Button>
+                <Button className="date-btn" onClick={() => handleDateRange(30)}>
+                  1개월
+                </Button>
+                <Button className="date-btn" onClick={() => handleDateRange(90)}>
+                  3개월
+                </Button>
+                <Button className="date-btn" onClick={() => handleDateRange(180)}>
+                  6개월
+                </Button>
+              </Col>
+            </Row>
+            <Row className="p-2">
+              <Col className="d-flex align-items-center justify-content-center">
+                <Form.Control
+                  className="date-input"
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />{" "}
+                <span style={{ color: "gray" }}>-</span>
+                <Form.Control
+                  className="date-input"
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              </Col>
+            </Row>
+          </Container>
 
           {/* 주문 배송 내역 */}
           <div>

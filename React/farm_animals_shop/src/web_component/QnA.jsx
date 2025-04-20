@@ -53,7 +53,7 @@ const QnA = () => {
         `}
       </style>
       <Container className="mt-3 mx-auto">
-        <div style={{ padding: "0 100px", minWidth: "800px" }}>
+        <div >
           <div style={{ textAlign: "left"}}>
             <Form.Group>
               <Form.Label className=''>제목</Form.Label>
