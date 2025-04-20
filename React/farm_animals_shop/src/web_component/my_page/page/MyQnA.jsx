@@ -3,6 +3,7 @@ import { Button, Container, Form, Pagination, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import MyQnADetail from "./MyQnADetail";
 import { DELETE, GET } from "../../../apis/CRUD";
+import { jwtDecode } from "jwt-decode";
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -12,23 +13,10 @@ const MyQnA = () => {
   const [QnAList, setQnAList] = useState([]);
   // 모달 보여주기
   const [isShow, setIsShow] = useState(false);
-  // 카테고리 조회
-  const [categoryList,setCategoryList] = useState([]);
-  // 선택된 카테고리 저장용
-  const [selectedCategory, setSelectedCategory] = useState(""); 
 
-  // 카테고리 목록조회
-  useEffect(()=>{
-    GET(`${baseURL}/admin/categories`)
-    .then(res=>{setCategoryList(res.data)
-    })
-    .catch()
-  },[])
+  //로그인한 유저의 id를 가져오는 로직직
+  const userId = jwtDecode(sessionStorage.getItem("accessToken")).sub;
 
-  const handleCategoryChange = (e) => {
-    setSelectedCategory(e.target.value);
-    // 여기에 선택한 카테고리에 따라 상품 불러오기 등의 로직 추가
-  };
 
   return (
     <Container className="mt-5">
@@ -36,17 +24,6 @@ const MyQnA = () => {
         <h2 className="fw-bold">나의 문의 내역</h2>
       </div>
       <hr />
-      <div className="d-flex justify-content-end">
-        {/* 상품의 카테고리를 가져와 카테고리에 맞는 상품내역 띄워주기 */}
-        <Form.Select className="mb-3" style={{width:"30%"}} onChange={(e)=>{handleCategoryChange(e)}} >
-          {categoryList.map((cate,i)=>{
-            return(
-              <option key={i} value={cate.cateCode}>{cate.cateName}</option>
-            )
-          })}
-          
-        </Form.Select>
-      </div>
       <Table>
         <thead>
           <tr>
