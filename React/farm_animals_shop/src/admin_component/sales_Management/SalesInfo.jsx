@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Container, Row, Col, Table } from 'react-bootstrap';
 import {
@@ -20,7 +20,12 @@ ChartJS.register(
   Legend
 );
 
-const SalesInfo = ({ userAuth }) => {
+const SalesInfo = () => {
+
+  useEffect(() => {
+    
+  })
+
   // 더미 데이터 예시 (날짜별 매출액 및 주문 내역)
   const salesData = [
     { date: '2024-04-01', total: 120000, orders: 15 },
