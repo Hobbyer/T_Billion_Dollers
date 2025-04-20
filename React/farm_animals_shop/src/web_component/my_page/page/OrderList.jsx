@@ -1,6 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
-import { Button, Form, Stack } from "react-bootstrap";
+import { Button, Col, Container, Form, Row, Stack } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import { GET } from "../../../apis/CRUD";
 
@@ -42,6 +42,7 @@ const OrderList = () => {
       })
       .catch((err) => {
         console.error(err);
+        setLoading(false);
       });
   }, []);
 
@@ -91,60 +92,64 @@ const OrderList = () => {
               주문하신 상품의 배송 진행사항 및 결제내역을 확인 하실 수 있습니다.
             </p>
           </div>
-          <div className="d-flex justify-content-between align-items-center">
-            <div className="p-2">
-              <Button
-                variant="outline-danger"
-                className="date-btn"
-                onClick={() => handleDateRange(7)}
-              >
-                1주일
-              </Button>
-              <Button
-                variant="outline-danger"
-                className="date-btn"
-                onClick={() => handleDateRange(15)}
-              >
-                15일
-              </Button>
-              <Button
-                variant="outline-danger"
-                className="date-btn"
-                onClick={() => handleDateRange(30)}
-              >
-                1개월
-              </Button>
-              <Button
-                variant="outline-danger"
-                className="date-btn"
-                onClick={() => handleDateRange(90)}
-              >
-                3개월
-              </Button>
-              <Button
-                variant="outline-danger"
-                className="date-btn"
-                onClick={() => handleDateRange(180)}
-              >
-                6개월
-              </Button>
-            </div>
-            <div className="p-2 d-flex align-items-center">
-              <Form.Control
-                className="date-input"
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />{" "}
-              <span style={{ color: "gray" }}>-</span>
-              <Form.Control
-                className="date-input"
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-            </div>
-          </div>
+          <Container>
+            <Row className="p-2">
+              <Col >
+                <Button
+                  variant="outline-danger"
+                  className="date-btn"
+                  onClick={() => handleDateRange(7)}
+                >
+                  1주일
+                </Button>
+                <Button
+                  variant="outline-danger"
+                  className="date-btn"
+                  onClick={() => handleDateRange(15)}
+                >
+                  15일
+                </Button>
+                <Button
+                  variant="outline-danger"
+                  className="date-btn"
+                  onClick={() => handleDateRange(30)}
+                >
+                  1개월
+                </Button>
+                <Button
+                  variant="outline-danger"
+                  className="date-btn"
+                  onClick={() => handleDateRange(90)}
+                >
+                  3개월
+                </Button>
+                <Button
+                  variant="outline-danger"
+                  className="date-btn"
+                  onClick={() => handleDateRange(180)}
+                >
+                  6개월
+                </Button>
+              </Col>
+            </Row>
+            <Row className="p-2 d-flex align-items-center">
+              <Col className="d-flex justify-content-center align-items-center">
+                <Form.Control
+                  className="date-input"
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />{" "}
+                <span style={{ color: "gray" }}>-</span>
+                <Form.Control
+                  className="date-input"
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              </Col>
+            </Row>
+          </Container>
 
           {/* 입금대기중 ~ 배송완료 */}
           <div className="p-2 d-flex justify-content-evenly align-items-center">
@@ -205,6 +210,7 @@ const OrderList = () => {
                 <img
                   className='loading-img mt-3'
                   // 원하는 로딩 이미지 경로
+                  src="/imgs/cow (1).png"
                   alt="로딩중"
                   style={{
                   width: "60px",
