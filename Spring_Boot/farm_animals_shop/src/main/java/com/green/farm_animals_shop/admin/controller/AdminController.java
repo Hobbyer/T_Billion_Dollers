@@ -3,6 +3,8 @@ package com.green.farm_animals_shop.admin.controller;
 import com.green.farm_animals_shop.admin.dto.EnvironDTO;
 import com.green.farm_animals_shop.admin.service.AdminService;
 import com.green.farm_animals_shop.admin.service.EnvironmentService;
+import com.green.farm_animals_shop.shop.dto.DailyOrderSummaryDTO;
+import com.green.farm_animals_shop.shop.service.OrderService;
 import com.green.farm_animals_shop.user.dto.MemberResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,7 @@ public class AdminController {
 
   private final AdminService adminService;
   private final EnvironmentService environmentService;
+  private final OrderService orderService;
 
 
   // 기온 데이터 추출
@@ -48,5 +51,11 @@ public class AdminController {
   ) {
     List<MemberResponseDTO> result = adminService.searchMembers(keyword);
     return ResponseEntity.ok(result);
+  }
+
+  @GetMapping("/daily-orders")
+  public ResponseEntity<?> getDailyOrderSummary() {
+    List<DailyOrderSummaryDTO> orders = orderService.getDailyOrderSummary();
+    return ResponseEntity.ok(orders);
   }
 }

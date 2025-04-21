@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Container, Row, Col, Table } from 'react-bootstrap';
 import {
@@ -10,6 +10,9 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import { GET } from '../../apis/CRUD';
+
+const baseURL = import.meta.env.VITE_API_URL;
 
 ChartJS.register(
   BarElement,
@@ -21,26 +24,25 @@ ChartJS.register(
 );
 
 const SalesInfo = () => {
+  const [salesData, setSalesData] = useState([]);
 
   useEffect(() => {
-    
-  })
-
-  // 더미 데이터 예시 (날짜별 매출액 및 주문 내역)
-  const salesData = [
-    { date: '2024-04-01', total: 120000, orders: 15 },
-    { date: '2024-04-02', total: 98000, orders: 12 },
-    { date: '2024-04-03', total: 143000, orders: 18 },
-    { date: '2024-04-04', total: 160000, orders: 20 },
-    { date: '2024-04-05', total: 110000, orders: 14 },
-  ];
+    GET(`${baseURL}/admin/daily-orders`)
+      .then((res) => {
+        console.log(res.data);
+        setSalesData(Array.isArray(res.data) ? res.data : []);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
   const chartData = {
-    labels: salesData.map((item) => item.date),
+    labels: salesData.slice().reverse().map((item) => item.orderDate),
     datasets: [
       {
         label: '일별 매출액 (원)',
-        data: salesData.map((item) => item.total),
+        data: salesData.slice().reverse().map((item) => item.totalPriceSum),
         backgroundColor: 'rgba(63, 125, 88, 0.6)',
         borderColor: '#3F7D58',
         borderWidth: 1,
@@ -123,13 +125,19 @@ const SalesInfo = () => {
                 </tr>
               </thead>
               <tbody>
-                {salesData.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item.date}</td>
-                    <td>{item.orders}</td>
-                    <td>{item.total.toLocaleString()}원</td>
+                {Array.isArray(salesData) && salesData.length > 0 ? (
+                  salesData.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.orderDate}</td>
+                      <td>{item.orders}</td>
+                      <td>{item.totalPriceSum ? item.totalPriceSum.toLocaleString() : null}원</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={3} style={{ textAlign: 'center' }}>데이터가 없습니다.</td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </Table>
           </div>
