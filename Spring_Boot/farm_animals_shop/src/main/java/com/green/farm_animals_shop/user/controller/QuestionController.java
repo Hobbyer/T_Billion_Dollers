@@ -5,6 +5,7 @@ import com.green.farm_animals_shop.user.dto.SearchDTO;
 import com.green.farm_animals_shop.user.repository.MemberRepository;
 import com.green.farm_animals_shop.user.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,11 +30,16 @@ public class QuestionController {
     return questionService.getQuestion(questionNum);
   }
 
-  //Q&A 게시글 등록
   @PostMapping("")
-  public void regQuestion(@RequestBody QuestionDTO questionDTO){
-    questionService.insertQuestion(questionDTO);
+  public ResponseEntity<String> regQuestion(@RequestBody QuestionDTO questionDTO) {
+    try {
+      questionService.insertQuestion(questionDTO);
+      return ResponseEntity.ok("문의가 성공적으로 등록되었습니다.");
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("문의 등록 실패");
+    }
   }
+
 
   //Q&A 게시글 삭제
   @DeleteMapping("/{questionNum}")

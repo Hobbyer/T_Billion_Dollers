@@ -4,11 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 
 public class DailyOrderSummaryDTO {
   private String orderDate; // 주문 날짜
-  private Integer totalOrders; // 총 주문 수
+  private Long totalPriceSum; // 총 결제금액 합
 }
