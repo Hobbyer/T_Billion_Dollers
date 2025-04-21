@@ -16,7 +16,7 @@ public class QuestionServiceImpl implements QuestionService {
   //  //Q&A 게시글 목록 리스트
   @Override
   public List<QuestionDTO> getQuestionList(SearchDTO searchDTO) {
-    return questionMapper.getQuestionList(searchDTO);
+     return questionMapper.getQuestionList(searchDTO);
   }
 
   //Q&A 게시글 등록
