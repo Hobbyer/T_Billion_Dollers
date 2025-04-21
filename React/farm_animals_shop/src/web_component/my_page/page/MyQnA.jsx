@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Container, Form, Pagination, Table } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MyQnADetail from "./MyQnADetail";
 import { DELETE, GET } from "../../../apis/CRUD";
 import { jwtDecode } from "jwt-decode";
@@ -20,10 +20,11 @@ const MyQnA = () => {
 
   const fetchQuestions = async () => {
     try {
-      const res = await GET(`${baseURL}/questions?userId=${userId}&page=1&size=10`); // API 경로 수정 필요
+      const res = await GET(
+        `${baseURL}/questions?userId=${userId}&page=1&size=10`
+      ); // API 경로 수정 필요
       setQuestions(res.data);
       console.log(res.data);
-      
     } catch (error) {
       console.error("문의 목록을 불러오는 데 실패했습니다.", error);
     }
@@ -49,37 +50,48 @@ const MyQnA = () => {
           </tr>
         </thead>
         <tbody>
-          {questions.map((question,i)=>{
-            return(
+          {questions.map((question, i) => {
+            return (
               <tr key={i}>
-              {/* 문의글 작성일 */}
-              <td>{dayjs(question.regDate).format('YY-MM-DD HH:mm')}</td>
-              {/* 주문한 상품/상품의 원래 링크 연결 */}
-              <td>{question.itemName === null ? '1:1 문의' : question.itemName}</td> 
-              {/* 문의글에 등록한 제목 */}
-              <td>{question.title}</td>
-              <td>
-                {/* 관리자 답변여부에 따라 완료/미완료 변경 */}
-                <Button
-                  variant="success"
-                  onClick={(e) => {
-                    setIsShow(true);
-                  }}
-                >
-                  답변 완료
-                </Button>{" "}
-                <MyQnADetail
-                  isShow={isShow}
-                  onHide={() => {
-                    setIsShow(false);
-                  }}
-                />
-              </td>
-            </tr>
-            )
-           
+                {/* 문의글 작성일 */}
+                <td>{dayjs(question.regDate).format("YY-MM-DD HH:mm")}</td>
+                {/* 주문한 상품/상품의 원래 링크 연결 */}
+                <td>
+                  {question.itemName === null ? (
+                    // 1:1 문의일 경우에는 텍스트만 보이게 함
+                    "1:1 문의"
+                  ) : (
+                    // itemName이 있으면 링크로 연결
+                    <Link
+                      to={`/farmdas/item/${question.itemCode}`}
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      {question.itemName}
+                    </Link>
+                  )}
+                </td>
+                {/* 문의글에 등록한 제목 */}
+                <td>{question.title}</td>
+                <td>
+                  {/* 관리자 답변여부에 따라 완료/미완료 변경 */}
+                  <Button
+                    variant="success"
+                    onClick={(e) => {
+                      setIsShow(true);
+                    }}
+                  >
+                    답변 완료
+                  </Button>{" "}
+                  <MyQnADetail
+                    isShow={isShow}
+                    onHide={() => {
+                      setIsShow(false);
+                    }}
+                  />
+                </td>
+              </tr>
+            );
           })}
-          
         </tbody>
       </Table>
       <div className="d-flex justify-content-end m-4">
