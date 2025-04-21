@@ -17,5 +17,5 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
       ORDER BY DATE(order_date) DESC
       LIMIT 7
       """, nativeQuery = true)
-  List<DailyOrderSummaryDTO> findDailyOrderSummary();
+  List<Object[]> findDailyOrderSummaryRaw();
 }

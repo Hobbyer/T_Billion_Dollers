@@ -2,6 +2,7 @@ package com.green.farm_animals_shop.shop.service;
 
 import com.green.farm_animals_shop.admin.entity.ItemInfoEntity;
 import com.green.farm_animals_shop.admin.repository.ItemInfoRepository;
+import com.green.farm_animals_shop.shop.dto.DailyOrderSummaryDTO;
 import com.green.farm_animals_shop.shop.dto.OrderDTO;
 import com.green.farm_animals_shop.shop.dto.OrderRequestDTO;
 import com.green.farm_animals_shop.shop.entity.OrderEntity;
@@ -77,6 +78,17 @@ public class OrderServiceImpl implements OrderService {
 
     return orders.stream()
         .map(OrderMapper::toOrderDTO)
+        .toList();
+  }
+
+  @Override
+  public List<DailyOrderSummaryDTO> getDailyOrderSummary() {
+    List<Object[]> rawList = orderRepository.findDailyOrderSummaryRaw();
+    return rawList.stream()
+        .map(row -> new DailyOrderSummaryDTO(
+            row[0].toString(),
+            ((Number) row[1]).longValue()
+        ))
         .toList();
   }
 }
