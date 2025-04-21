@@ -11,7 +11,10 @@ public class QuestionDTO {
   private String content;
   private LocalDateTime regDate;
   private int readCnt;
-  private String userId;
 
-  private boolean answered;// 문의 완료 여부
+  private String userId;
+  private Integer itemCode;
+
+  private String itemName;  // DB의 ITEM_NAME과 매핑
+  private String imagePath;  // DB의 IMAGE_PATH와 매핑
 }
