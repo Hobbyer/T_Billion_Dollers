@@ -237,6 +237,7 @@ const OrderList = () => {
                       <th>상품명</th>
                       <th>수량</th>
                       <th>가격</th>
+                      <th>문의하기</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -245,6 +246,9 @@ const OrderList = () => {
                       <td>{item.itemName}</td>
                       <td>{item.quantity}</td>
                       <td>{item.totalPrice.toLocaleString()}원</td>
+                      <td>
+                        <Button variant="success" onClick={()=>{}}>문의하기</Button>
+                      </td>
                       </tr>
                     ))}
                     </tbody>
