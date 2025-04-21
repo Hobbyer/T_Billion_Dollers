@@ -50,8 +50,8 @@ const LiveStockInfo = () => {
 
           {/* Humidity + Weather Cards */}
           <Row className="g-3" style={{ flex: 2 }}>
-            <Col xs={12} md={6}>
-              <Card className="w-100 shadow p-4 h-100" style={commonCardStyle}>
+            <Col xs={12} md={5}>
+              <Card className="w-100 shadow p-3 h-100" style={commonCardStyle}>
                 <CardTitle>
                   <h3 className="text-center">습도 (실시간)</h3>
                 </CardTitle>
@@ -61,13 +61,13 @@ const LiveStockInfo = () => {
               </Card>
             </Col>
 
-            <Col xs={12} md={6}>
-              <Card className="w-100 shadow p-4 h-100" style={commonCardStyle}>
+            <Col xs={12} md={7}>
+              <Card className="w-100 shadow p-3 h-100" style={commonCardStyle}>
                 <CardTitle>
-                  <h3 className="text-center">현재 날씨</h3>
+                  <h3 className="text-center">현재 날씨 & 5일 예보</h3>
                 </CardTitle>
-                <CardBody className="p-2 d-flex justify-content-center align-items-center">
-                  <WeatherCard />
+                <CardBody className=" d-flex justify-content-evenly align-items-center p-0">
+                  <WeatherCard className="w-100" />
                 </CardBody>
               </Card>
             </Col>
