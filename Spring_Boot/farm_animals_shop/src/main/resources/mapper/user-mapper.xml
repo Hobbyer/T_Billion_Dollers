@@ -7,19 +7,39 @@
 
     <!--검색 버튼 클릭 시 게시글 목록 조회 -->
     <select id="getQuestionList" resultType="QuestionDTO">
-        SELECT QUESTION_NUM
-            , TITLE
-            , USER_ID
-            , REG_DATE
-            , READ_CNT
-        FROM questions
+        SELECT
+        q.QUESTION_NUM AS questionNum,
+        q.TITLE,
+        q.USER_ID AS userId,
+        q.REG_DATE AS regDate,
+        q.READ_CNT AS readCnt,
+        i.ITEM_NAME AS itemName,
+        i.IMAGE_PATH AS imagePath,
+        i.ITEM_CODE AS itemCode
+        FROM questions q
+        LEFT JOIN item_info i ON q.ITEM_CODE = i.ITEM_CODE
         <where>
+            <!-- userId가 있을 경우에만 필터 -->
+            <if test="userId != null and userId != ''">
+                q.USER_ID = #{userId}
+            </if>
             <if test="searchValue != null and searchValue != ''">
-                ${searchKeyword} LIKE CONCAT('%', #{searchValue}, '%')
+                <choose>
+                    <when test="searchKeyword == 'title'">
+                        AND q.TITLE LIKE CONCAT('%', #{searchValue}, '%')
+                    </when>
+                    <when test="searchKeyword == 'userId'">
+                        AND q.USER_ID LIKE CONCAT('%', #{searchValue}, '%')
+                    </when>
+                    <!-- 필요한 경우 다른 필드도 추가 -->
+                </choose>
             </if>
         </where>
-        ORDER BY question_num DESC
+        ORDER BY q.QUESTION_NUM DESC
+        LIMIT #{offset}, #{size}
     </select>
+
+
 
     <select id="getQuestionListCount" resultType="int">
         SELECT COUNT(*) <!-- COUNT(*)는 전체 게시글 수 -->
@@ -35,10 +55,12 @@
             TITLE
             , USER_ID
             , CONTENT
+            , ITEM_CODE
         ) VALUES (
             #{title}
             , #{userId}
             , #{content}
+            , #{itemCode}
         )
     </insert>
 

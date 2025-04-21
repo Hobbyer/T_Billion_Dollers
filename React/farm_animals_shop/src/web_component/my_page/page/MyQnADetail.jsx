@@ -32,16 +32,16 @@ const MyQnADetail = ({ onHide, isShow, title }) => {
           <hr></hr>
           <div className="d-flex gap-3">
             <img src={cow} alt="" style={{ width: "100px", height: "100px" }} />
-            <p>등심 A++ 맛좋은 소고기</p>
+            <p>상품명 : 등심 A++ 맛좋은 소고기</p>
           </div>
           <hr />
           <div className="d-flex justify-content-end">
             <p className="border w-60 p-4 rounded">
-              제 소고기는 언제쯤 배송될까요?
+              content : 제 소고기는 언제쯤 배송될까요?
             </p>
           </div>
           <div className="d-flex">
-            <p className="border p-4 rounded w-60">그건.. 안타깝게 됐습니다.</p>
+            <p className="border p-4 rounded w-60"> 답변: 그건.. 안타깝게 됐습니다.</p>
           </div>
           <div className="d-flex justify-content-center gap-2 m-4">
             <Button
