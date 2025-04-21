@@ -14,7 +14,8 @@
         q.REG_DATE AS regDate,
         q.READ_CNT AS readCnt,
         i.ITEM_NAME AS itemName,
-        i.IMAGE_PATH AS imagePath
+        i.IMAGE_PATH AS imagePath,
+        i.ITEM_CODE AS itemCode
         FROM questions q
         LEFT JOIN item_info i ON q.ITEM_CODE = i.ITEM_CODE
         <where>
