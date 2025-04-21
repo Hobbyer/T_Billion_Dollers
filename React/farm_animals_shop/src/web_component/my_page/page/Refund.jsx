@@ -82,7 +82,7 @@ const Refund = () => {
         >
           <p
             style={{
-              fontSize: "1.3rem",
+              fontSize: "1.5rem",
               fontWeight: "bold",
               marginRight: "10px",
             }}
@@ -124,32 +124,42 @@ const Refund = () => {
                   인 경우 고객센터[영업시간(09:00~18:00)]의 연락을 통해
                   주문취소가 가능합니다. 배송 중/배송완료 상품은 주문취소가
                   불가하며, 배송완료 후 7일 이내에 반품 신청이 가능합니다.
-                  상품별 반품 가능 일이 상이 할 수 있습니다. 정확한 기간은
-                  상품 상세설명에서 확인하여 주시기 바랍니다.
+                  상품별 반품 가능 일이 상이 할 수 있습니다. 정확한 기간은 상품
+                  상세설명에서 확인하여 주시기 바랍니다.
                 </span>
               </Accordion.Body>
             </Accordion.Item>
           </Accordion>
 
-          {/* 달력 */}
-          <Container
-            style={{ margin: "70px 0" }}
-          >
+          {/* 신청 탭 달력 */}
+          <Container style={{ margin: "70px 0" }}>
             <Row className="p-2">
               <Col>
                 <Button className="date-btn" onClick={() => handleDateRange(7)}>
                   1주일
                 </Button>
-                <Button className="date-btn" onClick={() => handleDateRange(15)}>
+                <Button
+                  className="date-btn"
+                  onClick={() => handleDateRange(15)}
+                >
                   15일
                 </Button>
-                <Button className="date-btn" onClick={() => handleDateRange(30)}>
+                <Button
+                  className="date-btn"
+                  onClick={() => handleDateRange(30)}
+                >
                   1개월
                 </Button>
-                <Button className="date-btn" onClick={() => handleDateRange(90)}>
+                <Button
+                  className="date-btn"
+                  onClick={() => handleDateRange(90)}
+                >
                   3개월
                 </Button>
-                <Button className="date-btn" onClick={() => handleDateRange(180)}>
+                <Button
+                  className="date-btn"
+                  onClick={() => handleDateRange(180)}
+                >
                   6개월
                 </Button>
               </Col>
@@ -190,7 +200,71 @@ const Refund = () => {
 
         {/* 취소/반품 현황 */}
         <Tab eventKey="center" title="취소/반품 현황">
-          나중에 쓸께예 -ㄻ-
+          <div style={{ textAlign: "start", fontSize: "1.1rem", marginTop: "100px", borderBottom: "1px solid #000" }}>
+            <p>주문취소, 반품한 상품의 신청 현황을 확인하실 수 있습니다</p>
+          </div>
+
+          
+
+          {/* 현황 탭 달력 */}
+          <Container style={{ margin: "70px 0" }}>
+            <Row className="p-2">
+              <Col>
+                <Button className="date-btn" onClick={() => handleDateRange(7)}>
+                  1주일
+                </Button>
+                <Button
+                  className="date-btn"
+                  onClick={() => handleDateRange(15)}
+                >
+                  15일
+                </Button>
+                <Button
+                  className="date-btn"
+                  onClick={() => handleDateRange(30)}
+                >
+                  1개월
+                </Button>
+                <Button
+                  className="date-btn"
+                  onClick={() => handleDateRange(90)}
+                >
+                  3개월
+                </Button>
+                <Button
+                  className="date-btn"
+                  onClick={() => handleDateRange(180)}
+                >
+                  6개월
+                </Button>
+              </Col>
+            </Row>
+            <Row className="p-2">
+              <Col className="d-flex align-items-center justify-content-center">
+                <Form.Control
+                  className="date-input"
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />{" "}
+                <span style={{ color: "gray" }}>-</span>
+                <Form.Control
+                  className="date-input"
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              </Col>
+              <Stack gap={3}>
+              {/* 주문배송내역이 없을 때 */}
+              <p style={{ fontSize: "0.8rem", margin: "150px 0" }}>
+                해당기간 내에 취소, 반품
+                <br />
+                내역이 없습니다.
+              </p>
+            </Stack>
+            </Row>
+          </Container>
         </Tab>
       </Tabs>
 
@@ -200,7 +274,31 @@ const Refund = () => {
 
 
 
-      {/* 아랫단 ! (안내사항) */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      {/* --------------- 아랫단 ! (안내사항) ------------------*/}
+
       <Stack>
         <div
           className="d-flex align-items-end"
@@ -210,7 +308,7 @@ const Refund = () => {
           <div>
             <p
               style={{
-                fontSize: "1.3rem",
+                fontSize: "1.5rem",
                 fontWeight: "bold",
                 marginRight: "10px",
               }}
@@ -281,7 +379,7 @@ const Refund = () => {
           {/* 결제수단별 환불 안내 */}
           <p
             style={{
-              fontSize: "1.3rem",
+              fontSize: "1.5rem",
               fontWeight: "bold",
               marginRight: "10px",
             }}
