@@ -8,7 +8,6 @@ import dayjs from "dayjs";
 const baseURL = import.meta.env.VITE_API_URL;
 
 const OrderList = () => {
-
   const userId = jwtDecode(sessionStorage.getItem("accessToken")).sub;
 
   const [loading, setLoading] = useState(true);
@@ -31,7 +30,6 @@ const OrderList = () => {
     setEndDate(format(end));
   };
 
-
   const [orders, setOrders] = useState([]);
   // 주문 내역 가져오기
   useEffect(() => {
@@ -46,6 +44,19 @@ const OrderList = () => {
         setLoading(false);
       });
   }, []);
+
+  const [isShow, setIsShow] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const handleOpenModal = (item) => {
+    setSelectedItem(item); // 클릭한 아이템을 선택
+    setIsShow(true); // 모달을 띄움
+  };
+
+  const handleCloseModal = () => {
+    setSelectedItem(null);
+    setIsShow(false);
+  };
 
   return (
     <>
@@ -86,7 +97,13 @@ const OrderList = () => {
         {/* 주문/배송 현황 */}
         <Stack>
           <div className="d-flex align-items-end">
-            <p style={{ fontSize: "1.3rem", fontWeight: "bold", marginRight: "10px" }}>
+            <p
+              style={{
+                fontSize: "1.3rem",
+                fontWeight: "bold",
+                marginRight: "10px",
+              }}
+            >
               주문/배송 현황
             </p>
             <p>
@@ -95,7 +112,7 @@ const OrderList = () => {
           </div>
           <Container>
             <Row className="p-2">
-              <Col >
+              <Col>
                 <Button
                   variant="outline-danger"
                   className="date-btn"
@@ -204,72 +221,91 @@ const OrderList = () => {
               </p>
             </div>
 
-            { loading ? 
+            {loading ? (
               <div style={{ padding: "0 100px" }}>
                 <h3>Loading...</h3>
-                <div className='d-flex justify-content-center align-items-center'>
-                <img
-                  className='loading-img mt-3'
-                  // 원하는 로딩 이미지 경로
-                  src="/imgs/cow (1).png"
-                  alt="로딩중"
-                  style={{
-                  width: "60px",
-                  height: "60px",
-                  animation: "spin 1s linear infinite"
-                  }}
-                />
+                <div className="d-flex justify-content-center align-items-center">
+                  <img
+                    className="loading-img mt-3"
+                    // 원하는 로딩 이미지 경로
+                    src="/imgs/cow (1).png"
+                    alt="로딩중"
+                    style={{
+                      width: "60px",
+                      height: "60px",
+                      animation: "spin 1s linear infinite",
+                    }}
+                  />
                 </div>
-                </div>
-                :
-                orders.length > 0 ? 
-                orders.map(order => (
+              </div>
+            ) : orders.length > 0 ? (
+              orders.map((order) => (
                 <div key={order.orderId} className="card mb-4 shadow-sm">
-                  <div className="card-header text-white" style={{backgroundColor:"#73c8a9"}}>
-                  <h5 className="mb-0">주문번호: {order.orderId}</h5>
+                  <div
+                    className="card-header text-white"
+                    style={{ backgroundColor: "#73c8a9" }}
+                  >
+                    <h5 className="mb-0">주문번호: {order.orderId}</h5>
                   </div>
                   <div className="card-body">
-                  <p><strong>총 금액:</strong> {order.totalPrice.toLocaleString()}원</p>
-                  <p><strong>주문일자:</strong> {dayjs(order.orderDate).format('YYYY-MM-DD HH:mm:ss')}</p>
-                  <table className="table table-bordered">
-                    <thead className="table-light">
-                    <tr>
-                      <th>상품명</th>
-                      <th>수량</th>
-                      <th>가격</th>
-                      <th>문의하기</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {order.orderItems.map((item, idx) => (
-                      <tr key={idx}>
-                      <td>{item.itemName}</td>
-                      <td>{item.quantity}</td>
-                      <td>{item.totalPrice.toLocaleString()}원</td>
-                      <td>
-                        <Button variant="success" onClick={()=>{}}>문의하기</Button>
-                      </td>
-                      </tr>
-                    ))}
-                    </tbody>
-                  </table>
+                    <p>
+                      <strong>총 금액:</strong>{" "}
+                      {order.totalPrice.toLocaleString()}원
+                    </p>
+                    <p>
+                      <strong>주문일자:</strong>{" "}
+                      {dayjs(order.orderDate).format("YYYY-MM-DD HH:mm:ss")}
+                    </p>
+                    <table className="table table-bordered">
+                      <thead className="table-light">
+                        <tr>
+                          <th>상품명</th>
+                          <th>수량</th>
+                          <th>가격</th>
+                          <th>문의하기</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {order.orderItems.map((item, idx) => (
+                          <tr key={idx}>
+                            <td>{item.itemName}</td>
+                            <td>{item.quantity}</td>
+                            <td>{item.totalPrice.toLocaleString()}원</td>
+                            <td>
+                              <Button variant="success" onClick={() => {}}>
+                                문의하기
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
+
+                  {selectedItem && (
+                    <MyQnADetail
+                      isShow={isShow}
+                      onHide={handleCloseModal}
+                      item={selectedItem} // selectedItem만 전달
+                    />
+                  )}
+                  
                 </div>
-                ))
-                : 
-                <div className="text-center my-5">
+              ))
+            ) : (
+              <div className="text-center my-5">
                 <p style={{ fontSize: "4rem", color: "lightgray" }}>
                   <i className="bi bi-exclamation-circle"></i>
                 </p>
                 <span style={{ fontSize: "0.9rem", color: "gray" }}>
                   해당기간 내에 주문배송 <br /> 내역이 없습니다.
                 </span>
-                </div>
-              }
-              </Stack>
-            </div>
+              </div>
+            )}
+          </Stack>
+        </div>
 
-            {/* 배송 단계 안내 */}
+        {/* 배송 단계 안내 */}
         <div style={{ marginTop: "50px", textAlign: "start" }}>
           <Stack gap={3}>
             <div>

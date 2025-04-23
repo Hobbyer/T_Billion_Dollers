@@ -17,4 +17,6 @@ public class QuestionDTO {
 
   private String itemName;  // DB의 ITEM_NAME과 매핑
   private String imagePath;  // DB의 IMAGE_PATH와 매핑
+
+  private String answerStatus;
 }
