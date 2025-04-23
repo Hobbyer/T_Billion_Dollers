@@ -19,27 +19,27 @@ export default function WeatherCard() {
   const [today, setToday]     = useState(null);
   const [forecast, setForecast] = useState([]);
 
-  useEffect(() => {
-    async function fetchWeather() {
-      try {
-        const tRes = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?lat=${LAT}&lon=${LON}&appid=${WEATHER_KEY}&units=metric&lang=kr`
-        );
-        const tJson = await tRes.json();
-        setToday(tJson);
+  // useEffect(() => {
+  //   async function fetchWeather() {
+  //     try {
+  //       const tRes = await fetch(
+  //         `https://api.openweathermap.org/data/2.5/weather?lat=${LAT}&lon=${LON}&appid=${WEATHER_KEY}&units=metric&lang=kr`
+  //       );
+  //       const tJson = await tRes.json();
+  //       setToday(tJson);
 
-        const fRes = await fetch(
-          `https://api.openweathermap.org/data/2.5/forecast?lat=${LAT}&lon=${LON}&appid=${WEATHER_KEY}&units=metric&lang=kr`
-        );
-        const fJson = await fRes.json();
-        const daily = fJson.list.filter((_,i) => i % 8 === 0).slice(0,5);
-        setForecast(daily);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    fetchWeather();
-  }, []);
+  //       const fRes = await fetch(
+  //         `https://api.openweathermap.org/data/2.5/forecast?lat=${LAT}&lon=${LON}&appid=${WEATHER_KEY}&units=metric&lang=kr`
+  //       );
+  //       const fJson = await fRes.json();
+  //       const daily = fJson.list.filter((_,i) => i % 8 === 0).slice(0,5);
+  //       setForecast(daily);
+  //     } catch (e) {
+  //       console.error(e);
+  //     }
+  //   }
+  //   fetchWeather();
+  // }, []);
 
   if (!today) {
     return (

@@ -125,7 +125,7 @@ const SearchBar = () => {
 
   return (
     <>
-      <div style={{ width: "38%", position: "relative" }}>
+      <div style={{ width: "100%", maxWidth: "500px", position: "relative" }}>
         <Form.Control
           name="searchText"
           type="text"

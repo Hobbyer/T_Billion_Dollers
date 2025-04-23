@@ -10,7 +10,7 @@ import WeatherCard          from './WeatherCard';
 
 export default function LiveStockInfo() {
   return (
-    <ScrollView contentContainerStyle={s.container}>
+    <ScrollView>
       <View style={s.row}>
         <View style={s.chartBox}>
           <TemperatureCard />
