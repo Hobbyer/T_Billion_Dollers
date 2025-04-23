@@ -11,6 +11,11 @@
     "ios": {
       "supportsTablet": true
     },
+    "extra": {
+      "WEATHER_KEY": "YOUR_OPENWEATHERMAP_KEY",
+      "LAT": "37.123456",
+      "LON": "127.123456"
+    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",

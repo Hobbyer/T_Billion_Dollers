@@ -1,4 +1,5 @@
 // app/_layout.jsx
+
 import React from 'react';
 import { Tabs } from 'expo-router';
 import { FontAwesome } from '@expo/vector-icons';
@@ -15,9 +16,7 @@ export default function RootLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="home" size={size} color={color} />
-          ),
+          tabBarIcon: ({ color, size }) => <FontAwesome name="home" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -33,9 +32,15 @@ export default function RootLayout() {
         name="sales"
         options={{
           title: 'Sales',
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="money" size={size} color={color} />
-          ),
+          tabBarIcon: ({ color, size }) => <FontAwesome name="money" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="login"
+        options={{
+          title: 'Login',
+          // 로그인 화면은 탭 버튼 숨기기
+          tabBarIcon: ({ color, size }) => <FontAwesome name="money" size={size} color={color} />,
         }}
       />
     </Tabs>

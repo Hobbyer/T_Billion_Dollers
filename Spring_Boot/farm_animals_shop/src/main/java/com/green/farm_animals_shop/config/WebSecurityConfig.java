@@ -39,8 +39,11 @@ public class WebSecurityConfig implements WebMvcConfigurer {
         .allowedOrigins(
             "http://localhost:5173",        // 개발용 로컬
             "https://farmdas.netlify.app",  // Netlify 배포 도메인
-            "http://10.0.2.2" // Android 에뮬레이터에서 localhost 접근 시 사용
+            "http://10.0.2.2:8080", // Android 에뮬레이터에서 localhost 접근 시 사용
+            "http://localhost:19006", // React Native Expo 개발용
+            "http://192.168.204.19:8080" // 실제 기기 + PC 로컬 IP
         ) // 허용할 출처를 설정합니다.
+
         .allowedMethods("*") // 모든 HTTP 메서드를 허용합니다.
         .allowCredentials(true); // 자격 증명(쿠키, 인증 헤더 등)을 허용합니다.
 //        .maxAge(3600); // Preflight 요청에 대한 캐시 시간(초)을 설정합니다.
