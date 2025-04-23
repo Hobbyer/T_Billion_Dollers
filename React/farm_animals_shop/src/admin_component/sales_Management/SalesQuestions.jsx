@@ -15,7 +15,7 @@ const SalesQuestions = () => {
 
   //서버에서 게시글 목록 받아오기
   useEffect(() => {
-    GET(`${baseURL}/questions`)
+    GET(`${baseURL}/questions?searchKeyword=${searchData.searchKeyword}&searchValue=${searchData.searchValue}`)
       .then((res) => {
         setQuestionList(res.data);
       })
@@ -23,10 +23,11 @@ const SalesQuestions = () => {
         console.log(err);
       });
   }, []);
+  
 
   //검색창에 입력한 데이터를 저장할 변수
   const [searchData, setSearchData] = useState({
-    searchKeyword: "TITLE",
+    searchKeyword: "title",
     searchValue: "",
   });
 
@@ -74,8 +75,8 @@ const SalesQuestions = () => {
             className="form-select bg-warning text-dark fw-bold border-warning w-auto"
             onChange={(e) => changeSearchData(e)}
           >
-            <option value="TITLE">제목</option>
-            <option value="USER_ID">작성자</option>
+            <option value="title">제목</option>
+            <option value="userId">작성자</option>
           </select>
           <Form>
             <Form.Control
