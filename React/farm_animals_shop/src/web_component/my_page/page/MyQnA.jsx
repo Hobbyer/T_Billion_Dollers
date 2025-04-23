@@ -77,18 +77,18 @@ const MyQnA = () => {
                 <td>
                   {/* 관리자 답변여부에 따라 완료/미완료 변경 */}
                   <Button
-                    variant="success"
-                    onClick={(e) => {
+                    variant={question.answerStatus === "PENDING" ? "warning" : "success"}
+                    onClick={() => {
+                      setSelectedQuestion(question);
                       setIsShow(true);
                     }}
                   >
-                    답변 완료
-                  </Button>{" "}
+                    {question.answerStatus === "PENDING" ? "답변 대기 중" : "답변 완료"}
+                  </Button>
                   <MyQnADetail
                     isShow={isShow}
-                    onHide={() => {
-                      setIsShow(false);
-                    }}
+                    onHide={() => setIsShow(false)}
+                    question={selectedQuestion}
                   />
                 </td>
               </tr>
