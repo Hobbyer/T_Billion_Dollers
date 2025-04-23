@@ -15,6 +15,8 @@ const MyQnA = () => {
   // 모달 보여주기
   const [isShow, setIsShow] = useState(false);
 
+  const [selectedQuestion, setSelectedQuestion]= useState(null);
+
   //로그인한 유저의 id를 가져오는 로직직
   const userId = jwtDecode(sessionStorage.getItem("accessToken")).sub;
 
