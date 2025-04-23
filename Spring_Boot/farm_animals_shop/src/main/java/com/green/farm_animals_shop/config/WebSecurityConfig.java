@@ -38,7 +38,8 @@ public class WebSecurityConfig implements WebMvcConfigurer {
     registry.addMapping("/**") // 모든 경로에 대해 CORS 설정을 적용합니다.
         .allowedOrigins(
             "http://localhost:5173",        // 개발용 로컬
-            "https://farmdas.netlify.app"  // Netlify 배포 도메인
+            "https://farmdas.netlify.app",  // Netlify 배포 도메인
+            "http://10.0.2.2" // Android 에뮬레이터에서 localhost 접근 시 사용
         ) // 허용할 출처를 설정합니다.
         .allowedMethods("*") // 모든 HTTP 메서드를 허용합니다.
         .allowCredentials(true); // 자격 증명(쿠키, 인증 헤더 등)을 허용합니다.
