@@ -13,6 +13,7 @@
         q.USER_ID AS userId,
         q.REG_DATE AS regDate,
         q.READ_CNT AS readCnt,
+        q.ANSWER_STATUS AS answerStatus,
         i.ITEM_NAME AS itemName,
         i.IMAGE_PATH AS imagePath,
         i.ITEM_CODE AS itemCode
@@ -21,17 +22,16 @@
         <where>
             <!-- userId가 있을 경우에만 필터 -->
             <if test="userId != null and userId != ''">
-                q.USER_ID = #{userId}
+                AND q.USER_ID = #{userId}
             </if>
             <if test="searchValue != null and searchValue != ''">
                 <choose>
                     <when test="searchKeyword == 'title'">
-                        AND q.TITLE LIKE CONCAT('%', #{searchValue}, '%')
+                        AND LOWER(q.TITLE) LIKE CONCAT('%', LOWER(#{searchValue}), '%')
                     </when>
                     <when test="searchKeyword == 'userId'">
-                        AND q.USER_ID LIKE CONCAT('%', #{searchValue}, '%')
+                        AND LOWER(q.USER_ID) LIKE CONCAT('%', LOWER(#{searchValue}), '%')
                     </when>
-                    <!-- 필요한 경우 다른 필드도 추가 -->
                 </choose>
             </if>
         </where>
