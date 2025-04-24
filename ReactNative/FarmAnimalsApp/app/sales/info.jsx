@@ -1,5 +1,4 @@
-// src/screens/SalesInfoScreen.js
-
+// app/sales/info.jsx
 import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView, View, Text, FlatList,
@@ -8,16 +7,18 @@ import {
 import { BarChart } from 'react-native-chart-kit';
 import { GET } from '../../apis/CRUD';
 
+const baseUrl = 'http://192.168.204.19:8080'; // Replace with your actual base URL
+
 export default function SalesInfoScreen() {
-  const [data, setData] = useState([]);
+  const [data, setData]       = useState([]);
   const [loading, setLoading] = useState(true);
-  const { width } = useWindowDimensions();
-  const chartWidth = Math.max(width - 32, 0);
+  const { width }             = useWindowDimensions();
+  const chartWidth            = width - 32;
 
   useEffect(() => {
     (async () => {
       try {
-        const res = await GET('http://192.168.204.19:8080/admin/daily-orders');
+        const res = await GET(`${baseUrl}/admin/daily-orders`);
         setData(Array.isArray(res.data) ? res.data : []);
       } catch (e) {
         console.error(e);
@@ -27,22 +28,6 @@ export default function SalesInfoScreen() {
     })();
   }, []);
 
-  const sorted = [...data].sort(
-    (a, b) => new Date(a.orderDate) - new Date(b.orderDate)
-  );
-  const labels = sorted.map(i => i.orderDate);
-  const values = sorted.map(i => i.totalPriceSum || 0);
-
-  const chartConfig = {
-    backgroundGradientFrom: '#fff',
-    backgroundGradientTo:   '#fff',
-    decimalPlaces: 0,
-    color:        (op = 1) => `rgba(63,125,88,${op})`,
-    labelColor:   (op = 1) => `rgba(85,85,85,${op})`,
-    style:        { borderRadius: 8 },
-    propsForBackgroundLines: { strokeDasharray: '' },
-  };
-
   if (loading) {
     return (
       <SafeAreaView style={styles.safe}>
@@ -50,6 +35,13 @@ export default function SalesInfoScreen() {
       </SafeAreaView>
     );
   }
+
+  // 날짜 순 정렬
+  const sorted = [...data].sort(
+    (a, b) => new Date(a.orderDate) - new Date(b.orderDate)
+  );
+  const labels = sorted.map(i => i.orderDate);
+  const values = sorted.map(i => i.totalPriceSum || 0);
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -87,16 +79,25 @@ export default function SalesInfoScreen() {
   );
 }
 
+const chartConfig = {
+  backgroundGradientFrom: '#fff',
+  backgroundGradientTo:   '#fff',
+  decimalPlaces:          0,
+  color:        (op = 1) => `rgba(63,125,88,${op})`,
+  labelColor:   (op = 1) => `rgba(85,85,85,${op})`,
+  propsForBackgroundLines: { strokeDasharray: '' },
+};
+
 const styles = StyleSheet.create({
-  safe:  { flex: 1, backgroundColor: '#fff' },
-  center:{ flex:1, justifyContent:'center' },
-  container: { padding:16 },
-  title: { fontSize:20, fontWeight:'bold', color:'#3F7D58', textAlign:'center', marginBottom:8 },
-  chart: { marginVertical:8, borderRadius:8 },
-  subTitle:{ fontSize:16, fontWeight:'600', marginVertical:8 },
-  row: { flexDirection:'row', marginBottom:6 },
-  cellDate:  { flex:2, fontSize:14 },
-  cellCount: { flex:1, fontSize:14, textAlign:'center' },
-  cellPrice: { flex:2, fontSize:14, textAlign:'right' },
-  empty:{ textAlign:'center', color:'#888', marginTop:20 },
+  safe:       { flex: 1, backgroundColor: '#fff' },
+  center:     { flex:1, justifyContent:'center' },
+  container:  { padding:16 },
+  title:      { fontSize:20, fontWeight:'bold', color:'#3F7D58', textAlign:'center', marginBottom:8 },
+  chart:      { marginVertical:8, borderRadius:8 },
+  subTitle:   { fontSize:16, fontWeight:'600', marginVertical:8 },
+  row:        { flexDirection:'row', marginBottom:6 },
+  cellDate:   { flex:2, fontSize:14 },
+  cellCount:  { flex:1, fontSize:14, textAlign:'center' },
+  cellPrice:  { flex:2, fontSize:14, textAlign:'right' },
+  empty:      { textAlign:'center', color:'#888', marginTop:20 },
 });
