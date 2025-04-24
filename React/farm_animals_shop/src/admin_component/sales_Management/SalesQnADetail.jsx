@@ -90,6 +90,8 @@ const SalesQnADetail = () => {
     );
   };
 
+  const [answerData, setAnswerData] = useState([]); //답변 목록을 저장할 state 변수
+
   useEffect(() => {
     //서버에서 게시글 상세 정보 받아오기
     GET(`${baseURL}/questions/${questionNum}`)
@@ -101,6 +103,13 @@ const SalesQnADetail = () => {
         console.log(err);
         setLoading(false); //로딩 완료
       });
+
+    GET(`${baseURL}/admin/answers/${questionNum}`)
+      .then((res) => {
+        console.log(res.data)
+        setAnswerData(res.data); //답변 목록 저장
+      })
+      .catch((err) => {console.log(err)})
   }, []);
 
   const insertAnswer = () => {
@@ -273,18 +282,37 @@ const SalesQnADetail = () => {
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">
                   <Card.Body>
+                    { question.answerStatus === "ANSWERED" ? (
+                      <Form.Control
+                      as="textarea"
+                      value={answerData[0].content}
+                      onChange={handleAnswerChange}
+                    />
+                    )
+                    :
+                    (
                     <Form.Control
                       as="textarea"
                       placeholder="답변을 입력해주세요."
                       onChange={handleAnswerChange}
                     />
+                    )}
                   </Card.Body>
                 </Accordion.Collapse>
               </Card>
             </Accordion>
 
             {/* 삭제 버튼 */}
-            <div className="d-flex justify-content-end mt-5">
+            <div className="d-flex justify-content-between mt-5">
+            <Button
+                variant="secondary"
+                onClick={() => {
+                  nav("/admin/sales-questions");
+                }}
+              >
+                목록
+              </Button>
+
               <Button type="button" variant="danger" onClick={deleteQuestion}>
                 삭제
               </Button>
