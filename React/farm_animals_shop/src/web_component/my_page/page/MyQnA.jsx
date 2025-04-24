@@ -53,6 +53,8 @@ const MyQnA = ({active}) => {
         </thead>
         <tbody>
           {questions.map((question, i) => {
+            console.log(question);
+            
             return (
               <tr key={i}>
                 {/* 문의글 작성일 */}
