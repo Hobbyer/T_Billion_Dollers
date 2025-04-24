@@ -1,156 +1,177 @@
-// src/screens/ItemManageScreen.js
-
+// app/sales/items.jsx
 import React, { useEffect, useState } from 'react';
 import {
-  SafeAreaView, View, Text, FlatList, TextInput,
-  StyleSheet, TouchableOpacity, Modal, Button, Image, Alert, ScrollView,
+  SafeAreaView, SectionList, View, Text,
+  TextInput, Button, Modal, TouchableOpacity,
+  StyleSheet, ActivityIndicator, Alert
 } from 'react-native';
 import { GET, POST, DEL } from '../../apis/CRUD';
 
+const baseUrl = 'http://192.168.204.19:8080';
+
 export default function ItemManageScreen() {
   const [categories, setCategories] = useState([]);
-  const [items, setItems]         = useState([]);
-  const [catModal, setCatModal]   = useState(false);
-  const [newCat, setNewCat]       = useState('');
-  const [itemModal, setItemModal] = useState(false);
-  const [info, setInfo] = useState({
-    cateCode: '', itemName:'', price:'', stock:'', seller:'', description:''
+  const [items, setItems]           = useState([]);
+  const [loading, setLoading]       = useState(true);
+  const [catModal, setCatModal]     = useState(false);
+  const [newCat, setNewCat]         = useState('');
+  const [itemModal, setItemModal]   = useState(false);
+  const [info, setInfo]             = useState({
+    cateCode:'', itemName:'', price:'', stock:'', seller:'', description:''
   });
-  const [preview, setPreview] = useState(null);
 
+  // 1) 카테고리+아이템 로드
   const fetchAll = async () => {
     try {
+      setLoading(true);
       const [cRes, iRes] = await Promise.all([
-        GET('http://192.168.204.19:8080/admin/categories'),
-        GET('http://192.168.204.19:8080/admin/items')
+        GET(`${baseUrl}/admin/categories`),
+        GET(`${baseUrl}/admin/items`),
       ]);
       setCategories(cRes.data);
       setItems(iRes.data);
-    } catch (e) { console.error(e); }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(() => { fetchAll(); }, []);
+  useEffect(() => {
+    fetchAll();
+  }, []);
 
+  // 2) 카테고리 추가/삭제
   const addCategory = async () => {
     try {
-      await POST('http://192.168.204.19:8080/admin/categories', { cateName:newCat });
-      Alert.alert('완료','카테고리 등록됨');
+      await POST(`${baseUrl}/admin/categories`, { cateName: newCat });
       setCatModal(false);
       fetchAll();
-    } catch(e){ Alert.alert('오류','실패'); }
+    } catch (e) {
+      Alert.alert('오류','카테고리 등록 실패');
+    }
   };
-
   const removeCategory = async code => {
     try {
-      await POST('http://192.168.204.19:8080/admin/categories/delete',{ cateCode: code });
-      Alert.alert('완료','삭제됨');
+      await POST(`${baseUrl}/admin/categories/delete`,{ cateCode:code });
       fetchAll();
-    } catch(e){Alert.alert('오류','삭제실패');}
+    } catch (e) {
+      Alert.alert('오류','카테고리 삭제 실패');
+    }
   };
 
-  // itemModal 내부에서 파일 PICKER나 이미지 업로드 구현 필요
-  // 생략: preview = uri, info 필드 채우기
-
+  // 3) 상품 등록 (간단 폼)
   const createItem = async () => {
-    // TODO: FormData + 파일 처리
     try {
-      await POST('http://192.168.204.19:8080/admin/items', {
-        ...info, price:Number(info.price), stock:Number(info.stock)
+      await POST(`${baseUrl}/admin/items`, {
+        ...info,
+        price: Number(info.price),
+        stock: Number(info.stock),
       });
-      Alert.alert('완료','등록됨');
       setItemModal(false);
       fetchAll();
-    } catch(e){Alert.alert('오류','등록실패');}
+    } catch (e) {
+      Alert.alert('오류','상품 등록 실패');
+    }
   };
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.loader}>
+        <ActivityIndicator size="large" color="#3F7D58" />
+      </SafeAreaView>
+    );
+  }
+
+  // 4) SectionList용 데이터 변환
+  const sections = categories.map(cat => ({
+    title: cat.cateName,
+    data: items.filter(i => i.cateCode === cat.cateCode),
+  }));
 
   return (
     <SafeAreaView style={styles.safe}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.row}>
-          <Button title="카테고리 관리" onPress={()=>setCatModal(true)}/>
-          <Button title="상품 등록"   onPress={()=>setItemModal(true)}/>
-        </View>
+      {/* 상단 버튼 */}
+      <View style={styles.row}>
+        <Button title="카테고리 관리" onPress={()=>setCatModal(true)} />
+        <Button title="상품 등록" onPress={()=>setItemModal(true)} />
+      </View>
 
-        {/* 카테고리 Modal */}
-        <Modal visible={catModal} animationType="slide">
-          <View style={styles.modal}>
-            <Text style={styles.modalTitle}>카테고리 관리</Text>
+      {/* SectionList */}
+      <SectionList
+        sections={sections}
+        keyExtractor={item => item.itemCode.toString()}
+        renderSectionHeader={({ section }) => (
+          <Text style={styles.sectionHeader}>{section.title}</Text>
+        )}
+        renderItem={({ item }) => (
+          <View style={styles.row}>
+            <Text>{item.itemName}</Text>
+            <Text>{item.price.toLocaleString()}원</Text>
+          </View>
+        )}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+      />
+
+      {/* 카테고리 Modal */}
+      <Modal visible={catModal} animationType="slide">
+        <SafeAreaView style={styles.modal}>
+          <Text style={styles.modalTitle}>카테고리 관리</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="새 카테고리명"
+            value={newCat}
+            onChangeText={setNewCat}
+          />
+          <Button title="등록" onPress={addCategory} />
+          <SectionList
+            sections={[{ title:'등록된 카테고리', data:categories }]}
+            keyExtractor={cat=>cat.cateCode.toString()}
+            renderSectionHeader={({section}) => <Text style={styles.secTitle}>{section.title}</Text>}
+            renderItem={({item}) => (
+              <View style={styles.row}>
+                <Text>{item.cateName}</Text>
+                <TouchableOpacity onPress={()=>removeCategory(item.cateCode)}>
+                  <Text style={styles.danger}>삭제</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          />
+          <Button title="닫기" onPress={()=>setCatModal(false)} />
+        </SafeAreaView>
+      </Modal>
+
+      {/* 상품 등록 Modal */}
+      <Modal visible={itemModal} animationType="slide">
+        <SafeAreaView style={styles.modal}>
+          <Text style={styles.modalTitle}>상품 등록</Text>
+          {/** 필드: cateCode, itemName, price, stock, seller, description */}
+          {['cateCode','itemName','price','stock','seller','description'].map(key=>(
             <TextInput
-              placeholder="새 카테고리명"
+              key={key}
               style={styles.input}
-              value={newCat}
-              onChangeText={setNewCat}
+              placeholder={key}
+              value={info[key]}
+              onChangeText={v=>setInfo(i=>({...i,[key]:v}))}
             />
-            <Button title="등록" onPress={addCategory}/>
-            <FlatList
-              data={categories}
-              keyExtractor={c=>c.cateCode.toString()}
-              renderItem={({item})=>
-                <View style={styles.row}>
-                  <Text>{item.cateName}</Text>
-                  <TouchableOpacity onPress={()=>removeCategory(item.cateCode)}>
-                    <Text style={styles.danger}>삭제</Text>
-                  </TouchableOpacity>
-                </View>
-              }
-            />
-            <Button title="닫기" onPress={()=>setCatModal(false)}/>
-          </View>
-        </Modal>
-
-        {/* 상품 등록 Modal (간단 폼) */}
-        <Modal visible={itemModal} animationType="slide">
-          <View style={styles.modal}>
-            <Text style={styles.modalTitle}>상품 등록</Text>
-            <TextInput placeholder="상품명" style={styles.input}
-              onChangeText={v=>setInfo(i=>({...i,itemName:v}))}
-            />
-            <TextInput placeholder="가격"   style={styles.input} keyboardType="numeric"
-              onChangeText={v=>setInfo(i=>({...i,price:v}))}
-            />
-            <TextInput placeholder="재고"   style={styles.input} keyboardType="numeric"
-              onChangeText={v=>setInfo(i=>({...i,stock:v}))}
-            />
-            <TextInput placeholder="판매처" style={styles.input}
-              onChangeText={v=>setInfo(i=>({...i,seller:v}))}
-            />
-            <TextInput placeholder="설명"   style={styles.input}
-              onChangeText={v=>setInfo(i=>({...i,description:v}))}
-            />
-            {/* TODO: 이미지 업로드 및 preview */}
-            <Button title="등록" onPress={createItem}/>
-            <Button title="닫기" onPress={()=>setItemModal(false)}/>
-          </View>
-        </Modal>
-
-        {/* 분류별 상품 리스트 */}
-        {categories.map(cat=>(
-          <View key={cat.cateCode} style={{marginTop:16}}>
-            <Text style={styles.section}>{cat.cateName}</Text>
-            <FlatList
-              data={items.filter(i=>i.cateCode===cat.cateCode)}
-              keyExtractor={i=>i.itemCode.toString()}
-              renderItem={({item})=>(
-                <View style={styles.row}>
-                  <Text>{item.itemName}</Text>
-                  <Text>{item.price.toLocaleString()}원</Text>
-                </View>
-              )}
-            />
-          </View>
-        ))}
-      </ScrollView>
+          ))}
+          <Button title="등록" onPress={createItem} />
+          <Button title="닫기" onPress={()=>setItemModal(false)} />
+        </SafeAreaView>
+      </Modal>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safe:{flex:1,backgroundColor:'#fff'},
-  container:{padding:16},
-  row:{flexDirection:'row',justifyContent:'space-between',marginBottom:12},
-  section:{fontSize:18,fontWeight:'bold',marginVertical:8},
-  input:{borderWidth:1,borderColor:'#ccc',borderRadius:4,padding:8,marginBottom:8},
-  modal:{flex:1,padding:16,backgroundColor:'#fff'},
-  modalTitle:{fontSize:20,fontWeight:'bold',marginBottom:12},
-  danger:{color:'#c0392b'},
+  safe:     { flex:1, backgroundColor:'#fff' },
+  loader:   { flex:1, justifyContent:'center', alignItems:'center' },
+  row:      { flexDirection:'row', justifyContent:'space-between', padding:12 },
+  sectionHeader: { fontSize:18, fontWeight:'bold', backgroundColor:'#f0f0f0', padding:8 },
+  separator:{ height:1, backgroundColor:'#ddd' },
+  input:    { borderWidth:1, borderColor:'#ccc', borderRadius:4, padding:8, marginVertical:6 },
+  modal:    { flex:1, padding:16, backgroundColor:'#fff' },
+  modalTitle: { fontSize:20, fontWeight:'bold', marginBottom:12 },
+  secTitle:{ fontSize:16, fontWeight:'600', marginVertical:8 },
+  danger:   { color:'#c0392b' },
 });
