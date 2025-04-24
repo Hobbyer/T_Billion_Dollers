@@ -2,12 +2,31 @@ import React from "react";
 import { Button, Modal } from "react-bootstrap";
 import dayjs from "dayjs";
 import cow from "../../../../public/imgs/cow (1).png"; // 필요에 따라 동적 이미지로 교체 가능
+import { DELETE } from "../../../apis/CRUD";
 
-const MyQnADetail = ({ onHide, isShow, question }) => {
+const baseURL = import.meta.env.VITE_API_URL;
+
+const MyQnADetail = ({ onHide, isShow, question,removeFromList  }) => {
+
   if (!question) return null; // 데이터 없을 때 방어
 
   const isProduct = question.itemName !== null;
-  const isAnswered = question.answerStatus === "COMPLETED"; // PENDING 또는 COMPLETED 기준
+  const isAnswered = question.answerStatus === "ANSWERED"; // PENDING 또는 ANSWERED 기준
+
+  const deleteQuestion = ()=>{
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+          DELETE(`${baseURL}/questions/${question.questionNum}`)
+            .then(() => {
+              alert("삭제되었습니다.");
+              onHide();
+              removeFromList(question.questionNum)
+            })
+            .catch((err) => {
+              console.log(err);
+              alert("삭제에 실패했습니다.");
+            });
+        }
+  }
 
   return (
     <Modal
@@ -23,7 +42,7 @@ const MyQnADetail = ({ onHide, isShow, question }) => {
           <div className="mb-2">
             <div>문의 제목: {question.title}</div>
             <div style={{ fontSize: "15px" }}>
-              작성일: {dayjs(question.regDate).format("YYYY.MM.DD")}
+              작성일: {dayjs(question.regDate).format("YYYY-MM-DD")}
             </div>
           </div>
           <span
@@ -42,22 +61,25 @@ const MyQnADetail = ({ onHide, isShow, question }) => {
 
         {/* 상품 정보 */}
         {isProduct && (
-          <div className="d-flex gap-3">
-            <img
-              src={question.imagePath || cow}
-              alt="상품 이미지"
-              style={{ width: "100px", height: "100px", objectFit: "cover" }}
-            />
-            <p>상품명: {question.itemName}</p>
-          </div>
+         <>
+            <div className="d-flex gap-3">
+              <img
+                src={question.imagePath || cow}
+                alt="상품 이미지"
+                style={{ width: "100px", height: "100px", objectFit: "cover" }}
+              />
+              <p>{question.itemName}</p>
+            </div>
+            <hr />
+         </>
         )}
 
-        <hr />
+        
 
         {/* 문의 내용 */}
         <div className="d-flex justify-content-end">
           <p className="border w-60 p-4 rounded">
-            내용: {question.content}
+            {question.content}
           </p>
         </div>
 
@@ -65,7 +87,7 @@ const MyQnADetail = ({ onHide, isShow, question }) => {
         {isAnswered && (
           <div className="d-flex">
             <p className="border p-4 rounded w-60">
-              답변: {question.answer}
+              {question.answer}
             </p>
           </div>
         )}
@@ -89,6 +111,7 @@ const MyQnADetail = ({ onHide, isShow, question }) => {
               color: "#3D8D7A",
               border: "2px solid #3D8D7A",
             }}
+            onClick={deleteQuestion}
           >
             삭제
           </Button>

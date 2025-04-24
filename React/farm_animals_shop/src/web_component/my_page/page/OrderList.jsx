@@ -4,6 +4,7 @@ import { Button, Col, Container, Form, Row, Stack } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import { GET } from "../../../apis/CRUD";
 import dayjs from "dayjs";
+import ProductQnAForm from "./ProductQnAForm";
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -45,18 +46,10 @@ const OrderList = () => {
       });
   }, []);
 
+  // 모달 보여주기
   const [isShow, setIsShow] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
-
-  const handleOpenModal = (item) => {
-    setSelectedItem(item); // 클릭한 아이템을 선택
-    setIsShow(true); // 모달을 띄움
-  };
-
-  const handleCloseModal = () => {
-    setSelectedItem(null);
-    setIsShow(false);
-  };
+  // 선택된 상품
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
 
   return (
     <>
@@ -272,7 +265,13 @@ const OrderList = () => {
                             <td>{item.quantity}</td>
                             <td>{item.totalPrice.toLocaleString()}원</td>
                             <td>
-                              <Button variant="success" onClick={() => {}}>
+                              <Button
+                                variant="success"
+                                onClick={() => {
+                                  setIsShow(true);
+                                  setSelectedQuestion(item);
+                                }}
+                              >
                                 문의하기
                               </Button>
                             </td>
@@ -281,15 +280,6 @@ const OrderList = () => {
                       </tbody>
                     </table>
                   </div>
-
-                  {selectedItem && (
-                    <MyQnADetail
-                      isShow={isShow}
-                      onHide={handleCloseModal}
-                      item={selectedItem} // selectedItem만 전달
-                    />
-                  )}
-                  
                 </div>
               ))
             ) : (
@@ -303,6 +293,11 @@ const OrderList = () => {
               </div>
             )}
           </Stack>
+          <ProductQnAForm
+            isShow={isShow}
+            onHide={() => setIsShow(false)}
+            item={selectedQuestion}
+          />
         </div>
 
         {/* 배송 단계 안내 */}
