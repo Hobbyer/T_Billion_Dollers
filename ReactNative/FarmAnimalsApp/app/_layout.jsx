@@ -40,7 +40,7 @@ export default function RootLayout() {
         options={{
           title: 'Login',
           // 로그인 화면은 탭 버튼 숨기기
-          tabBarIcon: ({ color, size }) => <FontAwesome name="money" size={size} color={color} />,
+          tabBarIcon: ({ color, size }) => <FontAwesome name="arrow-circle-up" size={size} color={color} />,
         }}
       />
     </Tabs>

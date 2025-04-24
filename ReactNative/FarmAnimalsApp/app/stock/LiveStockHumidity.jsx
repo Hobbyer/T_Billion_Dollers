@@ -1,14 +1,22 @@
 // app/stock/LiveStockHumidity.jsx
 
 import React, { useEffect, useState } from 'react';
-import { View, ActivityIndicator, Text, StyleSheet, Dimensions } from 'react-native';
-import { ProgressChart } from 'react-native-chart-kit';
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  StyleSheet,
+  Dimensions
+} from 'react-native';
+import * as Progress from 'react-native-progress';
 import { GET } from '../../apis/CRUD';
 
 const baseURL = 'http://192.168.204.19:8080'; // PC의 LAN IP (테스트용)
 
 export default function LiveStockHumidity() {
-  const [latest, setLatest] = useState(null);
+  const [latest, setLatest]   = useState(null);
+  const [loading, setLoading] = useState(true);
+  const screenWidth           = Dimensions.get('window').width;
 
   useEffect(() => {
     let mounted = true;
@@ -23,51 +31,43 @@ export default function LiveStockHumidity() {
         }
       } catch (e) {
         console.error('Error fetching humidity:', e);
+      } finally {
+        if (mounted) setLoading(false);
       }
     };
     fetchHum();
     return () => { mounted = false; };
   }, []);
 
-  if (!latest) {
-    return <ActivityIndicator style={{ marginTop: 50 }} />;
+  if (loading || !latest) {
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color="#3F7D58" />
+      </View>
+    );
   }
 
-  // 원본 습도 비율
-  const rawPercent = latest.humidity / 100;
-
-  // 0.01 이상 0.99 이하로 잘라서 Infinity 경로 생성 방지
-  const percent = Math.min(Math.max(rawPercent, 0.01), 0.99);
-
-  const data = {
-    labels: ['습도'],     // 차트에 표시할 레이블
-    data: [percent],     // 클램프된 데이터
-  };
-
-  const chartConfig = {
-    backgroundGradientFrom: '#fff',
-    backgroundGradientTo:   '#fff',
-    color:      () => `rgba(79,177,160,1)`,
-    strokeWidth: 6,
-  };
-
-  const width = Dimensions.get('window').width * 0.3;
+  // 0~1 사이로 clamp
+  const raw = latest.humidity / 100;
+  const progress = Math.min(Math.max(raw, 0), 1);
 
   return (
-    <View style={styles.wrap}>
-      <ProgressChart
-        data={data}
-        width={width}
-        height={180}
-        strokeWidth={6}
-        radius={width / 4}
-        chartConfig={chartConfig}
-        hideLegend={false}
+    <View style={styles.card}>
+      <Text style={styles.cardTitle}>실시간 습도</Text>
+      <Progress.Circle
+        size={screenWidth * 0.4}
+        progress={progress}
+        thickness={12}
+        showsText={true}
+        formatText={() => `${(progress * 100).toFixed(1)}%`}
+        color="#4FB1A0"
+        unfilledColor="#e0e0e0"
+        borderWidth={0}
       />
-      <Text style={styles.time}>
+      <Text style={styles.timestamp}>
         {new Date(latest.timeLine).toLocaleTimeString('ko-KR', {
           hour: '2-digit',
-          minute: '2-digit',
+          minute: '2-digit'
         })}
       </Text>
     </View>
@@ -75,6 +75,35 @@ export default function LiveStockHumidity() {
 }
 
 const styles = StyleSheet.create({
-  wrap: { alignItems: 'center' },
-  time: { marginTop: 8, fontSize: 12, color: '#666' },
+  loader: {
+    flex:1,
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 12,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    alignItems: 'center',
+    // iOS shadow
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    shadowOffset: { width:0, height:2 },
+    // Android elevation
+    elevation: 3,
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#3F7D58',
+    marginBottom: 8,
+  },
+  timestamp: {
+    marginTop: 8,
+    fontSize: 12,
+    color: '#666',
+  },
 });

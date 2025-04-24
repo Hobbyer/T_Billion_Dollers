@@ -24,7 +24,7 @@ const FarmdasLayout = () => {
           <WebHeader />
         </div>
         {!shouldHideMenu && (
-        <div className="d-flex justify-content-end mt-3 mb-2">
+        <div className="d-flex align-items-center mt-3 mb-2">
           <Menu />
           <SearchBar />
         </div>
