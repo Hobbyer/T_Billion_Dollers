@@ -19,6 +19,7 @@ public class OrderMapper {
                 .price(orderItem.getPrice())
                 .quantity(orderItem.getQuantity())
                 .totalPrice(orderItem.getTotalPrice())
+                .imagePath(orderItem.getItem().getImagePath())
                 .build()
             ).toList())
         .build();
