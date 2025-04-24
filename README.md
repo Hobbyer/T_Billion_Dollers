@@ -1,3 +1,5 @@
+![Image](https://github.com/user-attachments/assets/31a9a380-8fc6-46fe-bc3c-dcb1ed7c0a08)
+
 <br/>
 
 # 🐮 **IoT 환경 데이터 수집 & 웹 쇼핑몰 프로젝트** 🐮
@@ -31,6 +33,11 @@
 
 <br/><br/><br/>
 
+## 🌟 **기술 스택** 🌟 ##
+![Image](https://github.com/user-attachments/assets/50153214-2f46-4c94-b3f4-24c204b3d66d)
+
+<br/><br/><br/>
+
 ## 📋 **요구 조건** 📋
 
 - **사용자 인증 및 권한 부여 시스템** 🔒
@@ -59,6 +66,8 @@
 ### 🧑🏿‍💻 **개발자** 👩🏿‍💻
 - 이 프로젝트의 주요 코드 및 기능은 **KEY, HHW, LLM**님이 개발하셨습니다. 😎  
   KEY, HHW, LLM님의 기여로 **JWT 인증**, **실시간 데이터 수집 및 시각화** 등이 구현되었습니다.
+
+<br/><br/><br/>
 
 ### 🌐 **오픈 API 사용**  
 - 본 프로젝트에서는 **OpenWeather**을 사용하여 **날씨 시각화**를 하였습니다. 💡 
