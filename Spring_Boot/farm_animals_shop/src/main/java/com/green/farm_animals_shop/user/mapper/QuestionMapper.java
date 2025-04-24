@@ -1,6 +1,6 @@
 package com.green.farm_animals_shop.user.mapper;
 
-import com.green.farm_animals_shop.user.dto.AnswerDTO;
+import com.green.farm_animals_shop.admin.dto.AnswerDTO;
 import com.green.farm_animals_shop.user.dto.QuestionDTO;
 import com.green.farm_animals_shop.user.dto.SearchDTO;
 import org.apache.ibatis.annotations.Mapper;

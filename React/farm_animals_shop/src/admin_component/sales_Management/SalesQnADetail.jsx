@@ -16,9 +16,12 @@ import {
 
 const baseURL = import.meta.env.VITE_API_URL;
 
-import { DELETE, GET } from "../../apis/CRUD";
+import { DELETE, GET, POST } from "../../apis/CRUD";
+import { jwtDecode } from "jwt-decode";
 
 const SalesQnADetail = () => {
+  const userId = jwtDecode(sessionStorage.getItem("accessToken")).sub; // JWT에서 userId 추출
+
   const nav = useNavigate();
   const { questionNum } = useParams();
   const location = useLocation(); //이전 페이지에서 전달된 상태를 가져오기 위한 useLocation 훅 사용
@@ -34,7 +37,7 @@ const SalesQnADetail = () => {
 
     // 답변 내용 관리
     const handleAnswerChange = (e) => {
-      setAnswer(e.target.value);
+      setAnswer(e.target.value); // 입력된 답변 내용 저장
     };
 
   const handleSubmit = () => {
@@ -46,9 +49,6 @@ const SalesQnADetail = () => {
 
   //조회한 상세 정보를 저장할 state 변수
   const [question, setQuestion] = useState({});
-
-  //답글 작성 시 필요한 state 변수
-  const [replyContent, setReplyContent] = useState({}); //답글 내용
 
   //해당 게시글의 답글 목록을 저장할 state 변수
 
@@ -102,6 +102,26 @@ const SalesQnADetail = () => {
         setLoading(false); //로딩 완료
       });
   }, []);
+
+  const insertAnswer = () => {
+    if (question.answerStatus !== "ANSWERED" && answer !== "") {
+      //답변 작성 API 호출
+      const data = {
+        content: answer
+      };
+      POST(`${baseURL}/admin/answers/${questionNum}?userId=${userId}`, data)
+        .then((res) => {
+          alert("답변이 등록되었습니다.");
+          nav("/admin/sales-questions"); //답변 등록 후 목록 페이지로 이동
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("답변 등록에 실패했습니다.");
+        });
+      } else {
+        null
+      }
+  };
 
   const deleteQuestion = () => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
@@ -241,17 +261,22 @@ const SalesQnADetail = () => {
               </FormText>
             </Form.Group>
 
-{/* 답변 */}
-<Accordion defaultActiveKey="0">
+            {/* 답변 */}
+            <Accordion defaultActiveKey={question.answerStatus === "ANSWERED" ? "1" : "0"}>
               <Card>
                 <Card.Header>
-                  <ContextAwareToggle eventKey="0">답변하기</ContextAwareToggle>
+                  <ContextAwareToggle eventKey="0">
+                    <div onClick={()=>{
+                      insertAnswer();
+                    }}>답변하기</div>
+                  </ContextAwareToggle>
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">
                   <Card.Body>
                     <Form.Control
                       as="textarea"
                       placeholder="답변을 입력해주세요."
+                      onChange={handleAnswerChange}
                     />
                   </Card.Body>
                 </Accordion.Collapse>
