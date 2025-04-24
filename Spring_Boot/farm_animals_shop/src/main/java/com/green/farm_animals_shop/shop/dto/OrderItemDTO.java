@@ -17,4 +17,6 @@ public class OrderItemDTO {
   private Integer quantity;
   private Integer price;
   private Integer totalPrice;
+
+  private String imagePath;  // DB의 IMAGE_PATH와 매핑
 }

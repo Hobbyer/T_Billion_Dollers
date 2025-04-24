@@ -42,7 +42,6 @@ public class OrderServiceImpl implements OrderService {
       dto.setShippingAddress(user.getAddress());
     }
 
-
     // 주문 생성
     OrderEntity order = OrderEntity.builder()
         .user(user)

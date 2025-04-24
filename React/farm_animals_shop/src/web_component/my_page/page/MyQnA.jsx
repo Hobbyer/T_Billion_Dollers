@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 
 const baseURL = import.meta.env.VITE_API_URL;
 
-const MyQnA = () => {
+const MyQnA = ({active}) => {
   const nav = useNavigate();
   // 문의 목록 불러오기
   const [questions, setQuestions] = useState([]);
@@ -33,8 +33,8 @@ const MyQnA = () => {
   };
 
   useEffect(() => {
-    fetchQuestions();
-  }, []);
+    if(active)fetchQuestions();
+  }, [active]);
 
   return (
     <Container className="mt-5">
@@ -89,6 +89,11 @@ const MyQnA = () => {
                     isShow={isShow}
                     onHide={() => setIsShow(false)}
                     question={selectedQuestion}
+                    removeFromList={(questionNum) => {
+                      setQuestions((prev) =>
+                        prev.filter((q) => q.questionNum !== questionNum)
+                      );
+                    }}
                   />
                 </td>
               </tr>

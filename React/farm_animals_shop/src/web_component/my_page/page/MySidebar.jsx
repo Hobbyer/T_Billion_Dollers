@@ -5,16 +5,7 @@ import Refund from "./Refund";
 import MyQnA from "./MyQnA";
 import MyInfo from "./MyInfo";
 
-const menuItems = [
-  { label: "주문 내역", href: "#my-orders", content: <OrderList/> },
-  {
-    label: "취소/환불 내역",
-    href: "#my-refund",
-    content: <Refund/>,
-  },
-  { label: "문의 내역", href: "#my-qna", content: <MyQnA/> },
-  { label: "개인정보 수정", href: "#my-page", content: <MyInfo/> },
-];
+
 
 const MySidebar = () => {
   // 기본적으로 첫 번째 탭을 활성화
@@ -36,6 +27,17 @@ const MySidebar = () => {
     localStorage.setItem("selectedTab", selectedKey); 
   };
 
+  const menuItems = [
+    { label: "주문 내역", href: "#my-orders", content: <OrderList/> },
+    {
+      label: "취소/환불 내역",
+      href: "#my-refund",
+      content: <Refund/>,
+    },
+    { label: "문의 내역", href: "#my-qna", content: <MyQnA active={activeKey === "#my-qna"} /> },
+    { label: "개인정보 수정", href: "#my-page", content: <MyInfo/> },
+  ];
+
   return (
     <>
        <style>
@@ -47,7 +49,7 @@ const MySidebar = () => {
             }
           `}
         </style>
-      <Tab.Container id="list-group-tabs-example" defaultActiveKey={"#my-orders"} onSelect={handleSelect}>
+      <Tab.Container id="list-group-tabs-example" defaultActiveKey={"#my-orders"} activeKey={activeKey} onSelect={handleSelect}>
       <Row>
         <Col sm={3} style={{ margin : "50px 0 70px 0"}}>
           <ListGroup>
