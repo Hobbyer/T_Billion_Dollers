@@ -14,6 +14,7 @@
         q.REG_DATE AS regDate,
         q.READ_CNT AS readCnt,
         q.ANSWER_STATUS AS answerStatus,
+        q.CONTENT AS content,
         i.ITEM_NAME AS itemName,
         i.IMAGE_PATH AS imagePath,
         i.ITEM_CODE AS itemCode

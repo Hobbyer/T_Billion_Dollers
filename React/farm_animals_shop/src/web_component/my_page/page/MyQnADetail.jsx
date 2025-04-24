@@ -73,7 +73,6 @@ const MyQnADetail = ({ onHide, isShow, question,removeFromList  }) => {
             <hr />
          </>
         )}
-
         
 
         {/* 문의 내용 */}
