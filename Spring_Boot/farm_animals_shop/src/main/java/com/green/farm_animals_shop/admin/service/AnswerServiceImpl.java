@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,8 +48,11 @@ public class AnswerServiceImpl implements AnswerService {
   }
 
   @Override
-  public AnswerDTO getAnswerByQuestionNum(int questionNum) {
-    return null;
+  public List<AnswerDTO> getAnswerByQuestionNum(int questionNum) {
+    return answerRepository.findByQuestion_QuestionNum(questionNum)
+            .stream()
+            .map(AnswerDTO::fromEntity)
+            .collect(Collectors.toList());
   }
 
   @Override
