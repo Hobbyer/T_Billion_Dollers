@@ -123,34 +123,39 @@ const Cart = () => {
       });
   };
 
+
+  const [isOrdering, setIsOrdering] = useState(false);
   // 주문하기
   const handleOrderSubmit = () => {
     if (selectedItems.length === 0) {
       alert("주문할 상품을 선택해주세요.");
-    } else {
-      if (!confirm(`${selectedItems.length}개의 상품을 주문하시겠습니까?`)) return;
+      return;
     }
-
+  
+    if (!confirm(`${selectedItems.length}개의 상품을 주문하시겠습니까?`)) return;
+  
+    setIsOrdering(true); // 주문 처리 시작
+  
     const orderItems = selectedItems.map(item => ({
       itemCode: item.itemCode,
       quantity: quantity[item.itemCode] ?? item.quantity,
       price: item.price,
       totalPrice: item.price * (quantity[item.itemCode] ?? item.quantity)
     }));
-
+  
     const orderData = {
       userId: userId,
       orderItems: orderItems,
       totalPrice: totalPrice,
       paymentMethod: "CREDIT_CARD", // 예시로 카드 결제 방식 사용
     };
-
+  
     POST(`${baseURL}/orders`, orderData)
       .then(res => {
         alert("주문이 완료되었습니다.");
         nav(`/farmdas/mypage/${userId}`, { state: { orderId: res.data.orderId } });
         const deleteRequests = selectedItems.map(item => {
-          DELETE(`${baseURL}/farmdas/cart/${userId}/${item.cartItemId}/delete`)
+          DELETE(`${baseURL}/farmdas/cart/${userId}/${item.cartItemId}/delete`);
         });
         Promise.all(deleteRequests)
           .then(() => {
@@ -160,18 +165,17 @@ const Cart = () => {
                 .then(() => {
                   setItems([]);
                 })
-                .catch(err => {
-                  console.error(err);
-                });
+                .catch(console.error);
             }
           })
-          .catch(err => {
-            console.error(err);
-          });
+          .catch(console.error);
       })
       .catch(err => {
         console.error(err);
         alert("주문 처리 중 오류가 발생했습니다.");
+      })
+      .finally(() => {
+        setIsOrdering(false); // 주문 처리 완료
       });
   };
 
@@ -477,16 +481,20 @@ const Cart = () => {
           <div className='btn-area d-flex justify-content-center align-items-center gap-3'>
             <button className='btn btn-success'
               onClick={() => {
-                if (items.length === 0) {
+                if (items.length === 0 || isOrdering) {
                   return;
                 }
                 handleOrderSubmit();
               }}
-            >주문하기</button>
+              disabled={isOrdering} // 주문 중일 때 버튼 비활성화
+            >
+              {isOrdering ? "주문 처리 중..." : "주문하기"}
+            </button>
             <button className='btn btn-outline-success'
               onClick={() => {
                 nav(-1)
               }}
+              disabled={isOrdering} // 주문 중일 때 버튼 비활성화
             >쇼핑 계속하기</button>
           </div>
         </Container>

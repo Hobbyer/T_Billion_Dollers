@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
+
   List<OrderEntity> findByUser_UserId(String userId); // 사용자 ID로 주문 내역 조회
 
   @Query(value = """
