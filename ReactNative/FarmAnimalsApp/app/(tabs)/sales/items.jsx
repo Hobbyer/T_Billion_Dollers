@@ -5,7 +5,7 @@ import {
   TextInput, Button, Modal, TouchableOpacity,
   StyleSheet, ActivityIndicator, Alert
 } from 'react-native';
-import { GET, POST, DEL } from '../../apis/CRUD';
+import { GET, POST, DEL } from '@/apis/CRUD';
 
 const baseUrl = 'http://192.168.204.19:8080';
 

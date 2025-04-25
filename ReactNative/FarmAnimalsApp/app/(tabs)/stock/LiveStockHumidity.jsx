@@ -9,7 +9,7 @@ import {
   Dimensions
 } from 'react-native';
 import * as Progress from 'react-native-progress';
-import { GET } from '../../apis/CRUD';
+import { GET } from '@/apis/CRUD';
 
 const baseURL = 'http://192.168.204.19:8080'; // PC의 LAN IP (테스트용)
 

@@ -5,7 +5,7 @@ import {
   useWindowDimensions, StyleSheet, ActivityIndicator,
 } from 'react-native';
 import { BarChart } from 'react-native-chart-kit';
-import { GET } from '../../apis/CRUD';
+import { GET } from '@/apis/CRUD';
 
 const baseUrl = 'http://192.168.204.19:8080'; // Replace with your actual base URL
 
