@@ -37,7 +37,11 @@ const OrderList = () => {
     GET(`${baseURL}/orders/${userId}`)
       .then((res) => {
         console.log(res.data);
-        setOrders(res.data);
+        // 날짜 기준 내림차순 정렬
+        const sortedOrders = res.data.sort((a, b) => {
+          return new Date(b.orderDate) - new Date(a.orderDate);
+        })
+        setOrders(sortedOrders);
         setLoading(false);
       })
       .catch((err) => {
