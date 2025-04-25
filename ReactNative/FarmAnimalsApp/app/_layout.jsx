@@ -1,48 +1,30 @@
 // app/_layout.jsx
 
-import React from 'react';
-import { Tabs } from 'expo-router';
-import { FontAwesome } from '@expo/vector-icons';
+import React, { useEffect } from "react";
+import { Stack, Tabs, useRouter } from "expo-router";
+import { SafeAreaView, StatusBar } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function RootLayout() {
+  const router = useRouter();
+
+  useEffect(() => {
+    // 앱 시작 시 로그인 여부를 체크
+    const checkLoginStatus = async () => {
+      const accessToken = await AsyncStorage.getItem('accessToken');
+      
+      if (!accessToken) {
+        // 로그인하지 않은 경우 로그인 화면으로 리디렉션
+        router.push('/auth/login'); // 로그인 화면으로 이동
+      }
+    };
+
+    checkLoginStatus();
+  }, []);
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: '#2f95dc',
-      }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, size }) => <FontAwesome name="home" size={size} color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="stock"
-        options={{
-          title: 'Farm',
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="tree" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="sales"
-        options={{
-          title: 'Sales',
-          tabBarIcon: ({ color, size }) => <FontAwesome name="money" size={size} color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="login"
-        options={{
-          title: 'Login',
-          // 로그인 화면은 탭 버튼 숨기기
-          tabBarIcon: ({ color, size }) => <FontAwesome name="arrow-circle-up" size={size} color={color} />,
-        }}
-      />
-    </Tabs>
+    <SafeAreaView style={{ flex: 1 }}>
+      <Stack screenOptions={{ headerShown: false }} />
+      <StatusBar style="auto" translucent={false} />
+    </SafeAreaView>
   );
 }

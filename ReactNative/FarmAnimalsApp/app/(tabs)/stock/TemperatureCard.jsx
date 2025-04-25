@@ -1,7 +1,7 @@
 // app/stock/TemperatureCard.jsx
 
 import React, { useEffect, useState } from 'react';
-import { GET } from '../../apis/CRUD';
+import { GET } from '@/apis/CRUD';
 import StatusCard from './StatusCard';
 
 const baseURL = 'http://192.168.204.19:8080'; // PC의 LAN IP (테스트용)
