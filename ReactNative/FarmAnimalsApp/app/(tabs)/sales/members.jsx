@@ -4,7 +4,7 @@ import {
   SafeAreaView, View, Text, FlatList,
   TextInput, Button, StyleSheet, ActivityIndicator,
 } from 'react-native';
-import { GET } from '../../apis/CRUD';
+import { GET } from '@/apis/CRUD';
 
 const baseUrl = 'http://192.168.204.19:8080';
 

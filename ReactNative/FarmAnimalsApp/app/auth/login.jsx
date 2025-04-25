@@ -14,7 +14,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // React Navigation 훅 (App.js 에서 createNativeStackNavigator 사용 중)
 import { useNavigation } from '@react-navigation/native';
 // 로그인 API 호출 함수
-import { POST } from '../apis/CRUD';
 import axios from 'axios';
 
 const baseURL = 'http://192.168.204.19:8080'; // PC의 LAN IP (테스트용)
