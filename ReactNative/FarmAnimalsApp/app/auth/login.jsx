@@ -15,14 +15,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 // 로그인 API 호출 함수
 import axios from 'axios';
+import { useRouter } from 'expo-router';
 
-const baseURL = 'http://192.168.204.19:8080'; // PC의 LAN IP (테스트용)
+// const baseURL = 'http://192.168.204.19:8080'; // PC의 LAN IP (테스트용)
+const baseURL = 'http://10.0.2.2:8080'; // PC의 LAN IP (테스트용)
 
 export default function LoginScreen() {
   // 로그인 폼 상태(userId, password)
   const [loginForm, setLoginForm] = useState({ userId: '', password: '' });
   // 네비게이션 객체
   const navigation = useNavigation();
+  const router =  useRouter();
 
   // 텍스트 인풋이 변경될 때 폼 상태 업데이트
   const handleChange = (field, value) => {
@@ -37,7 +40,8 @@ export default function LoginScreen() {
         AsyncStorage.setItem('accessToken', accessToken);
         AsyncStorage.setItem('refreshToken', refreshToken);
         Alert.alert('로그인 성공', '환영합니다!');
-        navigation.navigate('index'); // 홈 화면으로 이동
+        // navigation.navigate('home'); // 홈 화면으로 이동
+        router.push('/')
       })
       .catch(error => {
         // 로그인 실패 시 처리
