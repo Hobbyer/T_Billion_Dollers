@@ -13,16 +13,29 @@ import { LineChart, ProgressChart } from "react-native-chart-kit";
 
 import Card from "../../components/common/Card";
 import WeatherInfo from "../../components/WeatherInfo";
+import axios from "axios";
+import { POST } from "../../apis/CRUD";
 
 const screenWidth = Dimensions.get("window").width;
 
 const TemperatureTab = () => {
   const [isSensorOn, setIsSensorOn] = useState(true);
 
-  const toggleSensor = () => {
-    setIsSensorOn((prev) => !prev);
-    // 👉 센서 토글 API 호출은 여기에!
+  const toggleSensor = async () => {
+    const nextState = !isSensorOn;
+    setIsSensorOn(nextState);
+  
+    try {
+      await axios.post('http://192.168.30.151:8080/sensor/environment/toggle', {
+        
+        state: nextState,
+      });
+      console.log(`센서 ${nextState ? '켜짐' : '꺼짐'}`);
+    } catch (error) {
+      console.error('센서 제어 실패 ❌', error);
+    }
   };
+  
 
   return (
     <ScrollView style={styles.container}>

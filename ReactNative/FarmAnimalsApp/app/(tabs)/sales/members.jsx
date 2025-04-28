@@ -6,7 +6,8 @@ import {
 } from 'react-native';
 import { GET } from '@/apis/CRUD';
 
-const baseUrl = 'http://192.168.204.19:8080';
+// const baseUrl = 'http://192.168.204.19:8080';
+const baseUrl = 'http://10.0.2.2:8080';
 
 export default function MembersInfoScreen() {
   const [members, setMembers] = useState([]);
