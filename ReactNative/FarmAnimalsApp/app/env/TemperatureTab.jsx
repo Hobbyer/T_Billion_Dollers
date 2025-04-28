@@ -9,10 +9,20 @@ const TemperatureTab = () => {
   const [isSensorOn, setIsSensorOn] = useState(true);
   const [weather, setWeather] = useState(null);
 
-  const toggleSensor = () => {
-    setIsSensorOn(prev => !prev);
-    // 👉 센서 토글 API 호출은 여기에!
+  const toggleSensor = async () => {
+    const nextState = !isSensorOn;
+    setIsSensorOn(nextState);
+  
+    try {
+      await axios.post('http://localhost:8080/sensor/environment/toggle', {
+        state: nextState,
+      });
+      console.log(`센서 ${nextState ? '켜짐' : '꺼짐'}`);
+    } catch (error) {
+      console.error('센서 제어 실패 ❌', error);
+    }
   };
+  
 
   const fetchWeather = async () => {
     try {
