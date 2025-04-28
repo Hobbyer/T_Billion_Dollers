@@ -15,6 +15,7 @@ import Card from "../../components/common/Card";
 import WeatherInfo from "../../components/WeatherInfo";
 import axios from "axios";
 import { POST } from "../../apis/CRUD";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -22,16 +23,17 @@ const TemperatureTab = () => {
   const [isSensorOn, setIsSensorOn] = useState(true);
 
   const toggleSensor = async () => {
+    const token = await AsyncStorage.getItem('accessToken');
     const nextState = !isSensorOn;
     setIsSensorOn(nextState);
-  
+
     try {
-      await axios.post('http://192.168.30.151:8080/sensor/environment/toggle', {
+      await axios.post('http://192.168.30.151:8080/sensor/environment/toggle', { 
         state: nextState,
-      });
+      }, {headers: { Authorization: token ? `Bearer ${token}` : '' }});
       console.log(`센서 ${nextState ? '켜짐' : '꺼짐'}`);
     } catch (error) {
-      console.error('센서 제어 실패 ❌', error);
+      console.error('센서 제어 실패 ?', error);
     }
   };
   
