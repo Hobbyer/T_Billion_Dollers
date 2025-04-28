@@ -5,6 +5,8 @@ import { Ionicons } from '@expo/vector-icons'; // 추가!
 
 const DetailScreen = () => {
   const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(true); 
+
   const [summary, setSummary] = useState({
     temperature: 24,
     humidity: 60,
@@ -30,10 +32,19 @@ const DetailScreen = () => {
   return (
     <View style={styles.container}>
       
-      {/* 🔥 오른쪽 상단 고정 전원 버튼 */}
-      <TouchableOpacity style={styles.logoutIconButton} onPress={handleLogout}>
-        <Ionicons name="power" size={28} color="#ff6347" />
-      </TouchableOpacity>
+      <View style={styles.topBar}>
+  {/* 🔥 상태 동그라미만 보여주기! */}
+  <View style={styles.statusDotWrapper}>
+    <View style={[
+      styles.statusDot,
+      { backgroundColor: isLoggedIn ? '#28a745' : '#dc3545' }
+    ]} />
+  </View>
+
+  <TouchableOpacity style={styles.logoutIconButton} onPress={handleLogout}>
+    <Ionicons name="power" size={28} color="#6c757d" />
+  </TouchableOpacity>
+</View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Text style={styles.title}>👋 Farmdas 관리자님 환영합니다!</Text>
@@ -48,10 +59,10 @@ const DetailScreen = () => {
 
         {/* 버튼 그룹 */}
         <View style={styles.buttonGroup}>
-          <HomeButton title="🛍️ 상품 관리" onPress={() => router.push('/sales')} />
-          <HomeButton title="📦 주문 정보" onPress={() => router.push('/sales')} />
-          <HomeButton title="👤 회원 정보" onPress={() => router.push('/sales')} />
-          <HomeButton title="📊 매출 분석" onPress={() => router.push('/sales')} />
+          <HomeButton title="🛍️ 상품 관리" onPress={() => router.push('/sales/items')} />
+          <HomeButton title="📦 주문 정보" onPress={() => router.push('/sales/orders')} />
+          <HomeButton title="👤 회원 정보" onPress={() => router.push('/sales?initialTab=members')} />
+          <HomeButton title="📊 매출 분석" onPress={() => router.push('/sales?initialTab=info')} />
         </View>
       </ScrollView>
 
@@ -77,10 +88,6 @@ const styles = StyleSheet.create({
     paddingTop: 80,
   },
   logoutIconButton: {
-    position: 'absolute',
-    top: 16,
-    right: 20,
-    zIndex: 10,
     backgroundColor: '#ffffffcc',
     borderRadius: 30,
     padding: 6,
@@ -131,5 +138,22 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: '600',
+  },
+  topBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    gap: 10,
+  },
+  statusDotWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  statusDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
   },
 });
