@@ -53,7 +53,19 @@
 
 <br/><br/><br/>
 
-### 🟣 **개발자** 
+## 🟣 **시연 영상** 
+
+https://github.com/user-attachments/assets/dec07a04-8982-4062-ad15-0094dbd987e7
+
+https://github.com/user-attachments/assets/bfd93fc9-a079-4785-8e9e-cedc1baa4530
+
+https://github.com/user-attachments/assets/125a2104-b99d-48ec-a3bf-2a90b53a0048
+
+https://github.com/user-attachments/assets/37abfdff-955d-47db-941b-a6f042ded8bc
+
+<br/><br/><br/>
+
+### 🟠 **개발자** 
 - 이 프로젝트의 주요 코드 및 기능은 **KEY, HHW, LLM**님이 개발하셨습니다. 😎  
   KEY, HHW, LLM님의 기여로 **JWT 인증**, **실시간 데이터 수집 및 시각화** 등이 구현되었습니다.
 
