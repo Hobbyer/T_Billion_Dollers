@@ -1,25 +1,20 @@
 // app/sales/_layout.jsx
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Stack } from 'expo-router';
 
 import SalesManageScreen from './index';
 
-const Stack = createNativeStackNavigator();
+const stack = createNativeStackNavigator();
 
 export default function SalesLayout() {
   return (
-    <Stack.Navigator
+    <Stack
       screenOptions={{
-        headerTitleAlign: 'center',
-        headerStyle: { backgroundColor: '#fff' },
-        contentStyle: { backgroundColor: '#fff' },
+        headerShown: false,
       }}
     >
-      <Stack.Screen
-        name="index"
-        component={SalesManageScreen}
-        options={{ title: 'Sales 관리' }}
-      />
-    </Stack.Navigator>
+      <Stack.Screen name="index" /> {/* sales 메인 */}
+    </Stack>
   );
 }
