@@ -43,6 +43,8 @@ export async function POST(path, data = {}) {
 
 export async function GET(path) {
   const token = await AsyncStorage.getItem('accessToken');
+  console.log('accessToken',token);
+  
   return axios.get(path, {
     headers: { Authorization: token ? `Bearer ${token}` : '' }
   });

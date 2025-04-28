@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Constants from "expo-constants";
+import FastImage from "react-native-fast-image";
 
 const WeatherInfo = () => {
   const [weather, setWeather] = useState(null); // 현재 날씨
@@ -59,13 +60,25 @@ const WeatherInfo = () => {
   useEffect(() => {
     fetchWeather();
   }, []);
+
+  // 일단 이미지 못받음;;
+
+  const iconUrl = `https://openweathermap.org/img/wn/${weather?.weather[0].icon}.png`;
+
   return (
     <View>
       {/* 날씨 정보 */}
       <Text style={styles.label}>🌤️ 현재 날씨</Text>
       {weather ? (
-        <View>
-          <Text>
+        <View style={styles.weatherInfo}>
+          <Image
+            source={{
+              uri: iconUrl,
+              priority: FastImage.priority.normal,
+            }}
+            style={styles.icon}
+          />
+          <Text style={styles.weatherDetails}>
             온도: {weather.main.temp}℃ / 상태: {weather.weather[0].description}
           </Text>
           {/* 5일 예보 표 형식으로 표시 */}
@@ -88,7 +101,13 @@ const WeatherInfo = () => {
                     });
 
               return (
-                <View style={styles.tableRow} key={index}>
+                <View
+                  style={[
+                    styles.tableRow,
+                    index === forecast.length - 1 && styles.tableRowLast,
+                  ]}
+                  key={index}
+                >
                   <Text style={styles.tableCell}>{label}</Text>
                   <Text style={styles.tableCell}>
                     {item.main.temp.toFixed(1)}°C
@@ -111,4 +130,55 @@ const WeatherInfo = () => {
 
 export default WeatherInfo;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  label: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginVertical: 10,
+    textAlign: "center",
+  },
+  table: {
+    marginTop: 20,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    overflow: "hidden",
+  },
+  tableHeader: {
+    flexDirection: "row",
+    backgroundColor: "#77b677",
+    padding: 10,
+    justifyContent: "space-between",
+  },
+  tableHeaderText: {
+    flex: 1,
+    textAlign: "center",
+    fontWeight: "bold",
+    color: "#333",
+  },
+  tableRow: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+    padding: 10,
+    justifyContent: "space-between",
+  },
+  tableCell: {
+    flex: 1,
+    textAlign: "center",
+    color: "#555",
+  },
+  tableRowLast: {
+    borderBottomWidth: 0, // 마지막 행에 밑줄 제거
+  },
+  weatherInfo: {
+    marginBottom: 20,
+    fontSize: 16,
+    textAlign: "center",
+  },
+  weatherDetails: {
+    fontSize: 16,
+    textAlign: "center",
+    marginBottom: 20,
+  },
+});
