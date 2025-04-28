@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons'; // 추가!
 
 const DetailScreen = () => {
   const router = useRouter();
@@ -13,28 +14,48 @@ const DetailScreen = () => {
 
   useEffect(() => {
     // TODO: 진짜 데이터 받아오는 API 연결 가능
-    // setSummary({ ... });
   }, []);
 
+  const handleLogout = () => {
+    Alert.alert(
+      "로그아웃",
+      "정말 로그아웃 하시겠습니까?",
+      [
+        { text: "취소", style: "cancel" },
+        { text: "확인", onPress: () => router.replace('/auth/login') },
+      ]
+    );
+  };
+
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>👋 Farmdas 관리자님 환영합니다!</Text>
+    <View style={styles.container}>
+      
+      {/* 🔥 오른쪽 상단 고정 전원 버튼 */}
+      <TouchableOpacity style={styles.logoutIconButton} onPress={handleLogout}>
+        <Ionicons name="power" size={28} color="#ff6347" />
+      </TouchableOpacity>
 
-      <View style={styles.summaryBox}>
-        <Text style={styles.summaryText}>🌡️ 온도: {summary.temperature}℃</Text>
-        <Text style={styles.summaryText}>💧 습도: {summary.humidity}%</Text>
-        <Text style={styles.summaryText}>🌤️ 날씨: {summary.weather}</Text>
-        <Text style={styles.summaryText}>💸 오늘 매출: {summary.salesToday.toLocaleString()}원</Text>
-      </View>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Text style={styles.title}>👋 Farmdas 관리자님 환영합니다!</Text>
 
-      <View style={styles.buttonGroup}>
-        <HomeButton title="🌡️ 환경 관리" onPress={() => router.push('/(tabs)/env')} />
-        <HomeButton title="🛍️ 상품 관리" onPress={() => router.push('/(tabs)/product')} />
-        <HomeButton title="📦 주문 관리" onPress={() => router.push('/(tabs)/order')} />
-        <HomeButton title="👤 회원 정보" onPress={() => router.push('/(tabs)/member')} />
-        <HomeButton title="📊 매출 분석" onPress={() => router.push('/(tabs)/sales')} />
-      </View>
-    </ScrollView>
+        {/* 관리자 요약 정보 박스 */}
+        <View style={styles.summaryBox}>
+          <Text style={styles.summaryText}>🌡️ 온도: {summary.temperature}℃</Text>
+          <Text style={styles.summaryText}>💧 습도: {summary.humidity}%</Text>
+          <Text style={styles.summaryText}>🌤️ 날씨: {summary.weather}</Text>
+          <Text style={styles.summaryText}>💸 오늘 매출: {summary.salesToday.toLocaleString()}원</Text>
+        </View>
+
+        {/* 버튼 그룹 */}
+        <View style={styles.buttonGroup}>
+          <HomeButton title="🛍️ 상품 관리" onPress={() => router.push('/sales')} />
+          <HomeButton title="📦 주문 정보" onPress={() => router.push('/sales')} />
+          <HomeButton title="👤 회원 정보" onPress={() => router.push('/sales')} />
+          <HomeButton title="📊 매출 분석" onPress={() => router.push('/sales')} />
+        </View>
+      </ScrollView>
+
+    </View>
   );
 };
 
@@ -49,8 +70,20 @@ export default DetailScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: '#f0fff0',
+  },
+  scrollContent: {
+    padding: 20,
+    paddingTop: 80,
+  },
+  logoutIconButton: {
+    position: 'absolute',
+    top: 16,
+    right: 20,
+    zIndex: 10,
+    backgroundColor: '#ffffffcc',
+    borderRadius: 30,
+    padding: 6,
   },
   title: {
     fontSize: 26,
@@ -74,6 +107,7 @@ const styles = StyleSheet.create({
   buttonGroup: {
     flexDirection: 'column',
     gap: 16,
+    marginBottom: 40,
   },
   button: {
     backgroundColor: '#78b978',
@@ -83,6 +117,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  logoutButton: {
+    backgroundColor: '#6c757d',
+    paddingVertical: 14,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  logoutButtonText: {
     color: '#fff',
     fontSize: 18,
     fontWeight: '600',

@@ -28,7 +28,6 @@ const TemperatureTab = () => {
   
     try {
       await axios.post('http://192.168.30.151:8080/sensor/environment/toggle', {
-        
         state: nextState,
       });
       console.log(`센서 ${nextState ? '켜짐' : '꺼짐'}`);
@@ -52,22 +51,23 @@ const TemperatureTab = () => {
       <Card>
         <TemperatureInfo chartConfig={chartConfig}/>
       </Card>
-
       {/* 습도 도넛 차트 */}
       <Card>
         <Text style={styles.label}>💧 현재 습도</Text>
-        <View style={styles.donutContainer}>
-          <ProgressChart
-            data={{ data: [0.64] }}
-            width={screenWidth - 100}
-            height={200}
-            strokeWidth={16}
-            radius={48}
-            chartConfig={chartConfig}
-            hideLegend={true}
-          />
-          <View style={styles.donutCenter}>
-            <Text style={styles.donutText}>64%</Text>
+        <View style={styles.graphBox}>
+          <View style={styles.donutContainer}>
+            <ProgressChart
+              data={{ data: [0.64] }}
+              width={screenWidth - 100}
+              height={200}
+              strokeWidth={16}
+              radius={48}
+              chartConfig={chartConfig}
+              hideLegend={true}
+            />
+            <View style={styles.donutCenter}>
+              <Text style={styles.donutText}>64%</Text>
+            </View>
           </View>
         </View>
       </Card>
@@ -146,4 +146,19 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#228B22",
   },
+  graphBox: {
+    backgroundColor: '#ffffff',
+    padding: 16,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#d0e8d0',
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 4,
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  
 });
