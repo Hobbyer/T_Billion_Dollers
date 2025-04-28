@@ -7,7 +7,8 @@ import {
 } from 'react-native';
 import { GET, POST, DEL } from '@/apis/CRUD';
 
-const baseUrl = 'http://192.168.204.19:8080';
+// const baseUrl = 'http://192.168.204.19:8080';
+const baseUrl = 'http://10.0.2.2:8080';
 
 export default function ItemManageScreen() {
   const [categories, setCategories] = useState([]);
