@@ -15,6 +15,7 @@ import Card from "../../components/common/Card";
 import WeatherInfo from "../../components/WeatherInfo";
 import axios from "axios";
 import { POST } from "../../apis/CRUD";
+import TemperatureInfo from "../../components/TemperatureInfo";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -49,17 +50,7 @@ const TemperatureTab = () => {
 
       {/* 온도 그래프 */}
       <Card>
-        <Text style={styles.label}>📈 온도 그래프</Text>
-        <LineChart
-          data={{
-            labels: ["9시", "12시", "15시", "18시"],
-            datasets: [{ data: [22.1, 24.3, 25.2, 23.9] }],
-          }}
-          width={screenWidth - 32}
-          height={220}
-          chartConfig={chartConfig}
-          bezier
-        />
+        <TemperatureInfo chartConfig={chartConfig}/>
       </Card>
 
       {/* 습도 도넛 차트 */}
