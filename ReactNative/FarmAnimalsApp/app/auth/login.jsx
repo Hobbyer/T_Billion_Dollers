@@ -50,9 +50,9 @@ export default function LoginScreen() {
       });
   }
 
-  useEffect(() => {
-    AsyncStorage.clear(); // 앱 시작 시 AsyncStorage 초기화 (테스트용)
-  }, []);
+  // useEffect(() => {
+  //   AsyncStorage.clear(); // 앱 시작 시 AsyncStorage 초기화 (테스트용)
+  // }, []);
 
   return (
     <SafeAreaView style={styles.container}>

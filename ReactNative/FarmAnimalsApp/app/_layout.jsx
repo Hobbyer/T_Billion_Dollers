@@ -2,10 +2,12 @@
 
 import React, { useEffect } from "react";
 import { Stack, Tabs, useRouter } from "expo-router";
-import { SafeAreaView, StatusBar } from "react-native";
+import { SafeAreaView, StatusBar, Text } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+
 export default function RootLayout() {
+
   const router = useRouter();
 
   useEffect(() => {
@@ -21,6 +23,8 @@ export default function RootLayout() {
 
     checkLoginStatus();
   }, []);
+
+  
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Stack

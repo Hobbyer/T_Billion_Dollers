@@ -25,17 +25,26 @@ import { Platform } from 'react-native';
 
 
 // 편의 함수: POST('/auth/login', data)
-export async function POST(path, data) {
-  // 1) 토큰 꺼내기
-  const token = await AsyncStorage.getItem('accessToken');
-  // 2) axios 호출 (토큰이 없으면 빈 문자열)
-  return axios.post(path, data, {
-    headers: { Authorization: token ? `Bearer ${token}` : '' }
-  });
+export async function POST(path, data = {}) {
+  try {
+    const token = await AsyncStorage.getItem('accessToken');
+    const response = await axios.post(path, data, {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : '',
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;  // ? 추가: 호출한 쪽에서 바로 응답 data를 쓸 수 있게
+  } catch (error) {
+    console.error('POST 요청 에러 ?', error);
+    throw error;
+  }
 }
 
 export async function GET(path) {
   const token = await AsyncStorage.getItem('accessToken');
+  console.log('accessToken',token);
+  
   return axios.get(path, {
     headers: { Authorization: token ? `Bearer ${token}` : '' }
   });
