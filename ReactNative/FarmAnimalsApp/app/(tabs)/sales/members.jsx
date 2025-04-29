@@ -4,10 +4,9 @@ import {
   SafeAreaView, View, Text, FlatList,
   TextInput, Button, StyleSheet, ActivityIndicator,
 } from 'react-native';
-import { GET } from '@/apis/CRUD';
+import { GET_API } from '../../../apis/testcrud';
 
 // const baseUrl = 'http://192.168.204.19:8080';
-const baseUrl = 'http://10.0.2.2:8080';
 
 export default function MembersInfoScreen() {
   const [members, setMembers] = useState([]);
@@ -17,8 +16,8 @@ export default function MembersInfoScreen() {
   const fetchAll = async () => {
     setLoading(true);
     try {
-      const res = await GET(`${baseUrl}/admin/members`);
-      setMembers(res.data);
+      const res = await GET_API(`/admin/members`);
+      setMembers(res);
     } catch (e) {
       console.error(e);
     } finally {
@@ -31,8 +30,8 @@ export default function MembersInfoScreen() {
   const search = async () => {
     setLoading(true);
     try {
-      const res = await GET(`${baseUrl}/admin/members/search?keyword=${kw}&page=0&size=5`);
-      setMembers(res.data);
+      const res = await GET_API(`/admin/members/search?keyword=${kw}&page=0&size=5`);
+      setMembers(res);
     } catch (e) {
       console.error(e);
     } finally {
