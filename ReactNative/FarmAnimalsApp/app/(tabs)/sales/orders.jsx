@@ -6,9 +6,9 @@ import {
   Modal, Button, ScrollView
 } from 'react-native';
 import { GET } from '@/apis/CRUD';
+import { GET_API } from '../../../apis/testcrud';
 
 // const baseUrl = 'http://192.168.204.19:8080';
-const baseUrl = 'http://10.0.2.2:8080';
 
 export default function OrdersInfoScreen() {
   const [orders, setOrders]   = useState([]);
@@ -18,8 +18,8 @@ export default function OrdersInfoScreen() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await GET(`${baseUrl}/admin/orders`);
-        setOrders(res.data);
+        const res = await GET_API(`/admin/orders`);
+        setOrders(res);
       } catch (e) {
         console.error(e);
       } finally {
