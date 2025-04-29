@@ -9,17 +9,17 @@ import {
   FlatList,
   Image,
 } from "react-native";
-import { LineChart, ProgressChart } from "react-native-chart-kit";
 
-import Card from "../../components/common/Card";
-import WeatherInfo from "../../components/WeatherInfo";
+import Card from "@/components/common/Card";
+import WeatherInfo from "@/components/weather/WeatherInfo";
 import axios from "axios";
-import { POST } from "../../apis/CRUD";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import TemperatureInfo from "../../components/TemperatureInfo";
-
-const screenWidth = Dimensions.get("window").width;
+import TemperatureInfo from "../../components/temperature/TemperatureInfo";
+import HumidityInfo from "../../components/humidity/HumidityInfo";
+import HumidityCard from "../../components/humidity/HumidityCard";
+import TemperatureCard from "../../components/temperature/TemperatureCard";
+import { LABEL } from "../../styles/graghStyles";
 
 const TemperatureTab = () => {
   const [isEnvironmentOn, setIsEnvironmentOn] = useState(true);
@@ -74,30 +74,23 @@ const TemperatureTab = () => {
         <Text>{isMotionOn ? "🐮 모션감지 켜짐" : "❌ 모션감지 꺼짐"}</Text>
       </Card>
 
+      <Card>
+        <Text style={LABEL.label}> 🏡 현재 축사 상태</Text>
+        <HumidityCard/>
+        <TemperatureCard/>
+      </Card>
+
       {/* 온도 그래프 */}
       <Card>
-        <TemperatureInfo chartConfig={chartConfig}/>
+        <TemperatureInfo />
       </Card>
+
       {/* 습도 도넛 차트 */}
       <Card>
-        <Text style={styles.label}>💧 현재 습도</Text>
-        <View style={styles.graphBox}>
-          <View style={styles.donutContainer}>
-            <ProgressChart
-              data={{ data: [0.64] }}
-              width={screenWidth - 100}
-              height={200}
-              strokeWidth={16}
-              radius={48}
-              chartConfig={chartConfig}
-              hideLegend={true}
-            />
-            <View style={styles.donutCenter}>
-              <Text style={styles.donutText}>64%</Text>
-            </View>
-          </View>
-        </View>
+        <HumidityInfo />
       </Card>
+
+      
       
       {/* 날씨 데이터 */}
       <Card>
@@ -109,18 +102,7 @@ const TemperatureTab = () => {
 
 export default TemperatureTab;
 
-const chartConfig = {
-  backgroundGradientFrom: "#ffffff",
-  backgroundGradientTo: "#ffffff",
-  decimalPlaces: 1,
-  color: (opacity = 1) => `rgba(34, 139, 34, ${opacity})`,
-  labelColor: (opacity = 1) => `rgba(0, 100, 0, ${opacity})`,
-  propsForDots: {
-    r: "5",
-    strokeWidth: "2",
-    stroke: "#32CD32",
-  },
-};
+
 
 const styles = StyleSheet.create({
   container: {
@@ -134,58 +116,5 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     color: "#006400",
   },
-  card: {
-    marginBottom: 24,
-    padding: 16,
-    backgroundColor: "#e6f5e6",
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: "#90ee90",
-    shadowColor: "#006400",
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  label: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginBottom: 8,
-    color: "#228B22",
-  },
-  humidityText: {
-    textAlign: "center",
-    fontSize: 16,
-    marginTop: 8,
-    color: "#2e8b57",
-  },
-  donutContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  donutCenter: {
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  donutText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#228B22",
-  },
-  graphBox: {
-    backgroundColor: '#ffffff',
-    padding: 16,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#d0e8d0',
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 3 },
-    elevation: 4,
-    marginBottom: 20,
-    alignItems: 'center',
-  },
-  
+   
 });
