@@ -221,24 +221,27 @@ export default function ItemManageScreen() {
             <SafeAreaView style={styles.modal}>
               <Text style={styles.modalTitle}>상품 등록</Text>
 
-              {/* cateCode는 Picker로! */}
-              <View style={styles.pickerContainer}>
-                <Picker
-                  selectedValue={info.cateCode}
-                  onValueChange={(itemValue) =>
-                    setInfo((i) => ({ ...i, cateCode: itemValue }))
-                  }
-                >
-                  <Picker.Item label="카테고리를 선택하세요" value="" />
-                  {categories.map((cat) => (
-                    <Picker.Item
-                      key={cat.cateCode}
-                      label={cat.cateName}
-                      value={cat.cateCode}
-                    />
-                  ))}
-                </Picker>
-              </View>
+              <Text style={styles.label}>카테고리 선택</Text>
+<View style={styles.pickerContainer}>
+  <Picker
+    style={styles.picker}
+    dropdownIconColor="#4CAF50"
+    selectedValue={info.cateCode}
+    onValueChange={(itemValue) =>
+      setInfo((i) => ({ ...i, cateCode: itemValue }))
+    }
+  >
+    <Picker.Item label="카테고리를 선택하세요" value="" />
+    {categories.map((cat) => (
+      <Picker.Item
+        key={cat.cateCode}
+        label={`📦 ${cat.cateName}`}
+        value={cat.cateCode}
+      />
+    ))}
+  </Picker>
+</View>
+
 
               {["itemName", "price", "stock", "seller", "description"].map(
                 (key) => (
@@ -289,8 +292,19 @@ const styles = StyleSheet.create({
   rowItem: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#ffffff",
+    marginHorizontal: 8,
+    marginVertical: 6,
     padding: 12,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
+  
   button: {
     backgroundColor: "#4CAF50",
     paddingVertical: 12,
@@ -343,18 +357,54 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   selectImageButton: {
-    backgroundColor: "#ffffff", // 하얀 배경
+    backgroundColor: "#ffffff",
     borderWidth: 2,
     borderColor: "#4CAF50",
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 20,
-    marginVertical: 16, // 버튼 사이 여백!
+    marginVertical: 16,
     alignItems: "center",
   },
   selectImageButtonText: {
-    color: "#4CAF50", // 초록색 텍스트
+    color: "#4CAF50",
     fontSize: 16,
     fontWeight: "bold",
   },
+  pickerContainer: {
+  borderWidth: 2,
+  borderColor: "#4CAF50",
+  borderRadius: 8,
+  marginVertical: 12,
+  overflow: "hidden",
+  backgroundColor: "#ffffff",
+  paddingHorizontal: 4,
+  paddingVertical: 2,
+  elevation: 3,
+  shadowColor: "#000",
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.15,
+  shadowRadius: 4,
+},
+  picker: {
+    height: 55,
+    paddingHorizontal: 12,
+     justifyContent: "center",
+    color: "#2e7d32",
+    fontSize: 16,
+    fontWeight: "600",
+    backgroundColor: "#ffffff",
+  },
+  sectionHeader: {
+    fontSize: 18,
+    fontWeight: "bold",
+    backgroundColor: "#E8F5E9", // 연한 초록 배경
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    marginTop: 12,
+    marginHorizontal: 8,
+    color: "#2e7d32",
+  },
+  
 });
