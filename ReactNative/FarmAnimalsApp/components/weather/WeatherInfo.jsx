@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Constants from "expo-constants";
-import FastImage from "react-native-fast-image";
+import { LABEL } from "../../styles/graghStyles";
 
 const WeatherInfo = () => {
   const [weather, setWeather] = useState(null); // 현재 날씨
@@ -63,20 +63,18 @@ const WeatherInfo = () => {
 
   // 일단 이미지 못받음;;
 
-  const iconUrl = `https://openweathermap.org/img/wn/${weather?.weather[0].icon}.png`;
+  const iconUrl = `https://openweathermap.org/img/wn/${weather?.weather[0].icon}@2x.png`;
 
   return (
     <View>
       {/* 날씨 정보 */}
-      <Text style={styles.label}>🌤️ 현재 날씨</Text>
+      <Text style={LABEL.label}>🌤️ 현재 날씨</Text>
       {weather ? (
         <View style={styles.weatherInfo}>
           <Image
-            source={{
-              uri: iconUrl,
-              priority: FastImage.priority.normal,
-            }}
-            style={styles.icon}
+            source={{ uri: iconUrl }}
+            style={styles.image}
+            resizeMode="contain" // 이미지 쓸때 기본으로 width,height 줘야해
           />
           <Text style={styles.weatherDetails}>
             온도: {weather.main.temp}℃ / 상태: {weather.weather[0].description}
@@ -86,7 +84,9 @@ const WeatherInfo = () => {
             <View style={styles.tableHeader}>
               <Text style={styles.tableHeaderText}>날짜</Text>
               <Text style={styles.tableHeaderText}>온도(°C)</Text>
-              <Text style={styles.tableHeaderText}>상태</Text>
+              <Text style={[styles.tableHeaderText, styles.tableCell2]}>
+                상태
+              </Text>
               <Text style={styles.tableHeaderText}>습도(%)</Text>
             </View>
 
@@ -109,10 +109,18 @@ const WeatherInfo = () => {
                   key={index}
                 >
                   <Text style={styles.tableCell}>{label}</Text>
-                  <Text style={styles.tableCell}>
+                  <Text style={[styles.tableCell, styles.tableHeaderText]}>
                     {item.main.temp.toFixed(1)}°C
                   </Text>
-                  <Text style={styles.tableCell}>
+                  <Text style={styles.tableCell2}>
+                    <Image
+                      source={{
+                        uri: `https://openweathermap.org/img/wn/${item?.weather[0].icon}@2x.png`,
+                      }}
+                      resizeMode="contain"
+                      width={30}
+                      height={30}
+                    />
                     {item.weather[0].description}
                   </Text>
                   <Text style={styles.tableCell}>{item.main.humidity}%</Text>
@@ -131,12 +139,6 @@ const WeatherInfo = () => {
 export default WeatherInfo;
 
 const styles = StyleSheet.create({
-  label: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginVertical: 10,
-    textAlign: "center",
-  },
   table: {
     marginTop: 20,
     borderWidth: 1,
@@ -168,6 +170,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#555",
   },
+  tableCell2: {
+    flex: 3,
+    textAlign:'center',
+    justifyContent:'center'
+  },
   tableRowLast: {
     borderBottomWidth: 0, // 마지막 행에 밑줄 제거
   },
@@ -180,5 +187,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     marginBottom: 20,
+  },
+  image: {
+    margin: "auto",
+    width: 100,
+    height: 100,
+  },
+  weatherDetails: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#228B22",
+    textAlign: "center",
   },
 });

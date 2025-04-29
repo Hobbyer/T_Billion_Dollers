@@ -23,6 +23,7 @@ import { Platform } from 'react-native';
 //   timeout: 5000,
 // });
 
+export const baseURL = "http://10.0.2.2:8080"; // PC의 LAN IP (테스트용)
 
 // 편의 함수: POST('/auth/login', data)
 export async function POST(path, data = {}) {

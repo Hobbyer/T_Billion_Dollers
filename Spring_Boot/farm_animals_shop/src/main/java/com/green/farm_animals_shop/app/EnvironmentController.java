@@ -27,13 +27,12 @@ public class EnvironmentController {
 
   @PostMapping("/environment/toggle")
   public ResponseEntity<?> toggleSensor(@RequestBody Map<String, Boolean> body) {
-    Boolean state = body.get("state");
-    String flaskUrl = "http://192.168.30.240:5000/sensor/toggle";
+    String flaskUrl = "http://192.168.30.240:5000/sensor/toggle"; // Flask 서버 IP
 
     try {
       RestTemplate restTemplate = new RestTemplate();
-      restTemplate.postForObject(flaskUrl, body, String.class);
-      return ResponseEntity.ok("Sensor toggled: " + state);
+      restTemplate.postForObject(flaskUrl, body, String.class); // 받은 데이터를 그대로 Flask로 넘김
+      return ResponseEntity.ok("Sensor toggle request sent successfully.");
     } catch (Exception e) {
       return ResponseEntity.status(500).body("Failed to toggle sensor: " + e.getMessage());
     }
