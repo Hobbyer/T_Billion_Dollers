@@ -30,4 +30,8 @@ public interface MemberRepository extends JpaRepository<Member, String> {
         OR address LIKE %:keyword%
       """, nativeQuery = true)
   List<Member> searchMembersByKeyword(@Param("keyword") String keyword); // 회원 검색
+
+  // 일반회원 수 조회
+  @Query(value = "SELECT COUNT(*) FROM member WHERE authority = 'ROLE_USER'", nativeQuery = true)
+  int countUser(); // 일반회원 수 조회
 }

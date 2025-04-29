@@ -10,6 +10,7 @@ const HomeScreen = () => {
   const router = useRouter();
 
   useEffect(() => {
+    fetch()
     const timer = setInterval(() => {
       const now = new Date();
       const dateStr = now.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });

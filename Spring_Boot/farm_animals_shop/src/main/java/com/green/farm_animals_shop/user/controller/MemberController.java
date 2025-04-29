@@ -42,4 +42,6 @@ public class MemberController {
     String loggedInUserId = user.getUsername();
     return ResponseEntity.ok(memberService.updateMemberInfo(loggedInUserId, request));
   }
+
+  @GetMapping("")
 }
