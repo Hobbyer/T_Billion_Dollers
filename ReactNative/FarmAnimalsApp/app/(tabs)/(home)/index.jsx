@@ -1,159 +1,141 @@
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
+import Animated, { FadeInDown } from 'react-native-reanimated';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons'; // 추가!
 
-const DetailScreen = () => {
+const HomeScreen = () => {
+  const [currentTime, setCurrentTime] = useState('');
   const router = useRouter();
-  const [isLoggedIn, setIsLoggedIn] = useState(true); 
-
-  const [summary, setSummary] = useState({
-    temperature: 24,
-    humidity: 60,
-    weather: '맑음',
-    salesToday: 125000,
-  });
 
   useEffect(() => {
-    // TODO: 진짜 데이터 받아오는 API 연결 가능
+    const timer = setInterval(() => {
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+      const timeStr = now.toLocaleTimeString('ko-KR');
+      setCurrentTime(`${dateStr} ${timeStr}`);
+    }, 1000);
+    return () => clearInterval(timer);
   }, []);
 
   const handleLogout = () => {
     Alert.alert(
-      "로그아웃",
-      "정말 로그아웃 하시겠습니까?",
+      '로그아웃',
+      '정말 로그아웃 하시겠습니까?',
       [
-        { text: "취소", style: "cancel" },
-        { text: "확인", onPress: () => router.replace('/auth/login') },
+        { text: '취소', style: 'cancel' },
+        { text: '확인', onPress: () => router.replace('/auth/login') },
       ]
     );
   };
 
   return (
-    <View style={styles.container}>
-      
+    <LinearGradient colors={["#d0f0c0", "#a8e063"]} style={styles.container}>
       <View style={styles.topBar}>
-  {/* 🔥 상태 동그라미만 보여주기! */}
-  <View style={styles.statusDotWrapper}>
-    <View style={[
-      styles.statusDot,
-      { backgroundColor: isLoggedIn ? '#28a745' : '#dc3545' }
-    ]} />
-  </View>
+        <TouchableOpacity onPress={handleLogout}>
+          <Ionicons name="power" size={28} color="#2e7d32" />
+        </TouchableOpacity>
+      </View>
 
-  <TouchableOpacity style={styles.logoutIconButton} onPress={handleLogout}>
-    <Ionicons name="power" size={28} color="#6c757d" />
-  </TouchableOpacity>
-</View>
+      <View style={styles.timeWrapper}>
+        <Ionicons name="time" size={20} color="#2e7d32" />
+        <Text style={styles.timeText}>{currentTime}</Text>
+      </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.title}>👋 Farmdas 관리자님 환영합니다!</Text>
+      <Animated.View entering={FadeInDown.duration(1000)} style={styles.greetingWrapper}>
+        <Text style={styles.greetingText}>👋 관리자님, 반갑습니다!</Text>
+      </Animated.View>
 
-        {/* 관리자 요약 정보 박스 */}
-        <View style={styles.summaryBox}>
-          <Text style={styles.summaryText}>🌡️ 온도: {summary.temperature}℃</Text>
-          <Text style={styles.summaryText}>💧 습도: {summary.humidity}%</Text>
-          <Text style={styles.summaryText}>🌤️ 날씨: {summary.weather}</Text>
-          <Text style={styles.summaryText}>💸 오늘 매출: {summary.salesToday.toLocaleString()}원</Text>
-        </View>
+      <View style={styles.cardsWrapper}>
+        <InfoCard icon={<Ionicons name="thermometer" size={24} color="#ffffff" />} label="센서 데이터" value="24℃ / 60%" />
+        <InfoCard icon={<MaterialCommunityIcons name="account-group" size={24} color="#ffffff" />} label="회원 수" value="53명" />
+        <InfoCard icon={<Ionicons name="notifications" size={24} color="#ffffff" />} label="알림" value="3건" />
+        <InfoCard icon={<MaterialCommunityIcons name="package-variant" size={24} color="#ffffff" />} label="주문 수" value="7건" />
+      </View>
 
-        {/* 버튼 그룹 */}
-        <View style={styles.buttonGroup}>
-          <HomeButton title="🛍️ 상품 관리" onPress={() => router.push('/sales/items')} />
-          <HomeButton title="📦 주문 정보" onPress={() => router.push('/sales/orders')} />
-          <HomeButton title="👤 회원 정보" onPress={() => router.push('/sales?initialTab=members')} />
-          <HomeButton title="📊 매출 분석" onPress={() => router.push('/sales?initialTab=info')} />
-        </View>
-      </ScrollView>
-
-    </View>
+      <View style={styles.footerWrapper}>
+        <Text style={styles.footerText}>📢 오늘도 최선을 다하는 FarmDAS ✨</Text>
+      </View>
+    </LinearGradient>
   );
 };
 
-const HomeButton = ({ title, onPress }) => (
-  <TouchableOpacity style={styles.button} onPress={onPress}>
-    <Text style={styles.buttonText}>{title}</Text>
-  </TouchableOpacity>
+const InfoCard = ({ icon, label, value }) => (
+  <Animated.View entering={FadeInDown.delay(200).duration(800)} style={styles.card}>
+    <View style={styles.iconWrapper}>{icon}</View>
+    <View>
+      <Text style={styles.cardLabel}>{label}</Text>
+      <Text style={styles.cardValue}>{value}</Text>
+    </View>
+  </Animated.View>
 );
 
-export default DetailScreen;
+export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0fff0',
-  },
-  scrollContent: {
-    padding: 20,
-    paddingTop: 80,
-  },
-  logoutIconButton: {
-    backgroundColor: '#ffffffcc',
-    borderRadius: 30,
-    padding: 6,
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#006400',
-  },
-  summaryBox: {
-    backgroundColor: '#e6f5e6',
-    padding: 20,
-    borderRadius: 12,
-    marginBottom: 30,
-    borderWidth: 1,
-    borderColor: '#90ee90',
-  },
-  summaryText: {
-    fontSize: 18,
-    marginBottom: 10,
-    color: '#228B22',
-  },
-  buttonGroup: {
-    flexDirection: 'column',
-    gap: 16,
-    marginBottom: 40,
-  },
-  button: {
-    backgroundColor: '#78b978',
-    paddingVertical: 14,
+    paddingTop: 60,
     paddingHorizontal: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  logoutButton: {
-    backgroundColor: '#6c757d',
-    paddingVertical: 14,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  logoutButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
+    backgroundColor: '#ffffff',
   },
   topBar: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
+    zIndex: 10,
+  },
+  timeWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    gap: 10,
+    marginBottom: 10,
   },
-  statusDotWrapper: {
+  timeText: {
+    marginLeft: 8,
+    fontSize: 16,
+    color: '#2e7d32',
+    fontWeight: '500',
+  },
+  greetingWrapper: {
     alignItems: 'center',
-    justifyContent: 'center',
+    marginVertical: 20,
   },
-  statusDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+  greetingText: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#1b5e20',
+  },
+  cardsWrapper: {
+    marginTop: 20,
+    gap: 16,
+  },
+  card: {
+    backgroundColor: '#66bb6a',
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 12,
+    elevation: 4,
+  },
+  iconWrapper: {
+    marginRight: 16,
+  },
+  cardLabel: {
+    fontSize: 16,
+    color: '#e8f5e9',
+  },
+  cardValue: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#ffffff',
+  },
+  footerWrapper: {
+    marginTop: 40,
+    alignItems: 'center',
+  },
+  footerText: {
+    fontSize: 14,
+    color: '#2e7d32',
   },
 });

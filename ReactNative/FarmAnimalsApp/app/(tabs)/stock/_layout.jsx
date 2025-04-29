@@ -7,6 +7,7 @@ export default function StockLayout() {
   return (
     <Stack
       screenOptions={{
+        headerShown: false,
         headerTitleAlign: 'center',
         headerStyle: { backgroundColor: '#fff' },
       }}
