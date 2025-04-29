@@ -90,8 +90,6 @@ const TemperatureTab = () => {
         <HumidityInfo />
       </Card>
 
-      
-      
       {/* 날씨 데이터 */}
       <Card>
         <WeatherInfo/>
