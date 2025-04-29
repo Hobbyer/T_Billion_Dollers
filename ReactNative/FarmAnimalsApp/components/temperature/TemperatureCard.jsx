@@ -2,9 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { GET } from '@/apis/CRUD';
-import StatusCard from './StatusCard';
+import StatusCard from '../common/StatusCard';
+import { baseURL } from '../../apis/CRUD';
 
-const baseURL = 'http://192.168.204.19:8080'; // PC의 LAN IP (테스트용)
+// const baseURL = 'http://192.168.204.19:8080'; // PC의 LAN IP (테스트용)
 
 export default function TemperatureCard() {
   const [temp, setTemp] = useState(null);
