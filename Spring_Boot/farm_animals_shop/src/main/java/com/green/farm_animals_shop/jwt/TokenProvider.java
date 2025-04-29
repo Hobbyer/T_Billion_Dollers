@@ -67,6 +67,7 @@ public class TokenProvider {
     // 리프레시 토큰을 생성합니다.
     String refreshToken = Jwts.builder()
         .setSubject(authentication.getName()) // JWT의 제목(Subject) 설정
+        .claim(AUTHORITIES_KEY, authorities) // ★ 권한 정보 추가
         .setExpiration(refreshTokenExpiresIn) // JWT의 만료 시간 설정
         .signWith(key, SignatureAlgorithm.HS512) // JWT 서명 알고리즘 설정
         .compact(); // JWT 생성

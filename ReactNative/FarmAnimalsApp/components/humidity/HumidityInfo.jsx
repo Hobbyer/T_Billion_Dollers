@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { CHART_CONFIG, GRAPH_BOX, LABEL } from "../../styles/graghStyles";
 import { ProgressChart } from "react-native-chart-kit";
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../constants/dimensions";
-import { baseURL, GET } from "../../apis/CRUD";
+import { GET_API } from "../../apis/testcrud";
 
 const HumidityInfo = () => {
   const [latest, setLatest] = useState(null);
@@ -13,9 +13,9 @@ const HumidityInfo = () => {
     let mounted = true;
     const fetchHum = async () => {
       try {
-        const res = await GET(`${baseURL}/admin/humidity`);
-        if (mounted && Array.isArray(res.data) && res.data.length) {
-          const sorted = res.data.sort(
+        const res = await GET_API(`/admin/humidity`);
+        if (mounted && Array.isArray(res) && res.length) {
+          const sorted = res.sort(
             (a, b) => new Date(b.timeLine) - new Date(a.timeLine)
           ); // 내림차순 정렬
           setLatest(sorted[0]); // 최신데이터 하나만 따로 빼서 저장

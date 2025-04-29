@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { GET } from '@/apis/CRUD';
 import StatusCard from '../common/StatusCard';
 import { baseURL } from '../../apis/CRUD';
+import { GET_API } from '../../apis/testcrud';
 
 // const baseURL = 'http://192.168.204.19:8080'; // PC의 LAN IP (테스트용)
 
@@ -14,9 +15,9 @@ export default function TemperatureCard() {
     let m = true;
     const fn = async () => {
       try {
-        const r = await GET(`${baseURL}/admin/temp`);
-        if (m && r.data.length) {
-          setTemp(r.data[r.data.length - 1].temp);
+        const r = await GET_API(`/admin/temp`);
+        if (m && r.length) {
+          setTemp(r[r.length - 1].temp);
         }
       } catch (e) { console.error(e); }
     };
