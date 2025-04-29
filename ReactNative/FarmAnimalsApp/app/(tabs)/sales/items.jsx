@@ -18,6 +18,9 @@ import {
 import { GET, POST } from "@/apis/CRUD";
 import * as ImagePicker from "expo-image-picker";
 import { Picker } from "@react-native-picker/picker";
+import { Animated } from "react-native";
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { GET_API, POST_API } from "../../../apis/testcrud";
 
 const baseUrl = "http://10.0.2.2:8080";
 
@@ -28,6 +31,18 @@ export default function ItemManageScreen() {
   const [catModal, setCatModal] = useState(false);
   const [newCat, setNewCat] = useState("");
   const [itemModal, setItemModal] = useState(false);
+  const [searchText, setSearchText] = useState("");
+
+  const [info, setInfo] = useState({
+    cateCode: "",
+    itemName: "",
+    price: "",
+    stock: "",
+    seller: "",
+    description: "",
+  });
+  const [image, setImage] = useState(null);
+
   const resetItemForm = () => {
     setInfo({
       cateCode: "",
@@ -41,25 +56,15 @@ export default function ItemManageScreen() {
     setItemModal(false);
   };
 
-  const [info, setInfo] = useState({
-    cateCode: "",
-    itemName: "",
-    price: "",
-    stock: "",
-    seller: "",
-    description: "",
-  });
-  const [image, setImage] = useState(null);
-
   const fetchAll = async () => {
     try {
       setLoading(true);
       const [cRes, iRes] = await Promise.all([
-        GET(`${baseUrl}/admin/categories`),
-        GET(`${baseUrl}/admin/items`),
+        GET_API(`/admin/categories`),
+        GET_API(`/admin/items`),
       ]);
-      setCategories(cRes.data);
-      setItems(iRes.data);
+      setCategories(cRes);
+      setItems(iRes);
     } catch (e) {
       console.error(e);
     } finally {
@@ -73,7 +78,7 @@ export default function ItemManageScreen() {
 
   const addCategory = async () => {
     try {
-      await POST(`${baseUrl}/admin/categories`, { cateName: newCat });
+      await POST_API(`/admin/categories`, { cateName: newCat });
       setCatModal(false);
       fetchAll();
     } catch (e) {
@@ -82,22 +87,76 @@ export default function ItemManageScreen() {
   };
 
   const removeCategory = async (code) => {
-    try {
-      await POST(`${baseUrl}/admin/categories/delete`, { cateCode: code });
-      fetchAll();
-    } catch (e) {
-      Alert.alert("오류", "카테고리 삭제 실패");
-    }
+
+    Alert.alert(
+      "삭제 확인", // 제목
+      "정말 삭제하시겠습니까?", // 내용
+      [
+        {
+          text: "취소", // ❌ 취소
+          style: "cancel",
+        },
+        {
+          text: "삭제", // ✅ 삭제
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await POST(`${baseUrl}/admin/categories/delete`, {
+                cateCode: code,
+              });
+              fetchAll();
+            } catch (e) {
+              Alert.alert("오류", "카테고리 삭제 실패");
+            }
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+
   };
+
+  const DeleteButton = ({ onPress }) => {
+    const scale = useState(new Animated.Value(1))[0];
+  
+    const handlePressIn = () => {
+      Animated.spring(scale, {
+        toValue: 0.9,
+        useNativeDriver: true,
+      }).start();
+    };
+  
+    const handlePressOut = () => {
+      Animated.spring(scale, {
+        toValue: 1,
+        friction: 3,
+        useNativeDriver: true,
+      }).start();
+    };
+  
+    return (
+      <Animated.View style={{ transform: [{ scale }] }}>
+        <TouchableOpacity
+          onPressIn={handlePressIn}
+          onPressOut={handlePressOut}
+          onPress={onPress}
+          style={styles.deleteButton}
+        >
+            <AntDesign name="delete" size={24} color="#198754" />
+        </TouchableOpacity>
+      </Animated.View>
+    );
+  };
+  
 
   const createItem = async () => {
     try {
-      await POST(`${baseUrl}/admin/items`, {
+      await POST_API(`/admin/items`, {
         ...info,
         price: Number(info.price),
         stock: Number(info.stock),
       });
-      setItemModal(false);
+      resetItemForm();
       fetchAll();
     } catch (e) {
       Alert.alert("오류", "상품 등록 실패");
@@ -125,10 +184,18 @@ export default function ItemManageScreen() {
     );
   }
 
+  const filteredItems = items.filter((item) =>
+    item.itemName.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   const sections = categories.map((cat) => ({
     title: cat.cateName,
-    data: items.filter((i) => i.cateCode === cat.cateCode),
+    data: filteredItems.filter((i) => i.cateCode === cat.cateCode),
   }));
+
+  const [confirmVisible, setConfirmVisible] = useState(false);
+const [targetDeleteCode, setTargetDeleteCode] = useState(null);
+
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -147,22 +214,41 @@ export default function ItemManageScreen() {
         </TouchableOpacity>
       </View>
 
+      <TextInput
+        style={styles.searchInput}
+        placeholder="상품명 검색..."
+        value={searchText}
+        onChangeText={setSearchText}
+      />
+
       <SectionList
         sections={sections}
         keyExtractor={(item) => item.itemCode.toString()}
         renderSectionHeader={({ section }) => (
-          <Text style={styles.sectionHeader}>{section.title}</Text>
+          <View style={styles.sectionHeaderBox}>
+            <Text style={styles.sectionHeaderText}>🥬 {section.title}</Text>
+          </View>
         )}
         renderItem={({ item }) => (
-          <View style={styles.rowItem}>
-            <Text>{item.itemName}</Text>
-            <Text>{item.price.toLocaleString()}원</Text>
-          </View>
+          <TouchableOpacity style={styles.rowItem}>
+            <Image
+              source={{
+                uri: item.imagePath || "https://via.placeholder.com/50",
+              }}
+              style={styles.listImage}
+            />
+            <View style={{ flex: 1, marginLeft: 10 }}>
+              <Text style={styles.itemName}>{item.itemName}</Text>
+              <Text style={styles.itemPrice}>
+                {item.price.toLocaleString()}원
+              </Text>
+            </View>
+          </TouchableOpacity>
         )}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
 
-      {/* 카테고리 모달 */}
+      {/* 카테고리 관리 모달 */}
       <Modal visible={catModal} animationType="slide">
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -171,35 +257,39 @@ export default function ItemManageScreen() {
           <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
             <SafeAreaView style={styles.modal}>
               <Text style={styles.modalTitle}>카테고리 관리</Text>
+
               <TextInput
                 style={styles.input}
                 placeholder="새 카테고리명"
                 value={newCat}
                 onChangeText={setNewCat}
               />
+
               <TouchableOpacity
                 style={styles.modalButton}
                 onPress={addCategory}
               >
                 <Text style={styles.modalButtonText}>등록</Text>
               </TouchableOpacity>
+
               <SectionList
                 sections={[{ title: "등록된 카테고리", data: categories }]}
                 keyExtractor={(cat) => cat.cateCode.toString()}
                 renderSectionHeader={({ section }) => (
-                  <Text style={styles.secTitle}>{section.title}</Text>
+                  <View style={styles.sectionHeaderBox}>
+                    <Text style={styles.sectionHeaderText}>
+                      📦 {section.title}
+                    </Text>
+                  </View>
                 )}
                 renderItem={({ item }) => (
                   <View style={styles.rowItem}>
-                    <Text>{item.cateName}</Text>
-                    <TouchableOpacity
-                      onPress={() => removeCategory(item.cateCode)}
-                    >
-                      <Text style={styles.danger}>삭제</Text>
-                    </TouchableOpacity>
+                    <Text style={styles.itemName}>{item.cateName}</Text>
+                    <DeleteButton onPress={()=>{removeCategory(item.cateCode)}} />
                   </View>
                 )}
               />
+
               <TouchableOpacity
                 style={styles.modalButton}
                 onPress={() => setCatModal(false)}
@@ -221,9 +311,10 @@ export default function ItemManageScreen() {
             <SafeAreaView style={styles.modal}>
               <Text style={styles.modalTitle}>상품 등록</Text>
 
-              {/* cateCode는 Picker로! */}
               <View style={styles.pickerContainer}>
                 <Picker
+                  style={styles.picker}
+                  dropdownIconColor="#4CAF50"
                   selectedValue={info.cateCode}
                   onValueChange={(itemValue) =>
                     setInfo((i) => ({ ...i, cateCode: itemValue }))
@@ -233,7 +324,7 @@ export default function ItemManageScreen() {
                   {categories.map((cat) => (
                     <Picker.Item
                       key={cat.cateCode}
-                      label={cat.cateName}
+                      label={`📦 ${cat.cateName}`}
                       value={cat.cateCode}
                     />
                   ))}
@@ -251,6 +342,7 @@ export default function ItemManageScreen() {
                   />
                 )
               )}
+
               <TouchableOpacity
                 style={styles.selectImageButton}
                 onPress={pickImage}
@@ -261,12 +353,14 @@ export default function ItemManageScreen() {
               {image && (
                 <Image source={{ uri: image }} style={styles.imagePreview} />
               )}
+
               <TouchableOpacity style={styles.modalButton} onPress={createItem}>
                 <Text style={styles.modalButtonText}>등록</Text>
               </TouchableOpacity>
+
               <TouchableOpacity
                 style={styles.modalButton}
-                onPress={resetItemForm} // 여기 resetItemForm 함수 호출해야 해!
+                onPress={resetItemForm}
               >
                 <Text style={styles.modalButtonText}>닫기</Text>
               </TouchableOpacity>
@@ -279,44 +373,65 @@ export default function ItemManageScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#f0fff0" },
+  safe: { flex: 1, backgroundColor: "#E8F5E9" },
   loader: { flex: 1, justifyContent: "center", alignItems: "center" },
   row: {
     flexDirection: "row",
     justifyContent: "space-around",
     marginVertical: 20,
   },
+  button: {
+    backgroundColor: "#81C784",
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 24,
+  },
+  buttonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
+  searchInput: {
+    borderWidth: 1,
+    borderColor: "#A5D6A7",
+    borderRadius: 8,
+    padding: 10,
+    backgroundColor: "#fff",
+    margin: 12,
+  },
+  sectionHeaderBox: {
+    backgroundColor: "#C8E6C9",
+    borderRadius: 12,
+    padding: 10,
+    marginTop: 16,
+    marginBottom: 8,
+    marginHorizontal: 12,
+  },
+  sectionHeaderText: { fontSize: 18, fontWeight: "bold", color: "#2E7D32" },
   rowItem: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#fff",
     padding: 12,
+    marginVertical: 6,
+    marginHorizontal: 8,
+    borderRadius: 10,
   },
-  button: {
-    backgroundColor: "#4CAF50",
-    paddingVertical: 12,
-    paddingHorizontal: 20,
+  listImage: {
+    width: 50,
+    height: 50,
     borderRadius: 8,
+    backgroundColor: "#eee",
   },
-  buttonText: { color: "#ffffff", fontSize: 16, fontWeight: "bold" },
-  sectionHeader: {
-    fontSize: 18,
-    fontWeight: "bold",
-    backgroundColor: "#e6f5e6",
-    padding: 8,
+  itemName: { fontSize: 16, fontWeight: "bold", color: "#2E7D32" },
+  itemPrice: { fontSize: 14, color: "#666" },
+  separator: { height: 1, backgroundColor: "#ccc" },
+  modal: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: "#E8F5E9",
   },
-  separator: { height: 1, backgroundColor: "#ddd" },
-  input: {
-    borderWidth: 1,
-    borderColor: "#c8e6c9",
-    borderRadius: 6,
-    padding: 10,
-    marginVertical: 8,
-  },
-  modal: { flex: 1, padding: 20, backgroundColor: "#f0fff0" },
   modalTitle: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "#2e7d32",
+    color: "#2E7D32",
     marginBottom: 20,
     textAlign: "center",
   },
@@ -327,14 +442,26 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     alignItems: "center",
   },
-  modalButtonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
-  secTitle: {
+  modalButtonText: {
+    color: "#ffffff",
     fontSize: 16,
-    fontWeight: "600",
-    color: "#2e7d32",
-    marginVertical: 8,
+    fontWeight: "bold",
   },
-  danger: { color: "#c0392b", fontWeight: "bold" },
+  selectImageButton: {
+    backgroundColor: "#ffffff",
+    borderWidth: 2,
+    borderColor: "#4CAF50",
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    marginVertical: 16,
+    alignItems: "center",
+  },
+  selectImageButtonText: {
+    color: "#4CAF50",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
   imagePreview: {
     width: 200,
     height: 200,
@@ -342,19 +469,15 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     borderRadius: 10,
   },
-  selectImageButton: {
-    backgroundColor: "#ffffff", // 하얀 배경
-    borderWidth: 2,
-    borderColor: "#4CAF50",
+  deleteButton: {
+    marginLeft: "auto",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    marginVertical: 16, // 버튼 사이 여백!
-    alignItems: "center",
   },
-  selectImageButtonText: {
-    color: "#4CAF50", // 초록색 텍스트
-    fontSize: 16,
+  deleteButtonText: {
+    color: "#C62828",
     fontWeight: "bold",
+    fontSize: 14,
   },
 });

@@ -4,10 +4,9 @@ import {
   useWindowDimensions, StyleSheet, ActivityIndicator,
 } from 'react-native';
 import { BarChart } from 'react-native-chart-kit';
-import { GET } from '@/apis/CRUD';
+import { GET_API } from '../../../apis/testcrud';
 
 // const baseUrl = 'http://192.168.204.19:8080'; // Replace with your actual base URL
-const baseUrl = 'http://10.0.2.2:8080';
 
 export default function SalesInfoScreen() {
   const [data, setData] = useState([]);
@@ -18,8 +17,8 @@ export default function SalesInfoScreen() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await GET(`${baseUrl}/admin/daily-orders`);
-        setData(Array.isArray(res.data) ? res.data : []);
+        const res = await GET_API(`/admin/daily-orders`);
+        setData(Array.isArray(res) ? res : []);
       } catch (e) {
         console.error(e);
       } finally {
