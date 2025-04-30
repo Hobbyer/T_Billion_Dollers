@@ -43,5 +43,5 @@ public class MemberController {
     return ResponseEntity.ok(memberService.updateMemberInfo(loggedInUserId, request));
   }
 
-  @GetMapping("")
+//  @GetMapping("")
 }
