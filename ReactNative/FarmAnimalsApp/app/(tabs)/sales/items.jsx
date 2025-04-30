@@ -10,7 +10,6 @@ import {
   StyleSheet,
   ActivityIndicator,
   Alert,
-  ScrollView,
   KeyboardAvoidingView,
   Platform,
   Image,
@@ -219,7 +218,10 @@ export default function ItemManageScreen() {
   }));
 
   return (
-    <SafeAreaView style={styles.safe}>
+    
+<SafeAreaView style={styles.safe}>
+ListHeaderComponent={
+      <>
       <View style={styles.row}>
         <TouchableOpacity
           style={styles.button}
@@ -237,10 +239,12 @@ export default function ItemManageScreen() {
 
       <TextInput
         style={styles.searchInput}
-        placeholder="상품명 검색..."
+        placeholder="상품명 검색" 
         value={searchText}
         onChangeText={setSearchText}
       />
+      </>
+}
 
       <SectionList
         sections={sections}
@@ -268,6 +272,7 @@ export default function ItemManageScreen() {
         )}
         ItemSeparatorComponent={() => null}
       />
+
 
       {/* 카테고리 관리 모달 */}
       <Modal visible={catModal} animationType="slide">
@@ -363,7 +368,7 @@ export default function ItemManageScreen() {
                 marginBottom: 8,
               }}
             >
-              등록 완료!
+              등록 완료 !
             </Text>
             <Text
               style={{
@@ -690,6 +695,7 @@ export default function ItemManageScreen() {
         </View>
       </Modal>
     </SafeAreaView>
+              
   );
 }
 
