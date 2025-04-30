@@ -2,7 +2,6 @@
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { Platform } from 'react-native';
 
 /**
  * Android 에뮬레이터에서는 PC의 localhost를 10.0.2.2로 바라봐야 합니다.

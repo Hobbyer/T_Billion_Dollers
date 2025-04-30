@@ -12,9 +12,9 @@ import { BarChart } from "react-native-chart-kit";
 import { GET } from "@/apis/CRUD";
 
 // const baseUrl = 'http://192.168.204.19:8080'; // Replace with your actual base URL
-const baseUrl = "http://10.0.2.2:8080";
 
 export default function SalesInfoScreen() {
+  const baseUrl = "http://10.0.2.2:8080";
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const { width } = useWindowDimensions();

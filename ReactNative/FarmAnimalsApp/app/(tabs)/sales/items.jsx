@@ -21,8 +21,7 @@ import { Animated } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import CustomDropdown from "@/components/common/CustomDropdown";
 import { GET_API, POST_API } from "../../../apis/testcrud";
-
-const baseUrl = "http://10.0.2.2:8080";
+import { baseURL } from "../../../apis/CRUD";
 
 export default function ItemManageScreen() {
   const [categories, setCategories] = useState([]);
@@ -97,21 +96,20 @@ export default function ItemManageScreen() {
   };
 
   const removeCategory = async (code) => {
-
     Alert.alert(
       "삭제 확인", // 제목
       "정말 삭제하시겠습니까?", // 내용
       [
         {
-          text: "취소", // ❌ 취소
+          text: "취소", //  취소
           style: "cancel",
         },
         {
-          text: "삭제", // ✅ 삭제
+          text: "삭제", //  삭제
           style: "destructive",
           onPress: async () => {
             try {
-              await POST(`${baseUrl}/admin/categories/delete`, {
+              await POST_API(`/admin/categories/delete`, {
                 cateCode: code,
               });
               fetchAll();
@@ -123,7 +121,6 @@ export default function ItemManageScreen() {
       ],
       { cancelable: true }
     );
-
   };
 
   const askDelete = (code) => {
@@ -133,7 +130,7 @@ export default function ItemManageScreen() {
 
   const handleDelete = async () => {
     try {
-      await POST(`${baseUrl}/admin/categories/delete`, {
+      await POST(`${baseURL}/admin/categories/delete`, {
         cateCode: targetDeleteCode,
       });
       setConfirmVisible(false);
@@ -278,9 +275,8 @@ export default function ItemManageScreen() {
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={{ flex: 1 }}
         >
-          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            <SafeAreaView style={styles.modal}>
-              <Text style={styles.modalTitle}>카테고리 관리</Text>
+          <SafeAreaView style={styles.modal}>
+            <Text style={styles.modalTitle}>카테고리 관리</Text>
 
               <TextInput
   style={styles.categoryInput}
@@ -289,39 +285,38 @@ export default function ItemManageScreen() {
   onChangeText={setNewCat}
 />
 
-              <TouchableOpacity
-                style={styles.modalButton}
-                onPress={addCategory}
-              >
-                <Text style={styles.modalButtonText}>등록</Text>
-              </TouchableOpacity>
+            <TouchableOpacity style={styles.modalButton} onPress={addCategory}>
+              <Text style={styles.modalButtonText}>등록</Text>
+            </TouchableOpacity>
 
-              <SectionList
-                sections={[{ title: "등록된 카테고리", data: categories }]}
-                keyExtractor={(cat) => cat.cateCode.toString()}
-                renderSectionHeader={({ section }) => (
-                  <View style={styles.sectionHeaderBox}>
-                    <Text style={styles.sectionHeaderText}>
-                      📦 {section.title}
-                    </Text>
-                  </View>
-                )}
-                renderItem={({ item }) => (
-                  <View style={styles.rowItem}>
-                    <Text style={styles.itemName}>{item.cateName}</Text>
-                    <DeleteButton onPress={() => askDelete(item.cateCode)} />
-                  </View>
-                )}
-              />
-
-              <TouchableOpacity
-                style={styles.modalButton}
-                onPress={() => setCatModal(false)}
-              >
-                <Text style={styles.modalButtonText}>닫기</Text>
-              </TouchableOpacity>
-            </SafeAreaView>
-          </ScrollView>
+            <SectionList
+              style={{ flex: 1 }}
+              contentContainerStyle={{ paddingBottom: 100 }}
+              sections={[{ title: "등록된 카테고리", data: categories }]}
+              keyExtractor={(cat) => cat.cateCode.toString()}
+              renderSectionHeader={({ section }) => (
+                <View style={styles.sectionHeaderBox}>
+                  <Text style={styles.sectionHeaderText}>
+                    📦 {section.title}
+                  </Text>
+                </View>
+              )}
+              renderItem={({ item }) => (
+                <View style={styles.rowItem}>
+                  <Text style={styles.itemName}>{item.cateName}</Text>
+                  <DeleteButton onPress={() => askDelete(item.cateCode)} />
+                </View>
+              )}
+              ListFooterComponent={
+                <TouchableOpacity
+                  style={styles.modalButton}
+                  onPress={() => setCatModal(false)}
+                >
+                  <Text style={styles.modalButtonText}>닫기</Text>
+                </TouchableOpacity>
+              }
+            />
+          </SafeAreaView>
         </KeyboardAvoidingView>
       </Modal>
 
@@ -398,55 +393,76 @@ export default function ItemManageScreen() {
       </Modal>
 
       <Modal visible={itemErrorVisible} transparent animationType="fade">
-  <View style={{
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "center",
-    alignItems: "center"
-  }}>
-    <View style={{
-      width: "80%",
-      backgroundColor: "#fff",
-      borderRadius: 16,
-      padding: 24,
-      alignItems: "center",
-      shadowColor: "#000",
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5,
-    }}>
-      <View style={{
-        width: 64,
-        height: 64,
-        borderRadius: 32,
-        backgroundColor: "#FEE2E2",
-        justifyContent: "center",
-        alignItems: "center",
-        marginBottom: 16,
-      }}>
-        <AntDesign name="closecircleo" size={32} color="#DC2626" />
-      </View>
-      <Text style={{ fontSize: 20, fontWeight: "bold", color: "#DC2626", marginBottom: 8 }}>등록 실패!</Text>
-      <Text style={{ fontSize: 14, color: "#555", textAlign: "center", marginBottom: 20 }}>
-        상품 등록 중 오류가 발생했습니다.
-      </Text>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={{
+              width: "80%",
+              backgroundColor: "#fff",
+              borderRadius: 16,
+              padding: 24,
+              alignItems: "center",
+              shadowColor: "#000",
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
+            }}
+          >
+            <View
+              style={{
+                width: 64,
+                height: 64,
+                borderRadius: 32,
+                backgroundColor: "#FEE2E2",
+                justifyContent: "center",
+                alignItems: "center",
+                marginBottom: 16,
+              }}
+            >
+              <AntDesign name="closecircleo" size={32} color="#DC2626" />
+            </View>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+                color: "#DC2626",
+                marginBottom: 8,
+              }}
+            >
+              등록 실패!
+            </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                color: "#555",
+                textAlign: "center",
+                marginBottom: 20,
+              }}
+            >
+              상품 등록 중 오류가 발생했습니다.
+            </Text>
 
-      <TouchableOpacity
-        style={{
-          width: "100%",
-          backgroundColor: "#DC2626",
-          paddingVertical: 10,
-          borderRadius: 8,
-          alignItems: "center"
-        }}
-        onPress={() => setItemErrorVisible(false)}
-      >
-        <Text style={{ fontWeight: "bold", color: "white" }}>닫기</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-</Modal>
-
+            <TouchableOpacity
+              style={{
+                width: "100%",
+                backgroundColor: "#DC2626",
+                paddingVertical: 10,
+                borderRadius: 8,
+                alignItems: "center",
+              }}
+              onPress={() => setItemErrorVisible(false)}
+            >
+              <Text style={{ fontWeight: "bold", color: "white" }}>닫기</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       {/* 상품 등록 모달 */}
       <Modal visible={itemModal} transparent animationType="fade">
@@ -484,11 +500,12 @@ export default function ItemManageScreen() {
 
             {/* 카테고리 선택 */}
             <CustomDropdown
-  items={categories}
-  selectedValue={info.cateCode}
-  onValueChange={(value) => setInfo((prev) => ({ ...prev, cateCode: value }))}
-/>
-
+              items={categories}
+              selectedValue={info.cateCode}
+              onValueChange={(value) =>
+                setInfo((prev) => ({ ...prev, cateCode: value }))
+              }
+            />
 
             {/* 상품 정보 입력 */}
             {["itemName", "price", "stock", "seller", "description"].map(

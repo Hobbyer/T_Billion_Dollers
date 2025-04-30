@@ -7,9 +7,9 @@ import ItemManageScreen from './items';
 import OrdersInfoScreen from './orders';
 import MembersInfoScreen from './members';
 
-const Tab = createMaterialTopTabNavigator();
 
 export default function SalesManageScreen() {
+  const Tab = createMaterialTopTabNavigator();
   const { initialTab } = useLocalSearchParams(); // URL 파라미터 읽기
   const [currentTab, setCurrentTab] = useState('info'); // 기본 탭
 
