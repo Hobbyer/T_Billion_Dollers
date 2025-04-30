@@ -18,8 +18,13 @@ import {
 import { GET, POST } from "@/apis/CRUD";
 import * as ImagePicker from "expo-image-picker";
 import { Animated } from "react-native";
+<<<<<<< HEAD
 import AntDesign from "@expo/vector-icons/AntDesign";
 import CustomDropdown from "@/components/common/CustomDropdown";
+=======
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { GET_API, POST_API } from "../../../apis/testcrud";
+>>>>>>> dev
 
 const baseUrl = "http://10.0.2.2:8080";
 
@@ -63,11 +68,11 @@ export default function ItemManageScreen() {
     try {
       setLoading(true);
       const [cRes, iRes] = await Promise.all([
-        GET(`${baseUrl}/admin/categories`),
-        GET(`${baseUrl}/admin/items`),
+        GET_API(`/admin/categories`),
+        GET_API(`/admin/items`),
       ]);
-      setCategories(cRes.data);
-      setItems(iRes.data);
+      setCategories(cRes);
+      setItems(iRes);
     } catch (e) {
       console.error(e);
     } finally {
@@ -81,7 +86,7 @@ export default function ItemManageScreen() {
 
   const addCategory = async () => {
     try {
-      await POST(`${baseUrl}/admin/categories`, { cateName: newCat });
+      await POST_API(`/admin/categories`, { cateName: newCat });
       setCatModal(false);
       fetchAll();
     } catch (e) {
@@ -90,6 +95,7 @@ export default function ItemManageScreen() {
   };
 
   const removeCategory = async (code) => {
+
     Alert.alert(
       "삭제 확인", // 제목
       "정말 삭제하시겠습니까?", // 내용
@@ -115,6 +121,7 @@ export default function ItemManageScreen() {
       ],
       { cancelable: true }
     );
+
   };
 
   const askDelete = (code) => {
@@ -168,7 +175,7 @@ export default function ItemManageScreen() {
 
   const createItem = async () => {
     try {
-      await POST(`${baseUrl}/admin/items`, {
+      await POST_API(`/admin/items`, {
         ...info,
         price: Number(info.price),
         stock: Number(info.stock),

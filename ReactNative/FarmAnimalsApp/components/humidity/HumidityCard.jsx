@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { GET } from '@/apis/CRUD';
 import StatusCard from '../common/StatusCard';
-import { baseURL } from '../../apis/CRUD';
+import { GET_API } from '../../apis/testcrud';
 
 // const baseURL = 'http://192.168.204.19:8080'; // PC의 LAN IP (테스트용)
 
@@ -14,8 +14,8 @@ export default function HumidityCard() {
     let m = true;
     const fn = async () => {
       try {
-        const r = await GET(`${baseURL}/admin/humidity`);
-        if (m && r.data.length) setHum(r.data[0].humidity);
+        const r = await GET_API(`/admin/humidity`);
+        if (m && r.length) setHum(r[0].humidity);
       } catch (e) { console.error(e); }
     };
     fn();

@@ -1,9 +1,12 @@
-import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, Pressable } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // AsyncStorage 임포트
+import { refreshAccessToken } from '../../../apis/auth';
+import TokenRemainButton from '../../../components/common/TokenRemainButton';
 
 const HomeScreen = () => {
   const [currentTime, setCurrentTime] = useState('');
@@ -19,16 +22,29 @@ const HomeScreen = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const handleLogout = () => {
-    Alert.alert(
-      '로그아웃',
-      '정말 로그아웃 하시겠습니까?',
-      [
-        { text: '취소', style: 'cancel' },
-        { text: '확인', onPress: () => router.replace('/auth/login') },
-      ]
-    );
-  };
+ // 로그아웃 처리 함수
+ const handleLogout = async () => {
+  Alert.alert(
+    '로그아웃',
+    '정말 로그아웃 하시겠습니까?',
+    [
+      { text: '취소', style: 'cancel' },
+      {
+        text: '확인',
+        onPress: async () => {
+          // AsyncStorage에서 토큰 제거
+          await AsyncStorage.removeItem('accessToken');
+          await AsyncStorage.removeItem('refreshToken');
+
+          // 로그인 화면으로 이동
+          router.replace('/auth/login');
+        },
+      },
+    ]
+  );
+};
+
+
 
   return (
     <LinearGradient colors={["#d0f0c0", "#a8e063"]} style={styles.container}>
@@ -42,6 +58,8 @@ const HomeScreen = () => {
         <Ionicons name="time" size={20} color="#2e7d32" />
         <Text style={styles.timeText}>{currentTime}</Text>
       </View>
+
+      <TokenRemainButton/>
 
       <Animated.View entering={FadeInDown.duration(1000)} style={styles.greetingWrapper}>
         <Text style={styles.greetingText}>👋 관리자님, 반갑습니다!</Text>
