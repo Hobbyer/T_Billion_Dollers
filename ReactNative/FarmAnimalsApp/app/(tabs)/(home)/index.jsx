@@ -16,6 +16,7 @@ import { refreshAccessToken } from "../../../apis/auth";
 import TokenRemainButton from "../../../components/common/TokenRemainButton";
 import { useAuth } from "../../../contexts/AuthContext";
 import LoginScreen from "../../auth/login";
+import { ScrollView } from "react-native";
 
 const HomeScreen = () => {
   const [currentTime, setCurrentTime] = useState("");
@@ -60,6 +61,7 @@ const HomeScreen = () => {
 
   return (
     <>
+    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 40 }}>
       {isAuthenticated ? (
         <LinearGradient
           colors={["#d0f0c0", "#a8e063"]}
@@ -129,6 +131,7 @@ const HomeScreen = () => {
       ) : (
         <LoginScreen />
       )}
+      </ScrollView>
     </>
   );
 };
