@@ -17,12 +17,11 @@ import {
 } from "react-native";
 import { GET, POST } from "@/apis/CRUD";
 import * as ImagePicker from "expo-image-picker";
-import { Picker } from "@react-native-picker/picker";
 import { Animated } from "react-native";
-import AntDesign from '@expo/vector-icons/AntDesign';
+import AntDesign from "@expo/vector-icons/AntDesign";
+import CustomDropdown from "@/components/common/CustomDropdown";
 import { GET_API, POST_API } from "../../../apis/testcrud";
 import { baseURL } from "../../../apis/CRUD";
-
 
 export default function ItemManageScreen() {
   const [categories, setCategories] = useState([]);
@@ -32,6 +31,10 @@ export default function ItemManageScreen() {
   const [newCat, setNewCat] = useState("");
   const [itemModal, setItemModal] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [confirmVisible, setConfirmVisible] = useState(false);
+  const [targetDeleteCode, setTargetDeleteCode] = useState(null);
+  const [itemConfirmVisible, setItemConfirmVisible] = useState(false);
+  const [itemErrorVisible, setItemErrorVisible] = useState(false);
 
   const [info, setInfo] = useState({
     cateCode: "",
@@ -87,7 +90,6 @@ export default function ItemManageScreen() {
   };
 
   const removeCategory = async (code) => {
-
     Alert.alert(
       "삭제 확인", // 제목
       "정말 삭제하시겠습니까?", // 내용
@@ -113,19 +115,35 @@ export default function ItemManageScreen() {
       ],
       { cancelable: true }
     );
+  };
 
+  const askDelete = (code) => {
+    setTargetDeleteCode(code);
+    setConfirmVisible(true);
+  };
+
+  const handleDelete = async () => {
+    try {
+      await POST(`${baseURL}/admin/categories/delete`, {
+        cateCode: targetDeleteCode,
+      });
+      setConfirmVisible(false);
+      fetchAll();
+    } catch (e) {
+      Alert.alert("오류", "카테고리 삭제 실패");
+    }
   };
 
   const DeleteButton = ({ onPress }) => {
     const scale = useState(new Animated.Value(1))[0];
-  
+
     const handlePressIn = () => {
       Animated.spring(scale, {
         toValue: 0.9,
         useNativeDriver: true,
       }).start();
     };
-  
+
     const handlePressOut = () => {
       Animated.spring(scale, {
         toValue: 1,
@@ -133,7 +151,7 @@ export default function ItemManageScreen() {
         useNativeDriver: true,
       }).start();
     };
-  
+
     return (
       <Animated.View style={{ transform: [{ scale }] }}>
         <TouchableOpacity
@@ -142,12 +160,11 @@ export default function ItemManageScreen() {
           onPress={onPress}
           style={styles.deleteButton}
         >
-            <AntDesign name="delete" size={24} color="#198754" />
+          <AntDesign name="delete" size={24} color="#198754" />
         </TouchableOpacity>
       </Animated.View>
     );
   };
-  
 
   const createItem = async () => {
     try {
@@ -156,10 +173,12 @@ export default function ItemManageScreen() {
         price: Number(info.price),
         stock: Number(info.stock),
       });
+      setItemConfirmVisible(true);
       resetItemForm();
       fetchAll();
     } catch (e) {
-      Alert.alert("오류", "상품 등록 실패");
+      console.error(e);
+      setItemErrorVisible(true);
     }
   };
 
@@ -193,10 +212,6 @@ export default function ItemManageScreen() {
     data: filteredItems.filter((i) => i.cateCode === cat.cateCode),
   }));
 
-  const [confirmVisible, setConfirmVisible] = useState(false);
-const [targetDeleteCode, setTargetDeleteCode] = useState(null);
-
-
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.row}>
@@ -226,7 +241,7 @@ const [targetDeleteCode, setTargetDeleteCode] = useState(null);
         keyExtractor={(item) => item.itemCode.toString()}
         renderSectionHeader={({ section }) => (
           <View style={styles.sectionHeaderBox}>
-            <Text style={styles.sectionHeaderText}>🥬 {section.title}</Text>
+            <Text style={styles.sectionHeaderText}>🥩 {section.title}</Text>
           </View>
         )}
         renderItem={({ item }) => (
@@ -254,119 +269,419 @@ const [targetDeleteCode, setTargetDeleteCode] = useState(null);
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={{ flex: 1 }}
         >
-          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            <SafeAreaView style={styles.modal}>
-              <Text style={styles.modalTitle}>카테고리 관리</Text>
+          <SafeAreaView style={styles.modal}>
+            <Text style={styles.modalTitle}>카테고리 관리</Text>
 
-              <TextInput
-                style={styles.input}
-                placeholder="새 카테고리명"
-                value={newCat}
-                onChangeText={setNewCat}
-              />
+            <TextInput
+              style={styles.input}
+              placeholder="새 카테고리명"
+              value={newCat}
+              onChangeText={setNewCat}
+            />
 
-              <TouchableOpacity
-                style={styles.modalButton}
-                onPress={addCategory}
-              >
-                <Text style={styles.modalButtonText}>등록</Text>
-              </TouchableOpacity>
+            <TouchableOpacity style={styles.modalButton} onPress={addCategory}>
+              <Text style={styles.modalButtonText}>등록</Text>
+            </TouchableOpacity>
 
-              <SectionList
-                sections={[{ title: "등록된 카테고리", data: categories }]}
-                keyExtractor={(cat) => cat.cateCode.toString()}
-                renderSectionHeader={({ section }) => (
-                  <View style={styles.sectionHeaderBox}>
-                    <Text style={styles.sectionHeaderText}>
-                      📦 {section.title}
-                    </Text>
-                  </View>
-                )}
-                renderItem={({ item }) => (
-                  <View style={styles.rowItem}>
-                    <Text style={styles.itemName}>{item.cateName}</Text>
-                    <DeleteButton onPress={()=>{removeCategory(item.cateCode)}} />
-                  </View>
-                )}
-              />
-
-              <TouchableOpacity
-                style={styles.modalButton}
-                onPress={() => setCatModal(false)}
-              >
-                <Text style={styles.modalButtonText}>닫기</Text>
-              </TouchableOpacity>
-            </SafeAreaView>
-          </ScrollView>
+            <SectionList
+              style={{ flex: 1 }}
+              contentContainerStyle={{ paddingBottom: 100 }}
+              sections={[{ title: "등록된 카테고리", data: categories }]}
+              keyExtractor={(cat) => cat.cateCode.toString()}
+              renderSectionHeader={({ section }) => (
+                <View style={styles.sectionHeaderBox}>
+                  <Text style={styles.sectionHeaderText}>
+                    📦 {section.title}
+                  </Text>
+                </View>
+              )}
+              renderItem={({ item }) => (
+                <View style={styles.rowItem}>
+                  <Text style={styles.itemName}>{item.cateName}</Text>
+                  <DeleteButton onPress={() => askDelete(item.cateCode)} />
+                </View>
+              )}
+              ListFooterComponent={
+                <TouchableOpacity
+                  style={styles.modalButton}
+                  onPress={() => setCatModal(false)}
+                >
+                  <Text style={styles.modalButtonText}>닫기</Text>
+                </TouchableOpacity>
+              }
+            />
+          </SafeAreaView>
         </KeyboardAvoidingView>
       </Modal>
 
-      {/* 상품 등록 모달 */}
-      <Modal visible={itemModal} animationType="slide">
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={{ flex: 1 }}
+      <Modal visible={itemConfirmVisible} transparent animationType="fade">
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            <SafeAreaView style={styles.modal}>
-              <Text style={styles.modalTitle}>상품 등록</Text>
+          <View
+            style={{
+              width: "80%",
+              backgroundColor: "#fff",
+              borderRadius: 16,
+              padding: 24,
+              alignItems: "center",
+              shadowColor: "#000",
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
+            }}
+          >
+            <View
+              style={{
+                width: 64,
+                height: 64,
+                borderRadius: 32,
+                backgroundColor: "#D1FAE5",
+                justifyContent: "center",
+                alignItems: "center",
+                marginBottom: 16,
+              }}
+            >
+              <AntDesign name="checkcircleo" size={32} color="#10B981" />
+            </View>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+                color: "#10B981",
+                marginBottom: 8,
+              }}
+            >
+              등록 완료!
+            </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                color: "#555",
+                textAlign: "center",
+                marginBottom: 20,
+              }}
+            >
+              상품이 성공적으로 등록되었습니다.
+            </Text>
 
-              <View style={styles.pickerContainer}>
-                <Picker
-                  style={styles.picker}
-                  dropdownIconColor="#4CAF50"
-                  selectedValue={info.cateCode}
-                  onValueChange={(itemValue) =>
-                    setInfo((i) => ({ ...i, cateCode: itemValue }))
-                  }
-                >
-                  <Picker.Item label="카테고리를 선택하세요" value="" />
-                  {categories.map((cat) => (
-                    <Picker.Item
-                      key={cat.cateCode}
-                      label={`📦 ${cat.cateName}`}
-                      value={cat.cateCode}
-                    />
-                  ))}
-                </Picker>
-              </View>
+            <TouchableOpacity
+              style={{
+                width: "100%",
+                backgroundColor: "#10B981",
+                paddingVertical: 10,
+                borderRadius: 8,
+                alignItems: "center",
+              }}
+              onPress={() => setItemConfirmVisible(false)}
+            >
+              <Text style={{ fontWeight: "bold", color: "white" }}>확인</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
-              {["itemName", "price", "stock", "seller", "description"].map(
-                (key) => (
-                  <TextInput
-                    key={key}
-                    style={styles.input}
-                    placeholder={key}
-                    value={info[key]}
-                    onChangeText={(v) => setInfo((i) => ({ ...i, [key]: v }))}
-                  />
-                )
-              )}
+      <Modal visible={itemErrorVisible} transparent animationType="fade">
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={{
+              width: "80%",
+              backgroundColor: "#fff",
+              borderRadius: 16,
+              padding: 24,
+              alignItems: "center",
+              shadowColor: "#000",
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
+            }}
+          >
+            <View
+              style={{
+                width: 64,
+                height: 64,
+                borderRadius: 32,
+                backgroundColor: "#FEE2E2",
+                justifyContent: "center",
+                alignItems: "center",
+                marginBottom: 16,
+              }}
+            >
+              <AntDesign name="closecircleo" size={32} color="#DC2626" />
+            </View>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+                color: "#DC2626",
+                marginBottom: 8,
+              }}
+            >
+              등록 실패!
+            </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                color: "#555",
+                textAlign: "center",
+                marginBottom: 20,
+              }}
+            >
+              상품 등록 중 오류가 발생했습니다.
+            </Text>
 
+            <TouchableOpacity
+              style={{
+                width: "100%",
+                backgroundColor: "#DC2626",
+                paddingVertical: 10,
+                borderRadius: 8,
+                alignItems: "center",
+              }}
+              onPress={() => setItemErrorVisible(false)}
+            >
+              <Text style={{ fontWeight: "bold", color: "white" }}>닫기</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* 상품 등록 모달 */}
+      <Modal visible={itemModal} transparent animationType="fade">
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={{
+              width: "90%",
+              backgroundColor: "#fff",
+              borderRadius: 16,
+              padding: 24,
+              alignItems: "center",
+              shadowColor: "#000",
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 22,
+                fontWeight: "bold",
+                color: "#10B981",
+                marginBottom: 16,
+              }}
+            >
+              📦 상품 등록
+            </Text>
+
+            {/* 카테고리 선택 */}
+            <CustomDropdown
+              items={categories}
+              selectedValue={info.cateCode}
+              onValueChange={(value) =>
+                setInfo((prev) => ({ ...prev, cateCode: value }))
+              }
+            />
+
+            {/* 상품 정보 입력 */}
+            {["itemName", "price", "stock", "seller", "description"].map(
+              (key) => (
+                <TextInput
+                  key={key}
+                  style={{
+                    width: "100%",
+                    borderWidth: 1,
+                    borderColor: "#ccc",
+                    borderRadius: 8,
+                    padding: 10,
+                    marginBottom: 10,
+                  }}
+                  placeholder={key}
+                  value={info[key]}
+                  onChangeText={(v) => setInfo((i) => ({ ...i, [key]: v }))}
+                />
+              )
+            )}
+
+            {/* 이미지 선택 버튼 */}
+            <TouchableOpacity
+              style={{
+                width: "100%",
+                borderWidth: 2,
+                borderColor: "#10B981",
+                borderRadius: 8,
+                paddingVertical: 12,
+                marginVertical: 10,
+                alignItems: "center",
+              }}
+              onPress={pickImage}
+            >
+              <Text style={{ fontWeight: "bold", color: "#10B981" }}>
+                🖼️ 이미지 선택
+              </Text>
+            </TouchableOpacity>
+
+            {/* 이미지 미리보기 */}
+            {image && (
+              <Image
+                source={{ uri: image }}
+                style={{
+                  width: 120,
+                  height: 120,
+                  marginVertical: 10,
+                  borderRadius: 10,
+                }}
+              />
+            )}
+
+            {/* 등록 / 닫기 버튼 */}
+            <View
+              style={{ flexDirection: "row", marginTop: 12, width: "100%" }}
+            >
               <TouchableOpacity
-                style={styles.selectImageButton}
-                onPress={pickImage}
+                style={{
+                  flex: 1,
+                  backgroundColor: "#10B981",
+                  paddingVertical: 12,
+                  borderRadius: 8,
+                  marginRight: 8,
+                  alignItems: "center",
+                }}
+                onPress={createItem}
               >
-                <Text style={styles.selectImageButtonText}>🖼️ 이미지 선택</Text>
-              </TouchableOpacity>
-
-              {image && (
-                <Image source={{ uri: image }} style={styles.imagePreview} />
-              )}
-
-              <TouchableOpacity style={styles.modalButton} onPress={createItem}>
-                <Text style={styles.modalButtonText}>등록</Text>
+                <Text style={{ fontWeight: "bold", color: "#fff" }}>등록</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={styles.modalButton}
+                style={{
+                  flex: 1,
+                  backgroundColor: "#E5E7EB",
+                  paddingVertical: 12,
+                  borderRadius: 8,
+                  alignItems: "center",
+                }}
                 onPress={resetItemForm}
               >
-                <Text style={styles.modalButtonText}>닫기</Text>
+                <Text style={{ fontWeight: "bold", color: "#374151" }}>
+                  닫기
+                </Text>
               </TouchableOpacity>
-            </SafeAreaView>
-          </ScrollView>
-        </KeyboardAvoidingView>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal visible={confirmVisible} transparent animationType="fade">
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={{
+              width: "80%",
+              backgroundColor: "#fff",
+              borderRadius: 16,
+              padding: 24,
+              alignItems: "center",
+              shadowColor: "#000",
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
+            }}
+          >
+            <View
+              style={{
+                width: 64,
+                height: 64,
+                borderRadius: 32,
+                backgroundColor: "#FEE2E2",
+                justifyContent: "center",
+                alignItems: "center",
+                marginBottom: 16,
+              }}
+            >
+              <AntDesign name="delete" size={32} color="#DC2626" />
+            </View>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+                color: "#DC2626",
+                marginBottom: 8,
+              }}
+            >
+              삭제할까요?
+            </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                color: "#555",
+                textAlign: "center",
+                marginBottom: 20,
+              }}
+            >
+              이 작업은 되돌릴 수 없습니다.
+            </Text>
+
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  flex: 1,
+                  backgroundColor: "#E5E7EB",
+                  paddingVertical: 10,
+                  borderRadius: 8,
+                  alignItems: "center",
+                  marginRight: 8,
+                }}
+                onPress={() => setConfirmVisible(false)}
+              >
+                <Text style={{ fontWeight: "bold", color: "#374151" }}>
+                  취소
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  flex: 1,
+                  backgroundColor: "#EF4444",
+                  paddingVertical: 10,
+                  borderRadius: 8,
+                  alignItems: "center",
+                }}
+                onPress={handleDelete}
+              >
+                <Text style={{ fontWeight: "bold", color: "white" }}>삭제</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
       </Modal>
     </SafeAreaView>
   );
