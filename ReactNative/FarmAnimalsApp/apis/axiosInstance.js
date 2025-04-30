@@ -2,8 +2,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
-import { refreshAccessToken } from './testcrud'; // refresh 토큰을 갱신하는 함수
-import { useNavigation } from '@react-navigation/native'; // 네비게이션을 이용해 로그인 화면으로 이동
+import { refreshAccessToken } from './auth'; // refresh 토큰을 갱신하는 함수
 
 
 const axiosInstance = axios.create({
@@ -27,12 +26,11 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,  // 응답이 정상일 경우 바로 반환
   async (error) => {
-    const originalRequest = error.config;
-    const navigation = useNavigation(); // 네비게이션 사용
+    const originalRequest = error.config; // 실패한 요청의 설정 정보
 
     // 401 에러가 발생하고, 재시도하지 않은 경우
     if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
+      originalRequest._retry = true; // 중복 요청 방지
 
       try {
         // refreshToken을 가져와서 새 accessToken 발급 시도

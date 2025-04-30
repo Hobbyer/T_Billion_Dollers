@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-<<<<<<< HEAD
   SafeAreaView,
   View,
   Text,
@@ -13,18 +12,9 @@ import { BarChart } from "react-native-chart-kit";
 import { GET } from "@/apis/CRUD";
 
 // const baseUrl = 'http://192.168.204.19:8080'; // Replace with your actual base URL
-const baseUrl = "http://10.0.2.2:8080";
-=======
-  SafeAreaView, View, Text, FlatList,
-  useWindowDimensions, StyleSheet, ActivityIndicator,
-} from 'react-native';
-import { BarChart } from 'react-native-chart-kit';
-import { GET_API } from '../../../apis/testcrud';
-
-// const baseUrl = 'http://192.168.204.19:8080'; // Replace with your actual base URL
->>>>>>> dev
 
 export default function SalesInfoScreen() {
+  const baseUrl = "http://10.0.2.2:8080";
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const { width } = useWindowDimensions();
@@ -33,14 +23,9 @@ export default function SalesInfoScreen() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-<<<<<<< HEAD
         const res = await GET(`${baseUrl}/admin/daily-orders`);
         console.log("✅ API 응답:", res.data);
         setData(Array.isArray(res.data) ? res.data : []);
-=======
-        const res = await GET_API(`/admin/daily-orders`);
-        setData(Array.isArray(res) ? res : []);
->>>>>>> dev
       } catch (e) {
         console.error("❌ API 에러:", e);
       } finally {

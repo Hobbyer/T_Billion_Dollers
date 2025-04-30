@@ -25,7 +25,9 @@ export default function MembersInfoScreen() {
     }
   };
 
-  useEffect(fetchAll, []);
+  useEffect(() => {
+    fetchAll();
+  }, []);
 
   const search = async () => {
     setLoading(true);
