@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {jwtDecode} from 'jwt-decode';
-import { StyleSheet, View, Text, Pressable, Alert } from 'react-native';
+import { StyleSheet, View, Text, Pressable, Alert, Modal } from 'react-native';
 import { refreshAccessToken } from '../../apis/auth'; // 정확한 경로에 맞게 수정
 
 
 const TokenRemainButton = () => {
   const [remaining, setRemaining] = useState(null);
+  const [extendSuccessVisible, setExtendSuccessVisible] = useState(false);
+const [extendErrorVisible, setExtendErrorVisible] = useState(false);
+
 
   const updateRemainingTime = async () => {
     const token = await AsyncStorage.getItem('accessToken');
@@ -62,33 +65,163 @@ const TokenRemainButton = () => {
       await AsyncStorage.setItem('accessToken', newAccessToken);
       await updateRemainingTime();
 
-      Alert.alert('성공', 'AccessToken이 연장되었습니다.');
+      setExtendSuccessVisible(true); // 연장 성공 시 알림
     } catch (e) {
       console.error('리프레시 실패', e);
-      Alert.alert('실패', 'AccessToken 연장 실패');
+      setExtendErrorVisible(true); // 연장 실패 시 알림
     }
   };
   return (
     <View style={{ padding: 20 }}>
-    <Text style={{ fontSize: 16, marginBottom: 10 }}>
-      남은 시간: {remaining}
-    </Text>
+    <View style={styles.tokenBox}>
+  <Text style={styles.tokenText}>🔒 남은 시간: {remaining}</Text>
+  <Pressable style={styles.tokenButton} onPress={handleRefresh}>
+    <Text style={styles.tokenButtonText}>⏳ 연장</Text>
+  </Pressable>
+</View>
 
-    <Pressable
-      onPress={handleRefresh}
-      style={{
-        padding: 10,
-        backgroundColor: '#3F7D58',
-        borderRadius: 8,
-        alignItems: 'center',
-      }}
-    >
-      <Text style={{ color: 'white' }}>연장하기</Text>
-    </Pressable>
+
+    {/* ✅ 성공 모달 */}
+    <Modal transparent visible={extendSuccessVisible} animationType="fade">
+        <View style={styles.overlay}>
+          <View style={styles.modalBox}>
+            <View style={styles.iconBoxSuccess}>
+              <Text style={styles.iconText}>🐮</Text>
+            </View>
+            <Text style={styles.modalTitleSuccess}>연장 성공</Text>
+            <Text style={styles.modalMessage}>AccessToken이 성공적으로 갱신되었습니다.</Text>
+            <Pressable style={styles.successBtn} onPress={() => setExtendSuccessVisible(false)}>
+              <Text style={styles.successBtnText}>확인</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+
+      {/* ❌ 실패 모달 */}
+      <Modal transparent visible={extendErrorVisible} animationType="fade">
+        <View style={styles.overlay}>
+          <View style={styles.modalBox}>
+            <View style={styles.iconBoxError}>
+              <Text style={styles.iconText}>❌</Text>
+            </View>
+            <Text style={styles.modalTitleError}>연장 실패</Text>
+            <Text style={styles.modalMessage}>AccessToken 연장에 실패했습니다.</Text>
+            <Pressable style={styles.errorBtn} onPress={() => setExtendErrorVisible(false)}>
+              <Text style={styles.errorBtnText}>닫기</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
   </View>
   )
 }
 
 export default TokenRemainButton
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalBox: {
+    width: '80%',
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 24,
+    alignItems: 'center',
+    elevation: 6,
+  },
+  iconBoxSuccess: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: '#D1FAE5',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  iconBoxError: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: '#FEE2E2',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  iconText: {
+    fontSize: 30,
+  },
+  modalTitleSuccess: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#10B981',
+    marginBottom: 6,
+  },
+  modalTitleError: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#DC2626',
+    marginBottom: 6,
+  },
+  modalMessage: {
+    fontSize: 14,
+    color: '#555',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  successBtn: {
+    backgroundColor: '#10B981',
+    paddingVertical: 10,
+    width: '100%',
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  successBtnText: {
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  errorBtn: {
+    backgroundColor: '#DC2626',
+    paddingVertical: 10,
+    width: '100%',
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  errorBtnText: {
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  
+  tokenBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#F1F8E9',
+    borderWidth: 1,
+    borderColor: '#C5E1A5',
+    borderRadius: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    marginBottom: 12,
+  },
+  tokenText: {
+    fontSize: 14,
+    color: '#33691E',
+  },
+  tokenButton: {
+    backgroundColor: '#C8E6C9',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+  },
+  tokenButtonText: {
+    fontWeight: 'bold',
+    color: '#2E7D32',
+    fontSize: 13,
+    fontWeight: '600',
+  },
+
+})

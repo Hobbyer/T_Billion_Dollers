@@ -22,20 +22,43 @@ export default function SalesManageScreen() {
 
   return (
     <Tab.Navigator
-      initialRouteName={currentTab}
-      screenOptions={{
-        unmountOnBlur: true,
-        swipeEnabled: true,
-        tabBarScrollEnabled: true,
-        tabBarIndicatorStyle: { backgroundColor: '#3F7D58' },
-        tabBarLabelStyle: { fontSize: 12, textTransform: 'none' },
-        tabBarItemStyle: { width: 100 },
-      }}
-    >
-      <Tab.Screen name="info" component={SalesInfoScreen} options={{ tabBarLabel: '매출정보' }} />
-      <Tab.Screen name="items" component={ItemManageScreen} options={{ tabBarLabel: '상품관리' }} />
-      <Tab.Screen name="orders" component={OrdersInfoScreen} options={{ tabBarLabel: '주문정보' }} />
-      <Tab.Screen name="members" component={MembersInfoScreen} options={{ tabBarLabel: '회원정보' }} />
-    </Tab.Navigator>
+  initialRouteName={currentTab}
+  screenOptions={{
+    unmountOnBlur: true,
+    swipeEnabled: true,
+    tabBarScrollEnabled: false,
+    tabBarActiveTintColor: '#2E7D32',
+    tabBarInactiveTintColor: '#888',
+    tabBarPressColor: 'transparent',
+    tabBarLabelStyle: {
+      fontSize: 14,
+      fontWeight: 'bold',
+      textTransform: 'none',
+    },
+    tabBarItemStyle: {
+      paddingVertical: 10,
+    },
+    tabBarIndicatorStyle: {
+      backgroundColor: '#2E7D32',
+      height: 3,
+      borderRadius: 2,
+    },
+    tabBarStyle: {
+      backgroundColor: '#F1F8E9', // 연초록 배경
+      borderBottomColor: '#C8E6C9',
+      borderBottomWidth: 1,
+      shadowColor: '#000',
+      shadowOpacity: 0.05,
+      shadowOffset: { width: 0, height: 2 },
+      elevation: 4,
+    },
+  }}
+>
+  <Tab.Screen name="info" component={SalesInfoScreen} options={{ tabBarLabel: '매출정보' }} />
+  <Tab.Screen name="items" component={ItemManageScreen} options={{ tabBarLabel: '상품관리' }} />
+  <Tab.Screen name="orders" component={OrdersInfoScreen} options={{ tabBarLabel: '주문정보' }} />
+  <Tab.Screen name="members" component={MembersInfoScreen} options={{ tabBarLabel: '회원정보' }} />
+</Tab.Navigator>
+
   );
 }

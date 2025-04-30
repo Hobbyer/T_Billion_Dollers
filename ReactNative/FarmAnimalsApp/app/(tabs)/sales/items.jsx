@@ -18,13 +18,9 @@ import {
 import { GET, POST } from "@/apis/CRUD";
 import * as ImagePicker from "expo-image-picker";
 import { Animated } from "react-native";
-<<<<<<< HEAD
 import AntDesign from "@expo/vector-icons/AntDesign";
 import CustomDropdown from "@/components/common/CustomDropdown";
-=======
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { GET_API, POST_API } from "../../../apis/testcrud";
->>>>>>> dev
 
 const baseUrl = "http://10.0.2.2:8080";
 
@@ -85,12 +81,18 @@ export default function ItemManageScreen() {
   }, []);
 
   const addCategory = async () => {
+    if (!newCat.trim()) {
+      Alert.alert("오류", "카테고리명을 입력하세요.");
+      return; 
+    }
     try {
       await POST_API(`/admin/categories`, { cateName: newCat });
       setCatModal(false);
       fetchAll();
+      setNewCat("");
     } catch (e) {
       Alert.alert("오류", "카테고리 등록 실패");
+      setNewCat("");
     }
   };
 
@@ -267,7 +269,7 @@ export default function ItemManageScreen() {
             </View>
           </TouchableOpacity>
         )}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        ItemSeparatorComponent={() => null}
       />
 
       {/* 카테고리 관리 모달 */}
@@ -281,11 +283,11 @@ export default function ItemManageScreen() {
               <Text style={styles.modalTitle}>카테고리 관리</Text>
 
               <TextInput
-                style={styles.input}
-                placeholder="새 카테고리명"
-                value={newCat}
-                onChangeText={setNewCat}
-              />
+  style={styles.categoryInput}
+  placeholder="카테고리명을 입력하세요."
+  value={newCat}
+  onChangeText={setNewCat}
+/>
 
               <TouchableOpacity
                 style={styles.modalButton}
@@ -781,5 +783,16 @@ const styles = StyleSheet.create({
     color: "#C62828",
     fontWeight: "bold",
     fontSize: 14,
+  },
+  categoryInput: {
+    borderWidth: 1,
+    borderColor: "#66BB6A",
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 16,
+    backgroundColor: "#F1F8E9",
+    fontSize: 16,
+    color: "#2E7D32",
+    marginTop: 10,
   },
 });

@@ -1,17 +1,24 @@
 // app/sales/members.jsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
-  SafeAreaView, View, Text, FlatList,
-  TextInput, Button, StyleSheet, ActivityIndicator,
-} from 'react-native';
-import { GET_API } from '../../../apis/testcrud';
+  SafeAreaView,
+  View,
+  Text,
+  FlatList,
+  TextInput,
+  Button,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
+import { GET_API } from "../../../apis/testcrud";
+import { Pressable } from "react-native";
 
 // const baseUrl = 'http://192.168.204.19:8080';
 
 export default function MembersInfoScreen() {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [kw, setKw]           = useState('');
+  const [kw, setKw] = useState("");
 
   const fetchAll = async () => {
     setLoading(true);
@@ -30,7 +37,9 @@ export default function MembersInfoScreen() {
   const search = async () => {
     setLoading(true);
     try {
-      const res = await GET_API(`/admin/members/search?keyword=${kw}&page=0&size=5`);
+      const res = await GET_API(
+        `/admin/members/search?keyword=${kw}&page=0&size=5`
+      );
       setMembers(res);
     } catch (e) {
       console.error(e);
@@ -48,37 +57,38 @@ export default function MembersInfoScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={styles.searchRow}>
-        <Text>회원 수: {members.length}명</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="회원 검색"
-          value={kw}
-          onChangeText={setKw}
-        />
-        <Button title="검색" onPress={search} />
+    <SafeAreaView style={{flex: 1, backgroundColor: '#F0FDF4' }}>
+      <View style={styles.topSection}>
+        <Text style={styles.memberCount}>총 회원 수: {members.length}명</Text>
+        <View style={styles.searchBox}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="이름, ID, 전화번호로 검색"
+            value={kw}
+            onChangeText={setKw}
+          />
+          <Pressable style={styles.searchBtn} onPress={search}>
+            <Text style={styles.searchBtnText}>검색</Text>
+          </Pressable>
+        </View>
       </View>
 
       <FlatList
         data={members}
-        keyExtractor={(_,i) => i.toString()}
-        ListHeaderComponent={() => (
-          <View style={[styles.row, styles.headerRow]}>
-            {['#','ID','이름','전화','이메일','주소','권한'].map((h,i)=>(
-              <Text key={i} style={styles.headerCell}>{h}</Text>
-            ))}
-          </View>
-        )}
-        renderItem={({ item, index }) => (
-          <View style={styles.row}>
-            <Text style={styles.cell}>{members.length - index}</Text>
-            <Text style={styles.cell2}>{item.userId}</Text>
-            <Text style={styles.cell2}>{item.name}</Text>
-            <Text style={styles.cell2}>{item.phoneNumber}</Text>
-            <Text style={styles.cell2}>{item.email}</Text>
-            <Text style={styles.cell2}>{item.address}</Text>
-            <Text style={styles.cell2}>{item.authority}</Text>
+        keyExtractor={(item, idx) => idx.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.memberCard}>
+            <View style={styles.memberHeader}>
+              <Text style={styles.memberName}>{item.name}</Text>
+              <Text style={styles.memberRole}>
+  {item.authority === 'ROLE_ADMIN' ? '👑 관리자' : '🙋‍♂️ 일반회원'}
+</Text>
+
+            </View>
+            <Text style={styles.memberInfo}>📌 ID: {item.userId}</Text>
+            <Text style={styles.memberInfo}>📞 {item.phoneNumber}</Text>
+            <Text style={styles.memberInfo}>📧 {item.email}</Text>
+            <Text style={styles.memberInfo}>🏡 {item.address}</Text>
           </View>
         )}
       />
@@ -87,13 +97,73 @@ export default function MembersInfoScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe:      { flex:1, backgroundColor:'#fff' },
-  loader:    { flex:1, justifyContent:'center', alignItems:'center' },
-  searchRow: { flexDirection:'row', alignItems:'center', padding:16, justifyContent:'space-between' },
-  input:     { flex:1, borderWidth:1, borderColor:'#ccc', borderRadius:4, padding:8, marginHorizontal:8 },
-  row:       { flexDirection:'row', padding:12, borderBottomWidth:1, borderColor:'#eee' },
-  headerRow: { backgroundColor:'#f0f0f0' },
-  cell:      { width:30, textAlign:'center', fontWeight:'bold' },
-  cell2:     { flex:1, textAlign:'center' },
-  headerCell:{ flex:1, textAlign:'center', fontWeight:'bold' },
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  topSection: {
+    padding: 16,
+    backgroundColor: '#E8F5E9',
+  },
+  memberCount: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#2E7D32',
+    marginBottom: 8,
+  },
+  searchBox: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  searchInput: {
+    flex: 1,
+    padding: 10,
+    fontSize: 14,
+  },
+  searchBtn: {
+    backgroundColor: '#10B981',
+    paddingHorizontal: 16,
+    justifyContent: 'center',
+  },
+  searchBtnText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  memberCard: {
+    backgroundColor: '#fff',
+    marginHorizontal: 16,
+    marginTop: 12,
+    padding: 16,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOpacity: 0.06,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 2,
+    borderLeftWidth: 5,
+    borderLeftColor: '#66BB6A',
+  },
+  memberHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  memberName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#1B5E20',
+  },
+  memberRole: {
+    fontSize: 12,
+    color: '#10B981',
+    fontWeight: '600',
+  },
+  memberInfo: {
+    fontSize: 14,
+    color: '#333',
+    marginBottom: 2,
+  },
 });
