@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Alert,
   Pressable,
+  Modal,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
@@ -20,6 +21,8 @@ import LoginScreen from "../../auth/login";
 const HomeScreen = () => {
   const [currentTime, setCurrentTime] = useState("");
   const router = useRouter();
+  const [logoutModalVisible, setLogoutModalVisible] = useState(false);
+
   const { isAuthenticated } = useAuth(); // 로그인 상태 확인
 
   useEffect(() => {
@@ -37,95 +40,133 @@ const HomeScreen = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // 로그아웃 처리 함수
-  const handleLogout = async () => {
-    Alert.alert("로그아웃", "정말 로그아웃 하시겠습니까?", [
-      { text: "취소", style: "cancel" },
-      {
-        text: "확인",
-        onPress: async () => {
-          // AsyncStorage에서 토큰 제거
-          await AsyncStorage.removeItem("accessToken");
-          await AsyncStorage.removeItem("refreshToken");
+ // 로그아웃 처리 함수
+ const handleLogout = async () => {
+  setLogoutModalVisible(true);
+};
 
-          // 로그인 화면으로 이동
-          router.replace("/auth/login");
-        },
-      },
-    ]);
-  };
+const confirmLogout = async () => {
+  await AsyncStorage.removeItem('accessToken');
+  await AsyncStorage.removeItem('refreshToken');
+  setLogoutModalVisible(false);
+  router.replace('/auth/login');
+};
 
 
  
 
+
   return (
     <>
       {isAuthenticated ? (
-        <LinearGradient
-          colors={["#d0f0c0", "#a8e063"]}
-          style={styles.container}
-        >
+        <View style={{ flex: 1 }}>
+        <LinearGradient colors={["#d0f0c0", "#a8e063"]} style={styles.container}>
           <View style={styles.topBar}>
             <TouchableOpacity onPress={handleLogout}>
               <Ionicons name="power" size={28} color="#2e7d32" />
             </TouchableOpacity>
           </View>
-
+    
           <View style={styles.timeWrapper}>
             <Ionicons name="time" size={20} color="#2e7d32" />
             <Text style={styles.timeText}>{currentTime}</Text>
           </View>
-
-          <TokenRemainButton />
-
-          <Animated.View
-            entering={FadeInDown.duration(1000)}
-            style={styles.greetingWrapper}
-          >
+    
+          <TokenRemainButton/>
+    
+          <Animated.View entering={FadeInDown.duration(1000)} style={styles.greetingWrapper}>
             <Text style={styles.greetingText}>👋 관리자님, 반갑습니다!</Text>
           </Animated.View>
-
+    
           <View style={styles.cardsWrapper}>
-            <InfoCard
-              icon={<Ionicons name="thermometer" size={24} color="#ffffff" />}
-              label="센서 데이터"
-              value="24℃ / 60%"
-            />
-            <InfoCard
-              icon={
-                <MaterialCommunityIcons
-                  name="account-group"
-                  size={24}
-                  color="#ffffff"
-                />
-              }
-              label="회원 수"
-              value="53명"
-            />
-            <InfoCard
-              icon={<Ionicons name="notifications" size={24} color="#ffffff" />}
-              label="알림"
-              value="3건"
-            />
-            <InfoCard
-              icon={
-                <MaterialCommunityIcons
-                  name="package-variant"
-                  size={24}
-                  color="#ffffff"
-                />
-              }
-              label="주문 수"
-              value="7건"
-            />
+            <InfoCard icon={<Ionicons name="thermometer" size={24} color="#ffffff" />} label="센서 데이터" value="24℃ / 60%" />
+            <InfoCard icon={<MaterialCommunityIcons name="account-group" size={24} color="#ffffff" />} label="회원 수" value="53명" />
+            <InfoCard icon={<Ionicons name="notifications" size={24} color="#ffffff" />} label="알림" value="3건" />
+            <InfoCard icon={<MaterialCommunityIcons name="package-variant" size={24} color="#ffffff" />} label="주문 수" value="7건" />
           </View>
-
+    
           <View style={styles.footerWrapper}>
-            <Text style={styles.footerText}>
-              📢 오늘도 최선을 다하는 FarmDAS ✨
-            </Text>
+            <Text style={styles.footerText}>📢 오늘도 최선을 다하는 FarmDAS ✨</Text>
           </View>
         </LinearGradient>
+    
+    {logoutModalVisible && (
+      <Modal transparent animationType="fade" visible>
+        <View style={{
+          flex: 1,
+          backgroundColor: "rgba(0,0,0,0.5)",
+          justifyContent: "center",
+          alignItems: "center"
+        }}>
+          <View style={{
+            width: "80%",
+            backgroundColor: "#fff",
+            borderRadius: 16,
+            padding: 24,
+            alignItems: "center",
+            shadowColor: "#000",
+            shadowOpacity: 0.25,
+            shadowRadius: 4,
+            elevation: 5,
+          }}>
+            <View style={{
+              width: 64,
+              height: 64,
+              borderRadius: 32,
+              backgroundColor: "#E0F2F1",
+              justifyContent: "center",
+              alignItems: "center",
+              marginBottom: 16,
+            }}>
+              <Ionicons name="power" size={32} color="#2e7d32" />
+            </View>
+    
+            <Text style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              color: "#2e7d32",
+              marginBottom: 8,
+            }}>로그아웃 하시겠습니까?</Text>
+    
+            <Text style={{
+              fontSize: 14,
+              color: "#555",
+              textAlign: "center",
+              marginBottom: 20,
+            }}>정말로 로그아웃하시려면 확인을 눌러주세요.</Text>
+    
+            <View style={{ flexDirection: "row", gap: 10 }}>
+              <Pressable
+                style={{
+                  flex: 1,
+                  backgroundColor: "#E0E0E0",
+                  paddingVertical: 10,
+                  borderRadius: 8,
+                  alignItems: "center"
+                }}
+                onPress={() => setLogoutModalVisible(false)}
+              >
+                <Text style={{ fontWeight: "bold", color: "#333" }}>취소</Text>
+              </Pressable>
+    
+              <Pressable
+                style={{
+                  flex: 1,
+                  backgroundColor: "#2e7d32",
+                  paddingVertical: 10,
+                  borderRadius: 8,
+                  alignItems: "center"
+                }}
+                onPress={confirmLogout}
+              >
+                <Text style={{ fontWeight: "bold", color: "white" }}>확인</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    )}
+      </View>
       ) : (
         <LoginScreen />
       )}
