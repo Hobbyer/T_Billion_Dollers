@@ -21,8 +21,8 @@ import { Picker } from "@react-native-picker/picker";
 import { Animated } from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { GET_API, POST_API } from "../../../apis/testcrud";
+import { baseURL } from "../../../apis/CRUD";
 
-const baseUrl = "http://10.0.2.2:8080";
 
 export default function ItemManageScreen() {
   const [categories, setCategories] = useState([]);
@@ -93,15 +93,15 @@ export default function ItemManageScreen() {
       "정말 삭제하시겠습니까?", // 내용
       [
         {
-          text: "취소", // ❌ 취소
+          text: "취소", //  취소
           style: "cancel",
         },
         {
-          text: "삭제", // ✅ 삭제
+          text: "삭제", //  삭제
           style: "destructive",
           onPress: async () => {
             try {
-              await POST(`${baseUrl}/admin/categories/delete`, {
+              await POST_API(`/admin/categories/delete`, {
                 cateCode: code,
               });
               fetchAll();
