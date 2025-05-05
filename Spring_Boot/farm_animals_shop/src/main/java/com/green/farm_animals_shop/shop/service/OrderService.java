@@ -13,4 +13,6 @@ public interface OrderService {
   List<OrderDTO> getOrdersByUserId(String userId); // 사용자 ID로 주문 내역 조회
 
   List<DailyOrderSummaryDTO> getDailyOrderSummary(); // 최근 7일간의 주문 요약 정보 조회
+
+  List<OrderDTO> getAllOrders(); // 모든 주문 내역 조회
 }

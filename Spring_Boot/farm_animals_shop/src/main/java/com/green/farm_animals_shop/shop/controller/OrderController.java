@@ -35,4 +35,10 @@ public class OrderController {
     List<OrderDTO> orders = orderService.getOrdersByUserId(userId);
     return ResponseEntity.ok(orders);
   }
+
+  @GetMapping("")
+  public ResponseEntity<?> getAllOrders() {
+    List<OrderDTO> orders = orderService.getAllOrders();
+    return ResponseEntity.ok(orders);
+  }
 }

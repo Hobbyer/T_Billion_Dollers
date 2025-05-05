@@ -9,6 +9,10 @@ import {
   Spinner,
   Offcanvas,
 } from 'react-bootstrap'
+import { GET } from '../../apis/CRUD';
+import dayjs from 'dayjs';
+
+const baseURL = import.meta.env.VITE_API_URL;
 
 const OrdersInfo = () => {
   const [orders, setOrders] = useState([])
@@ -17,43 +21,36 @@ const OrdersInfo = () => {
   const [selectedOrder, setSelectedOrder] = useState(null)
 
   useEffect(() => {
-    // 실제 API 호출로 교체하세요.
-    const mockData = [
-      {
-        orderDate: '2024-06-01',
-        orderNumber: 'TB1001',
-        userId: 'user01',
-        userName: '홍길동',
-        contact: '010-1234-5678',
-        address: '서울시 강남구 역삼동',
-        totalPrice: 22000,
-        orderStatus: '결제완료',
-        shippingStatus: '배송준비중',
-        items: [
-          { productName: '닭 모이', qty: 2, price: 5000 },
-          { productName: '소 돼지 사료', qty: 1, price: 12000 },
-        ],
-      },
-      {
-        orderDate: '2024-06-02',
-        orderNumber: 'TB1002',
-        userId: 'user02',
-        userName: '김철수',
-        contact: '010-8765-4321',
-        address: '부산시 해운대구',
-        totalPrice: 24000,
-        orderStatus: '취소',
-        shippingStatus: '-',
-        items: [
-          { productName: '말 건초', qty: 3, price: 8000 },
-        ],
-      },
-    ]
+    
+    setLoading(true);
 
-    setTimeout(() => {
-      setOrders(mockData)
-      setLoading(false)
-    }, 500)
+  Promise.all([
+    GET(`${baseURL}/orders`),
+    GET(`${baseURL}/admin/members`)
+  ])
+    .then(([ordersRes, membersRes]) => {
+      const orders = ordersRes.data;
+      const members = membersRes.data;
+
+      const enrichedOrders = orders.map((order) => {
+        const member = members.find((m) => m.userId === order.userId);
+        return {
+          ...order,
+          userName: member?.name ?? 'Unknown',
+          contact: member?.phoneNumber ?? 'Unknown',
+          address: member?.address ?? 'Unknown',
+        };
+      });
+
+      setOrders(enrichedOrders);
+    })
+    .catch((err) => {
+      console.error('데이터 로딩 실패:', err);
+    })
+    .finally(() => {
+      setLoading(false);
+    })
+
   }, [])
 
   const handleShow = (order) => {
@@ -95,11 +92,11 @@ const OrdersInfo = () => {
         </thead>
         <tbody>
           {orders.map((o, idx) => (
-            <tr key={o.orderNumber + idx}>
-              <td>{o.orderDate}</td>
+            <tr key={idx}>
+              <td>{dayjs(o.orderDate).format('YYYY-MM-DD HH:mm:ss')}</td>
               <td>
                 <Button variant="link" className="p-0" onClick={() => handleShow(o)}>
-                  {o.orderNumber}
+                  {o.orderId}
                 </Button>
               </td>
               <td>{o.userId}</td>
@@ -109,13 +106,17 @@ const OrdersInfo = () => {
               <td>{o.totalPrice.toLocaleString()}원</td>
               <td>
                 <Badge bg={
-                  o.orderStatus === '결제완료'
+                  o.orderStatus === 'CREATED'
                     ? 'success'
                     : o.orderStatus === '취소'
                     ? 'danger'
                     : 'secondary'
                 }>
-                  {o.orderStatus}
+                  {
+                  o.orderStatus === 'CREATED'
+                    ? '결제완료'
+                    : o.orderStatus === '취소'
+                  }
                 </Badge>
               </td>
               <td>
