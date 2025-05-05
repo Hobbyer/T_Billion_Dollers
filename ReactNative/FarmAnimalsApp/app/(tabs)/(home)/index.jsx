@@ -27,6 +27,7 @@ const HomeScreen = () => {
   const { isAuthenticated } = useAuth(); // 로그인 상태 확인
 
   useEffect(() => {
+    fetch()
     const timer = setInterval(() => {
       const now = new Date();
       const dateStr = now.toLocaleDateString("ko-KR", {

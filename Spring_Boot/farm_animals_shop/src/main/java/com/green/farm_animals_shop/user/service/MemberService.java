@@ -71,4 +71,9 @@ public class MemberService {
 
     return memberRepository.save(member);
   }
+
+  // 회원 수 조회
+  public int getMemberCount(){
+    return (int) memberRepository.countUser();
+  }
 }

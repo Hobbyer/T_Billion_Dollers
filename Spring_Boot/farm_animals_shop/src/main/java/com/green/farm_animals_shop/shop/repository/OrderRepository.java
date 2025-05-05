@@ -1,6 +1,7 @@
 package com.green.farm_animals_shop.shop.repository;
 
 import com.green.farm_animals_shop.shop.dto.DailyOrderSummaryDTO;
+import com.green.farm_animals_shop.shop.dto.OrderDTO;
 import com.green.farm_animals_shop.shop.entity.OrderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,4 +20,17 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
       LIMIT 7
       """, nativeQuery = true)
   List<Object[]> findDailyOrderSummaryRaw();
+
+  @Query(value = """
+      SELECT new com.green.farm_animals_shop.shop.dto.OrderDTO(
+        o.orderId,
+        o.totalPrice,
+        o.orderStatus,
+        o.orderDate,
+        o.user.userId
+      )
+      FROM OrderEntity o
+      ORDER BY o.orderDate DESC
+      """)
+  List<OrderDTO> findAllAsDTO(); // 모든 주문 내역 조회
 }

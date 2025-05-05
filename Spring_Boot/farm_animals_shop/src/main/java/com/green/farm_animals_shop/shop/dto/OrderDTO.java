@@ -21,4 +21,13 @@ public class OrderDTO {
   private Integer totalPrice; // 총 주문 금액
   private OrderStatus orderStatus;
   private LocalDateTime orderDate; // 주문 날짜
+  private String userId; // 주문자 ID
+
+  public OrderDTO(Long orderId, Integer totalPrice, OrderStatus orderStatus, LocalDateTime orderDate, String userId) {
+    this.orderId = orderId;
+    this.totalPrice = totalPrice;
+    this.orderStatus = orderStatus;
+    this.orderDate = orderDate;
+    this.userId = userId;
+  }
 }

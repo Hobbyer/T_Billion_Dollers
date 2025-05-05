@@ -90,4 +90,9 @@ public class OrderServiceImpl implements OrderService {
         ))
         .toList();
   }
+
+  @Override
+  public List<OrderDTO> getAllOrders() {
+    return orderRepository.findAllAsDTO();
+  }
 }
