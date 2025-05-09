@@ -1,8 +1,9 @@
 // src/apis/axiosInstance.js
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert } from 'react-native';
+import { Alert, InteractionManager } from 'react-native';
 import { refreshAccessToken } from './auth'; // refresh 토큰을 갱신하는 함수
+import { router } from 'expo-router';
 
 
 const axiosInstance = axios.create({
@@ -32,29 +33,41 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true; // 중복 요청 방지
 
-      try {
-        // refreshToken을 가져와서 새 accessToken 발급 시도
-        const refreshToken = await AsyncStorage.getItem('refreshToken');
-        const response = await refreshAccessToken(refreshToken);
+      const accessToken = await AsyncStorage.getItem('accessToken');
 
-        const newAccessToken = response.accessToken;
-        await AsyncStorage.setItem('accessToken', newAccessToken);
-
-        // 새로운 accessToken으로 원래 요청 재발송
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        return axiosInstance(originalRequest); // 재요청
-      } catch (refreshError) {
-        console.error('리프레시 토큰 실패', refreshError);
-
-        // 리프레시 토큰도 실패하면 로그아웃 처리
-        await AsyncStorage.removeItem('accessToken');
-        await AsyncStorage.removeItem('refreshToken');
-
-        Alert.alert('로그아웃', '세션이 만료되었습니다. 다시 로그인 해주세요.');
-
-        // 로그인 화면으로 리디렉션
-        return Promise.reject(refreshError);
+      if(accessToken){
+        try {
+          // refreshToken을 가져와서 새 accessToken 발급 시도
+          const refreshToken = await AsyncStorage.getItem('refreshToken');
+          const response = await refreshAccessToken(refreshToken);
+  
+          const newAccessToken = response.accessToken;
+          await AsyncStorage.setItem('accessToken', newAccessToken);
+  
+          // 새로운 accessToken으로 원래 요청 재발송
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return axiosInstance(originalRequest); // 재요청
+        } catch (refreshError) {
+          console.error('리프레시 토큰 실패', refreshError);
+  
+          // 리프레시 토큰도 실패하면 로그아웃 처리
+          await AsyncStorage.removeItem('accessToken');
+          await AsyncStorage.removeItem('refreshToken');
+  
+          Alert.alert('로그아웃', '세션이 만료되었습니다. 다시 로그인 해주세요.');
+  
+          //router.replace("/auth/login")
+          // 로그인 화면으로 리디렉션
+  
+          InteractionManager.runAfterInteractions(() => {
+            router.replace("/auth/login");
+          });
+  
+          return Promise.reject(refreshError);
+        }
       }
+
+   
     }
 
     return Promise.reject(error); // 다른 에러들은 그대로 처리
