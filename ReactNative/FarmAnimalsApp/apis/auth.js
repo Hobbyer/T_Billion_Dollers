@@ -10,6 +10,7 @@ export const login = async (loginForm) => {
     // 직접 axiosInstance.post를 사용
     const response = await axiosInstance.post('/auth/login', loginForm); // 수정된 부분
     const { accessToken, refreshToken } = response.data;
+    console.log(accessToken, refreshToken);
 
     // 로그인 성공 시 토큰을 AsyncStorage에 저장
     await AsyncStorage.setItem('accessToken', accessToken);
@@ -30,6 +31,7 @@ export const refreshAccessToken = async (refreshToken) => {
     
     return response.data; // 갱신된 토큰 반환
   } catch (error) {
+    console.log(444)
     console.error('리프레시 토큰 실패:', error);
     throw error; // 리프레시 토큰 실패 시 에러 반환
   }

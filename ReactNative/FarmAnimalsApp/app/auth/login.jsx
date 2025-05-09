@@ -31,6 +31,7 @@ export default function LoginScreen() {
     try {
       const response = await login(loginForm);
       setLoginSuccessVisible(true);
+      //router.replace("/")
     } catch (error) {
       setLoginErrorVisible(true);
     }
@@ -130,7 +131,11 @@ export default function LoginScreen() {
                 }}
                 onPress={() => {
                   setLoginSuccessVisible(false);
-                  router.push("/");
+                  setTimeout(() => {
+                    console.log(111111111);
+                    
+                    router.replace("/");
+                  }, 300); // 0.3초 정도 지연시켜 모달이 닫힌 후 이동하도록 함
                 }}
               >
                 <Text style={{ fontWeight: "bold", color: "white" }}>확인</Text>
