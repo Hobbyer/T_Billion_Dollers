@@ -70,7 +70,7 @@ const WebItemList = () => {
   const cateCode = categoryMap[category];
 
    // 카테고리 이름을 화면에 표시하기 위한 매핑
-   const categoryNames = {
+  const categoryNames = {
     beef: "한우",
     pork: "양돈",
     set: "세트",
@@ -117,7 +117,7 @@ const isHome = location.pathname === "/farmdas" || location.pathname === "/farmd
       `}
       </style>
 
-<div >
+      <div >
         {/* 카테고리 이름과 상품 갯수 표시 */}
         {!isHome&&<div className="d-flex mt-3 border p-3 rounded">
           {categoryNames[category]} 전체 상품 ({itemList.length})

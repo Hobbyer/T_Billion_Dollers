@@ -74,7 +74,7 @@ function App() {
         {/* 관리자 회원처리 */}
         <Route path="/auth/login" element={<Login />} />
         {/* <Route path='/auth/signup' element={<Signup/>}/> */}
-        <Route path='/auth/signup' element={<Signup/ >} />
+        <Route path='/auth/signup' element={<Signup/>} />
 
         {/* 일반 회원처리 */}
         <Route path="/farmdas/login" element={<UserLogin />} />
@@ -83,7 +83,7 @@ function App() {
         <Route path='/farmdas/signup' element={<UserSignup />} />
 
 
-        <Route path='/farmdas' element={<FarmdasLayout />}>
+        <Route  path='/farmdas' element={<FarmdasLayout />}>
           <Route index element={<HomeBody/>}/>
           {/* 카테고리별 상품리스트 */}
           <Route path='cate/:category?' element={<ItemListPage/>} />
@@ -100,9 +100,7 @@ function App() {
           {/* 상품상세 */}
           <Route path='item/:itemCode' element={<WebItemDetail />} />
           {/* 취소, 환불 내역 */}
-          <Route path="mypage/:userId/refund" element={<Refund />}></Route>
-         
-
+          <Route path="mypage/:userId/refund" element={<Refund />} />
         </Route>
       </Routes>
     </>
