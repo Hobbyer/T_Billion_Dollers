@@ -7,11 +7,11 @@ import {
   Pressable,
   Modal,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage"; // AsyncStorage 임포트
 import { refreshAccessToken } from "../../../apis/auth";
 import TokenRemainButton from "../../../components/common/TokenRemainButton";
@@ -23,22 +23,50 @@ const HomeScreen = () => {
   const router = useRouter();
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
 
-  const { isAuthenticated } = useAuth(); // 로그인 상태 확인
+  //const { isAuthenticated } = useAuth(); // 로그인 상태 확인
+  //const isAuthenticated = null; // 로그인 상태 확인
+  const { isAuthenticated, checkLogin } = useAuth();
+  console.log(isAuthenticated);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date();
-      const dateStr = now.toLocaleDateString("ko-KR", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        weekday: "long",
-      });
-      const timeStr = now.toLocaleTimeString("ko-KR");
-      setCurrentTime(`${dateStr} ${timeStr}`);
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      checkLogin(); // ✅ 포커스될 때마다 인증 상태를 다시 확인
+
+      if (!isAuthenticated) return;
+
+      const timer = setInterval(() => {
+        const now = new Date();
+        const dateStr = now.toLocaleDateString("ko-KR", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          weekday: "long",
+        });
+        const timeStr = now.toLocaleTimeString("ko-KR");
+        setCurrentTime(`${dateStr} ${timeStr}`);
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }, [isAuthenticated])
+  );
+
+  // useEffect(() => {
+  //   if(!isAuthenticated) return; 
+
+  //   const timer = setInterval(() => {
+  //     const now = new Date();
+  //     const dateStr = now.toLocaleDateString("ko-KR", {
+  //       year: "numeric",
+  //       month: "long",
+  //       day: "numeric",
+  //       weekday: "long",
+  //     });
+  //     const timeStr = now.toLocaleTimeString("ko-KR");
+  //     setCurrentTime(`${dateStr} ${timeStr}`);
+  //   }, 1000);
+  //   return () => clearInterval(timer);
+  // }, [isAuthenticated]);
 
  // 로그아웃 처리 함수
  const handleLogout = async () => {
@@ -53,7 +81,7 @@ const confirmLogout = async () => {
 };
 
 
- 
+ if(isAuthenticated === null) return null; 
 
 
   return (

@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { GET_API } from "../../../apis/testcrud";
 import { Pressable } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // const baseUrl = 'http://192.168.204.19:8080';
 
@@ -19,6 +20,7 @@ export default function MembersInfoScreen() {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [kw, setKw] = useState("");
+  const insets = useSafeAreaInsets();
 
   const fetchAll = async () => {
     setLoading(true);
@@ -58,8 +60,9 @@ export default function MembersInfoScreen() {
     );
   }
 
+ 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#F0FDF4' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#F0FDF4" }}>
       <View style={styles.topSection}>
         <Text style={styles.memberCount}>총 회원 수: {members.length}명</Text>
         <View style={styles.searchBox}>
@@ -83,9 +86,8 @@ export default function MembersInfoScreen() {
             <View style={styles.memberHeader}>
               <Text style={styles.memberName}>{item.name}</Text>
               <Text style={styles.memberRole}>
-  {item.authority === 'ROLE_ADMIN' ? '👑 관리자' : '🙋‍♂️ 일반회원'}
-</Text>
-
+                {item.authority === "ROLE_ADMIN" ? "👑 관리자" : "🙋‍♂️ 일반회원"}
+              </Text>
             </View>
             <Text style={styles.memberInfo}>📌 ID: {item.userId}</Text>
             <Text style={styles.memberInfo}>📞 {item.phoneNumber}</Text>
@@ -93,6 +95,7 @@ export default function MembersInfoScreen() {
             <Text style={styles.memberInfo}>🏡 {item.address}</Text>
           </View>
         )}
+        contentContainerStyle={{ paddingBottom: insets.bottom + 90 }}
       />
     </SafeAreaView>
   );
@@ -101,24 +104,24 @@ export default function MembersInfoScreen() {
 const styles = StyleSheet.create({
   loader: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   topSection: {
     padding: 16,
-    backgroundColor: '#E8F5E9',
+    backgroundColor: "#E8F5E9",
   },
   memberCount: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2E7D32',
+    fontWeight: "bold",
+    color: "#2E7D32",
     marginBottom: 8,
   },
   searchBox: {
-    flexDirection: 'row',
-    backgroundColor: '#fff',
+    flexDirection: "row",
+    backgroundColor: "#fff",
     borderRadius: 8,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   searchInput: {
     flex: 1,
@@ -126,46 +129,46 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   searchBtn: {
-    backgroundColor: '#10B981',
+    backgroundColor: "#10B981",
     paddingHorizontal: 16,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   searchBtnText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
   memberCard: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     marginHorizontal: 16,
     marginTop: 12,
     padding: 16,
     borderRadius: 12,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOpacity: 0.06,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
     elevation: 2,
     borderLeftWidth: 5,
-    borderLeftColor: '#66BB6A',
+    borderLeftColor: "#66BB6A",
   },
   memberHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 8,
   },
   memberName: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#1B5E20',
+    fontWeight: "bold",
+    color: "#1B5E20",
   },
   memberRole: {
     fontSize: 12,
-    color: '#10B981',
-    fontWeight: '600',
+    color: "#10B981",
+    fontWeight: "600",
   },
   memberInfo: {
     fontSize: 14,
-    color: '#333',
+    color: "#333",
     marginBottom: 2,
   },
 });
