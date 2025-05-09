@@ -19,13 +19,14 @@ import HumidityCard from "../../components/humidity/HumidityCard";
 import TemperatureCard from "../../components/temperature/TemperatureCard";
 import { LABEL } from "../../styles/graghStyles";
 import SensorInfo from "../../components/sensor/SensorInfo";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const TemperatureTab = () => {
-  
+  const insets = useSafeAreaInsets();
   
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container}contentContainerStyle={{ paddingBottom: insets.bottom + 90 }}>
       <Text style={styles.title}>🌡️ 환경 관리</Text>
 
       <SensorInfo/>

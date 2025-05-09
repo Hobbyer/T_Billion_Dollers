@@ -21,37 +21,66 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    const checkLogin = async () => {
-      const token = await AsyncStorage.getItem("accessToken");
-      if (!token) {
-        setIsAuthenticated(false);
-        if (!pathname.startsWith("/auth")) {
-          router.replace("/auth/login"); // 비로그인 시 로그인 화면으로
-        }
-      } else {
-        setIsAuthenticated(true);
-        if (pathname === "/auth/login") {
-          router.replace("/"); // 로그인 상태인데 로그인 페이지면 홈으로
-        }
+  const checkLogin = async () => {
+    const token = await AsyncStorage.getItem("accessToken");
+    const isTokenExpired = token ? checkTokenExpiration(token) : true;
 
-        // 추가적으로 만료된 토큰이 아닌지 체크하고 만료되었으면 로그인으로 리다이렉트
-        const isTokenExpired = await checkTokenExpiration(token);
-        if (isTokenExpired) {
-          setIsAuthenticated(false);
-          router.replace("/auth/login"); // 만료된 토큰이면 로그인 페이지로
-        }
+    if (!token || isTokenExpired) {
+      setIsAuthenticated(false);
+      if (!pathname.startsWith("/auth")) {
+        router.replace("/auth/login");
       }
-    };
+      return;
+    }
 
-    // `pathname`이 준비될 때까지 기다리기
+    setIsAuthenticated(true);
+    if (pathname === "/auth/login") {
+      router.replace("/");
+    }
+  };
+
+  useEffect(() => {
     if (pathname) {
       checkLogin();
     }
-  }, [pathname]); // `pathname`이 변경될 때마다 호출
+  }, [pathname]);
+
+  // useEffect(() => {
+  //   const checkLogin = async () => {
+  //     const token = await AsyncStorage.getItem("accessToken");
+  //     console.log('@@' + token)
+  //     const isTokenExpired = token ? checkTokenExpiration(token) : true;
+  
+  //     if (!token || isTokenExpired) {
+  //       console.log('아직 로그인 안됨')
+  //       // 로그아웃 처리
+  //       setIsAuthenticated(false);
+  
+  //       // 이미 auth 페이지면 이동할 필요 없음
+  //       if (!pathname.startsWith("/auth")) {
+  //         router.replace("/auth/login");
+  //       }
+  
+  //       return; // 이후 코드 실행 막기
+  //     }
+  
+  //     // 로그인 상태
+  //     setIsAuthenticated(true);
+  
+  //     // 로그인 상태인데 로그인 페이지에 있을 경우만 홈으로 이동
+  //     if (pathname === "/auth/login") {
+  //       router.replace("/");
+  //     }
+  //   };
+  
+  //   if (pathname) {
+  //     checkLogin();
+  //   }
+  // }, [pathname]);
+  
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, checkLogin }}>
       {isAuthenticated === null ? (
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
