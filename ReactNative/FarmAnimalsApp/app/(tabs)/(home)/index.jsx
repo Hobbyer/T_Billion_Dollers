@@ -17,6 +17,7 @@ import { refreshAccessToken } from "../../../apis/auth";
 import TokenRemainButton from "../../../components/common/TokenRemainButton";
 import { useAuth } from "../../../contexts/AuthContext";
 import LoginScreen from "../../auth/login";
+import { ScrollView } from "react-native";
 
 const HomeScreen = () => {
   const [currentTime, setCurrentTime] = useState("");
@@ -27,7 +28,6 @@ const HomeScreen = () => {
   //const isAuthenticated = null; // 로그인 상태 확인
   const { isAuthenticated, checkLogin } = useAuth();
   console.log(isAuthenticated);
-
 
   useFocusEffect(
     useCallback(() => {
@@ -68,6 +68,7 @@ const HomeScreen = () => {
   //   return () => clearInterval(timer);
   // }, [isAuthenticated]);
 
+
  // 로그아웃 처리 함수
  const handleLogout = async () => {
   setLogoutModalVisible(true);
@@ -86,6 +87,7 @@ const confirmLogout = async () => {
 
   return (
     <>
+    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 40 }}>
       {isAuthenticated ? (
         <View style={{ flex: 1 }}>
         <LinearGradient colors={["#d0f0c0", "#a8e063"]} style={styles.container}>
@@ -198,6 +200,7 @@ const confirmLogout = async () => {
       ) : (
         <LoginScreen />
       )}
+      </ScrollView>
     </>
   );
 };
