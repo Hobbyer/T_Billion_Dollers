@@ -26,7 +26,8 @@ const OrdersInfo = () => {
 
   Promise.all([
     GET(`${baseURL}/orders`),
-    GET(`${baseURL}/admin/members`)
+    GET(`${baseURL}/admin/members`),
+    
   ])
     .then(([ordersRes, membersRes]) => {
       const orders = ordersRes.data;
@@ -134,6 +135,8 @@ const OrdersInfo = () => {
           ))}
         </tbody>
       </Table>
+
+
 
       <Offcanvas show={showOffcanvas} onHide={handleClose} placement="end">
         <Offcanvas.Header closeButton>
