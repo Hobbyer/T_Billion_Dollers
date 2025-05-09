@@ -40,8 +40,21 @@ const MySidebar = () => {
 
   return (
     <>
-       <style>
+        <style>
           {`
+            @media (max-width: 768px) {
+              #my-page-row {
+                flex-direction: column;
+              }
+              .my-page-list {
+                margin: 0;
+                width: 100%;
+              }
+              .my-page-body {
+                width: 100%;
+              }
+            }
+
             .custom-nav-link.active {
               background-color: #339f8b !important;
               color: white !important;
@@ -50,8 +63,8 @@ const MySidebar = () => {
           `}
         </style>
       <Tab.Container id="list-group-tabs-example" defaultActiveKey={"#my-orders"} activeKey={activeKey} onSelect={handleSelect}>
-      <Row>
-        <Col sm={3} style={{ margin : "50px 0 70px 0"}}>
+      <Row id="my-page-row">
+        <Col className="my-page-list" sm={3} style={{ margin : "50px 0 70px 0"}}>
           <ListGroup>
             {menuItems.map((item, i) => (
               <ListGroup.Item key={i} className="custom-nav-link" action eventKey={item.href}>
@@ -61,7 +74,7 @@ const MySidebar = () => {
           </ListGroup>
         </Col>
   
-          <Col sm={9}>
+          <Col className="my-page-body" sm={9}>
             <Tab.Content>
               {menuItems.map((item, i) => (
                 <Tab.Pane key={i} eventKey={item.href}>
