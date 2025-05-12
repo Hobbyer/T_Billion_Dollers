@@ -59,8 +59,6 @@ const OrderList = () => {
     <>
       <style>
         {`
-          
-
           .date-btn {
           border-radius: 50px;
           width: 90px;
@@ -90,14 +88,13 @@ const OrderList = () => {
             `}
       </style>
 
-      <div style={{ margin: "50px 0 90px 0" }}>
+      <div>
         {/* 주문/배송 현황 */}
         <Stack>
-          <div className="d-flex align-items-end">
-            <p
+          <div className="p-line d-flex align-items-end">
+            <p className="fw-bold"
               style={{
                 fontSize: "1.3rem",
-                fontWeight: "bold",
                 marginRight: "10px",
               }}
             >
@@ -108,8 +105,8 @@ const OrderList = () => {
             </p>
           </div>
           <Container>
-            <Row className="p-2">
-              <Col>
+            <Row>
+              <Col className="p-2 d-none">
                 <Button
                   variant="outline-danger"
                   className="date-btn"
@@ -167,29 +164,29 @@ const OrderList = () => {
           </Container>
 
           {/* 입금대기중 ~ 배송완료 */}
-          <div className="p-2 d-flex justify-content-evenly align-items-center">
-            <div className="p-2">
+          <div className="processing p-2 d-flex justify-content-evenly align-items-center">
+            <div>
               <p>입금대기중</p>
               <p>0건</p>
             </div>
             <div>
               <i className="bi bi-chevron-right"></i>
             </div>
-            <div className="p-2">
+            <div>
               <p>결제완료</p>
               <p>0건</p>
             </div>
             <div>
               <i className="bi bi-chevron-right"></i>
             </div>
-            <div className="p-2">
+            <div>
               <p>상품준비중</p>
               <p>0건</p>
             </div>
             <div>
               <i className="bi bi-chevron-right"></i>
             </div>
-            <div className="p-2">
+            <div>
               <p>배송중</p>
               <p>0건</p>
             </div>
@@ -208,10 +205,10 @@ const OrderList = () => {
         <div>
           <Stack gap={3}>
             <div
-              className="d-flex align-items-end gap-3"
+              className="p-line d-flex align-items-center gap-3"
               style={{ borderBottom: "2px solid black" }}
             >
-              <p style={{ fontSize: "1.3rem", fontWeight: "bold" }}>주문내역</p>
+              <p className="fw-bold" style={{ fontSize: "1.3rem"}}>주문내역</p>
               <p>
                 주문하신 상품의 배송 진행상황 및 결제내역을 확인 하실 수
                 있습니다.
@@ -253,7 +250,7 @@ const OrderList = () => {
                       <strong>주문일자:</strong>{" "}
                       {dayjs(order.orderDate).format("YYYY-MM-DD HH:mm:ss")}
                     </p>
-                    <table className="table table-bordered">
+                    <table className="table table-bordered d-none d-sm-table">
                       <thead className="table-light">
                         <tr>
                           <th>상품명</th>
@@ -283,6 +280,25 @@ const OrderList = () => {
                         ))}
                       </tbody>
                     </table>
+                    <div className="d-sm-none">
+  {order.orderItems.map((item, idx) => (
+    <div key={idx} className="border p-3 mb-2 rounded shadow-sm">
+      <p className="fw-bold mb-1">{item.itemName}</p>
+      <p className="mb-1">수량: {item.quantity}</p>
+      <p className="mb-2">가격: {item.totalPrice.toLocaleString()}원</p>
+      <Button
+        variant="success"
+        size="sm"
+        onClick={() => {
+          setIsShow(true);
+          setSelectedQuestion(item);
+        }}
+      >
+        문의하기
+      </Button>
+    </div>
+  ))}
+</div>
                   </div>
                 </div>
               ))
@@ -305,7 +321,7 @@ const OrderList = () => {
         </div>
 
         {/* 배송 단계 안내 */}
-        <div style={{ marginTop: "50px", textAlign: "start" }}>
+        <div className="d-none" style={{ marginTop: "50px", textAlign: "start" }}>
           <Stack gap={3}>
             <div>
               <p style={{ fontSize: "1.3rem", fontWeight: "bold" }}>
@@ -353,9 +369,6 @@ const OrderList = () => {
                   <p>05</p>
                   <i className="bi bi-gift"></i>
                   <p>배송완료</p>
-                </div>
-                <div>
-                  <i className="bi bi-chevron-right"></i>
                 </div>
               </div>
             </div>
