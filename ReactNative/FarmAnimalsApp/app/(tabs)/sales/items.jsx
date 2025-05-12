@@ -81,7 +81,7 @@ export default function ItemManageScreen() {
   const addCategory = async () => {
     if (!newCat.trim()) {
       Alert.alert("오류", "카테고리명을 입력하세요.");
-      return; 
+      return;
     }
     try {
       await POST_API(`/admin/categories`, { cateName: newCat });
@@ -218,34 +218,32 @@ export default function ItemManageScreen() {
   }));
 
   return (
-    
-<SafeAreaView style={styles.safe}>
-ListHeaderComponent={
-      <>
-      <View style={styles.row}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => setCatModal(true)}
-        >
-          <Text style={styles.buttonText}>카테고리 관리</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => setItemModal(true)}
-        >
-          <Text style={styles.buttonText}>상품 등록</Text>
-        </TouchableOpacity>
-      </View>
+    <SafeAreaView style={styles.safe}>
+      {
+        <>
+          <View style={styles.row}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => setCatModal(true)}
+            >
+              <Text style={styles.buttonText}>카테고리 관리</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => setItemModal(true)}
+            >
+              <Text style={styles.buttonText}>상품 등록</Text>
+            </TouchableOpacity>
+          </View>
 
-      <TextInput
-        style={styles.searchInput}
-        placeholder="상품명 검색" 
-        value={searchText}
-        onChangeText={setSearchText}
-      />
-      </>
-}
-
+          <TextInput
+            style={styles.searchInput}
+            placeholder="상품명 검색"
+            value={searchText}
+            onChangeText={setSearchText}
+          />
+        </>
+      }
       <SectionList
         sections={sections}
         keyExtractor={(item) => item.itemCode.toString()}
@@ -272,8 +270,6 @@ ListHeaderComponent={
         )}
         ItemSeparatorComponent={() => null}
       />
-
-
       {/* 카테고리 관리 모달 */}
       <Modal visible={catModal} animationType="slide">
         <KeyboardAvoidingView
@@ -283,12 +279,12 @@ ListHeaderComponent={
           <SafeAreaView style={styles.modal}>
             <Text style={styles.modalTitle}>카테고리 관리</Text>
 
-              <TextInput
-  style={styles.categoryInput}
-  placeholder="카테고리명을 입력하세요."
-  value={newCat}
-  onChangeText={setNewCat}
-/>
+            <TextInput
+              style={styles.categoryInput}
+              placeholder="카테고리명을 입력하세요."
+              value={newCat}
+              onChangeText={setNewCat}
+            />
 
             <TouchableOpacity style={styles.modalButton} onPress={addCategory}>
               <Text style={styles.modalButtonText}>등록</Text>
@@ -324,7 +320,6 @@ ListHeaderComponent={
           </SafeAreaView>
         </KeyboardAvoidingView>
       </Modal>
-
       <Modal visible={itemConfirmVisible} transparent animationType="fade">
         <View
           style={{
@@ -396,7 +391,6 @@ ListHeaderComponent={
           </View>
         </View>
       </Modal>
-
       <Modal visible={itemErrorVisible} transparent animationType="fade">
         <View
           style={{
@@ -468,7 +462,6 @@ ListHeaderComponent={
           </View>
         </View>
       </Modal>
-
       {/* 상품 등록 모달 */}
       <Modal visible={itemModal} transparent animationType="fade">
         <View
@@ -599,7 +592,6 @@ ListHeaderComponent={
           </View>
         </View>
       </Modal>
-
       <Modal visible={confirmVisible} transparent animationType="fade">
         <View
           style={{
@@ -695,7 +687,6 @@ ListHeaderComponent={
         </View>
       </Modal>
     </SafeAreaView>
-              
   );
 }
 

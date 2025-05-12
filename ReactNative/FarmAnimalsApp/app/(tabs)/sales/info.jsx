@@ -59,26 +59,28 @@ export default function SalesInfoScreen() {
           <View style={styles.headerContainer}>
             <Text style={styles.sectionTitle}>📈 최근 매출 추이</Text>
             <View style={styles.chartBox}>
-                {labels.length > 0 && values.length > 0 ? (
-                  <BarChart
-                    data={{
-                      labels,
-                      datasets: [{ data: values }],
-                    }}
-                    width={chartWidth}
-                    height={240}
-                    yAxisSuffix="원"
-                    fromZero
-                    segments={4}
-                    chartConfig={chartConfig}
-                    verticalLabelRotation={45}
-                    style={styles.chart}
-                  />
-                ) : (
+              {labels.length > 0 && values.length > 0 ? (
+                <BarChart
+                  data={{
+                    labels,
+                    datasets: [{ data: values }],
+                  }}
+                  width={chartWidth}
+                  height={240}
+                  yAxisSuffix="원"
+                  fromZero
+                  segments={4}
+                  chartConfig={chartConfig}
+                  verticalLabelRotation={45}
+                  style={styles.chart}
+                />
+              ) : (
+                <View>
                   <Text style={{ color: "gray", textAlign: "center" }}>
                     📭 차트 데이터가 없습니다.
                   </Text>
-                )}
+                </View>
+              )}
             </View>
             <Text style={styles.sectionTitle}>🗓️ 일자별 주문 내역</Text>
           </View>
@@ -93,7 +95,9 @@ export default function SalesInfoScreen() {
           </View>
         )}
         ListEmptyComponent={
-          <Text style={styles.empty}>데이터가 없습니다.</Text>
+          <View>
+            <Text style={styles.empty}>데이터가 없습니다.</Text>
+          </View>
         }
         contentContainerStyle={styles.container}
       />

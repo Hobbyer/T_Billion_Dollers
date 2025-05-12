@@ -1,18 +1,11 @@
-import React, { useEffect, useState } from "react";
 import {
-  View,
   Text,
   StyleSheet,
-  Dimensions,
   ScrollView,
-  Switch,
-  FlatList,
-  Image,
 } from "react-native";
 
 import Card from "@/components/common/Card";
 import WeatherInfo from "@/components/weather/WeatherInfo";
-
 import TemperatureInfo from "../../components/temperature/TemperatureInfo";
 import HumidityInfo from "../../components/humidity/HumidityInfo";
 import HumidityCard from "../../components/humidity/HumidityCard";

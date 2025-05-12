@@ -13,11 +13,14 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect, useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage"; // AsyncStorage 임포트
-import { refreshAccessToken } from "../../../apis/auth";
 import TokenRemainButton from "../../../components/common/TokenRemainButton";
 import { useAuth } from "../../../contexts/AuthContext";
 import LoginScreen from "../../auth/login";
 import { ScrollView } from "react-native";
+import SensorCard from "../../../components/cards/SensorCard";
+import MemberListCard from "../../../components/cards/MemberListCard";
+import AlertCard from "../../../components/cards/AlertCard";
+import OrderListCard from "../../../components/cards/OrderListCard";
 
 const HomeScreen = () => {
   const [currentTime, setCurrentTime] = useState("");
@@ -87,7 +90,7 @@ const confirmLogout = async () => {
 
   return (
     <>
-    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 40 }}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }} >
       {isAuthenticated ? (
         <View style={{ flex: 1 }}>
         <LinearGradient colors={["#d0f0c0", "#a8e063"]} style={styles.container}>
@@ -109,14 +112,14 @@ const confirmLogout = async () => {
           </Animated.View>
     
           <View style={styles.cardsWrapper}>
-            <InfoCard icon={<Ionicons name="thermometer" size={24} color="#ffffff" />} label="센서 데이터" value="24℃ / 60%" />
-            <InfoCard icon={<MaterialCommunityIcons name="account-group" size={24} color="#ffffff" />} label="회원 수" value="53명" />
-            <InfoCard icon={<Ionicons name="notifications" size={24} color="#ffffff" />} label="알림" value="3건" />
-            <InfoCard icon={<MaterialCommunityIcons name="package-variant" size={24} color="#ffffff" />} label="주문 수" value="7건" />
+            <SensorCard/>
+            <MemberListCard/>
+            <AlertCard/>
+            <OrderListCard/>
           </View>
     
           <View style={styles.footerWrapper}>
-            <Text style={styles.footerText}>📢 오늘도 최선을 다하는 FarmDAS ✨</Text>
+            <Text style={styles.footerText}>📢 오늘도 최선을 다하는 FARMDAS ✨</Text>
           </View>
         </LinearGradient>
     
@@ -257,26 +260,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
     gap: 16,
   },
-  card: {
-    backgroundColor: "#66bb6a",
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 16,
-    borderRadius: 12,
-    elevation: 4,
-  },
-  iconWrapper: {
-    marginRight: 16,
-  },
-  cardLabel: {
-    fontSize: 16,
-    color: "#e8f5e9",
-  },
-  cardValue: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#ffffff",
-  },
+  
+ 
   footerWrapper: {
     marginTop: 40,
     alignItems: "center",
