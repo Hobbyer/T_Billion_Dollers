@@ -3,6 +3,8 @@ import { Stack, router } from "expo-router";
 import { SafeAreaView, ActivityIndicator, View } from "react-native";
 import { AuthProvider } from "../contexts/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Provider } from "react-redux";
+import store from "../redux/store";
 
 export default function RootLayout() {
   const [isLoading, setIsLoading] = useState(true);
@@ -38,15 +40,17 @@ export default function RootLayout() {
   }
 
   return (
-    <AuthProvider>
-      <SafeAreaView style={{ flex: 1 }}>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            animation: "slide_from_right",
-          }}
-        />
-      </SafeAreaView>
-    </AuthProvider>
+    <Provider store={store}>
+      <AuthProvider>
+        <SafeAreaView style={{ flex: 1 }}>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              animation: "slide_from_right",
+            }}
+          />
+        </SafeAreaView>
+      </AuthProvider>
+    </Provider>
   );
 }

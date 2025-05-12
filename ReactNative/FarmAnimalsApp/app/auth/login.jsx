@@ -133,7 +133,7 @@ export default function LoginScreen() {
                   setLoginSuccessVisible(false);
                   setTimeout(() => {
                     console.log(111111111);
-                    
+
                     router.replace("/");
                   }, 300); // 0.3초 정도 지연시켜 모달이 닫힌 후 이동하도록 함
                 }}
