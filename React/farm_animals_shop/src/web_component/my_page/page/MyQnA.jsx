@@ -65,7 +65,7 @@ const MyQnA = ({active}) => {
           <h2 className="fw-bold">나의 문의 내역</h2>
         </div>
         <hr />
-        <Table>
+        <Table className="d-none d-md-table">
           <thead>
             <tr>
               <th>작성일</th>
@@ -126,6 +126,43 @@ const MyQnA = ({active}) => {
             })}
           </tbody>
         </Table>
+        <div className="d-block d-md-none">
+          {questions.map((question, i) => (
+            <div key={i} className="border p-3 mb-3 rounded shadow-sm bg-light">
+              <div className="d-flex justify-content-between align-items-center mb-2">
+                <strong style={{ fontSize: '14px' }}>
+                  {dayjs(question.regDate).format("YY-MM-DD HH:mm")}
+                </strong>
+                <Button
+                  size="sm"
+                  variant={question.answerStatus === "PENDING" ? "warning" : "success"}
+                  onClick={() => {
+                    setSelectedQuestion(question);
+                    setIsShow(true);
+                  }}
+                >
+                  {question.answerStatus === "PENDING" ? "답변 대기 중" : "답변 완료"}
+                </Button>
+              </div>
+              <div style={{ fontSize: '14px', marginBottom: '4px' }}>
+                {question.itemName ? (
+                  <>
+                    <strong>상품명:&nbsp;</strong>
+                    <Link to={`/farmdas/item/${question.itemCode}`}>
+                      {question.itemName}
+                    </Link>
+                  </>
+                ) : (
+                  '1:1 문의'
+                )}
+              </div>
+              <div style={{ fontSize: '14px' }}>
+                <strong>제목:</strong> {question.title}
+              </div>
+            </div>
+          ))}
+        </div>
+
         <div className="d-flex justify-content-end m-4">
           <Button
             variant="secondary"
