@@ -59,6 +59,20 @@ const OrderList = () => {
     <>
       <style>
         {`
+          @media (max-width: 576px) {
+            .processing p {
+              font-size: 12px;
+              margin: 2px 0;
+            }
+
+            .card-header h5 {
+              font-size: 16px;
+            }
+
+            .card-body p {
+              font-size: 14px;
+            }
+          }
           .date-btn {
           border-radius: 50px;
           width: 90px;
