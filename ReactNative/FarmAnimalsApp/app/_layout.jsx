@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Stack, router } from "expo-router";
+import { Slot, Stack, router } from "expo-router";
 import { SafeAreaView, ActivityIndicator, View } from "react-native";
 import { AuthProvider } from "../contexts/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -43,12 +43,14 @@ export default function RootLayout() {
     <Provider store={store}>
       <AuthProvider>
         <SafeAreaView style={{ flex: 1 }}>
-          <Stack
-            screenOptions={{
-              headerShown: false,
-              animation: "slide_from_right",
-            }}
-          />
+          <Slot>
+            <Stack
+              screenOptions={{
+                headerShown: false,
+                animation: "slide_from_right",
+              }}
+            />
+          </Slot>
         </SafeAreaView>
       </AuthProvider>
     </Provider>
