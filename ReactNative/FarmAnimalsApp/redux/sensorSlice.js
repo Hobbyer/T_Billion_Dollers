@@ -5,9 +5,10 @@ export const fetchSensorData = createAsyncThunk(
   'sensor/fetchSensorData',
   async (_, thunkAPI) => {
     try {
-      const [tempRes, humRes] = await Promise.all([
+      const [tempRes, humRes, motionRes] = await Promise.all([
         GET_API('/admin/temp'),
         GET_API('/admin/humidity'),
+        GET_API('/admin/motions/recent'),
       ]);
 
       const sortedTemp = tempRes.sort(
@@ -20,6 +21,7 @@ export const fetchSensorData = createAsyncThunk(
       return {
         temperature: sortedTemp[0] || null,
         humidity: sortedHum[0] || null,
+        motion: motionRes.length > 0 ? motionRes.length : 0
       };
     } catch (err) {
       return thunkAPI.rejectWithValue(err.message || 'Fetch error');
@@ -32,6 +34,7 @@ const sensorSlice = createSlice({
   initialState: {
     temperature: null, // 온도 데이터 저장
     humidity: null, // 습도 데이터 저장
+    motion: 0, // 모션 감지 횟수 저장
     loading: false, // 데이터를 불러오는 중인지 여부 
     error: null, // 에러 발생시 메세지 저장
   },
@@ -48,6 +51,7 @@ const sensorSlice = createSlice({
         state.loading = false; // 로딩 종료
         state.temperature = action.payload.temperature; // 온도 데이터 저장
         state.humidity = action.payload.humidity; // 습도 데이터 저장
+        state.motion = action.payload.motion; // 모션 감지 횟수 저장
       })
       // 요청 실패 했을 때 
       .addCase(fetchSensorData.rejected, (state, action) => {

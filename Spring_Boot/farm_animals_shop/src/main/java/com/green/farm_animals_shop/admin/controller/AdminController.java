@@ -1,8 +1,10 @@
 package com.green.farm_animals_shop.admin.controller;
 
 import com.green.farm_animals_shop.admin.dto.EnvironDTO;
+import com.green.farm_animals_shop.admin.dto.MotionDTO;
 import com.green.farm_animals_shop.admin.service.AdminService;
 import com.green.farm_animals_shop.admin.service.EnvironmentService;
+import com.green.farm_animals_shop.admin.service.MotionService;
 import com.green.farm_animals_shop.shop.dto.DailyOrderSummaryDTO;
 import com.green.farm_animals_shop.shop.service.OrderService;
 import com.green.farm_animals_shop.user.dto.MemberResponseDTO;
@@ -24,6 +26,7 @@ public class AdminController {
   private final AdminService adminService;
   private final EnvironmentService environmentService;
   private final OrderService orderService;
+  private final MotionService motionService;
 
 
   // 기온 데이터 추출
@@ -36,6 +39,11 @@ public class AdminController {
   @GetMapping("/humidity")
   public List<EnvironDTO> getHumidity() {
     return environmentService.getHumidity();
+  }
+
+  @GetMapping("/motions/recent")
+  public List<MotionDTO> getRecentMotions() {
+    return motionService.getRecentMotions();
   }
 
   // 전체 회원 조회

@@ -3,12 +3,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {jwtDecode} from 'jwt-decode';
 import { StyleSheet, View, Text, Pressable, Alert, Modal } from 'react-native';
 import { refreshAccessToken } from '../../apis/auth'; // 정확한 경로에 맞게 수정
+import { useRouter } from 'expo-router';
 
 
 const TokenRemainButton = () => {
   const [remaining, setRemaining] = useState(null);
   const [extendSuccessVisible, setExtendSuccessVisible] = useState(false);
 const [extendErrorVisible, setExtendErrorVisible] = useState(false);
+
+const router = useRouter();
 
 
   const updateRemainingTime = async () => {
@@ -27,6 +30,7 @@ const [extendErrorVisible, setExtendErrorVisible] = useState(false);
 
       if (diff <= 0) {
         setRemaining('만료됨');
+        router.navigate('/auth/login'); // 만료된 경우 로그인 화면으로 이동
       } else {
         const min = Math.floor(diff / 60);
         const sec = diff % 60;
