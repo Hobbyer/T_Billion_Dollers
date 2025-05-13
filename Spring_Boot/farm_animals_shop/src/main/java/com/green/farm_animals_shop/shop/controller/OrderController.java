@@ -2,6 +2,7 @@ package com.green.farm_animals_shop.shop.controller;
 
 import com.green.farm_animals_shop.shop.dto.DailyOrderSummaryDTO;
 import com.green.farm_animals_shop.shop.dto.OrderDTO;
+import com.green.farm_animals_shop.shop.dto.OrderItemDTO;
 import com.green.farm_animals_shop.shop.dto.OrderRequestDTO;
 import com.green.farm_animals_shop.shop.entity.OrderEntity;
 import com.green.farm_animals_shop.shop.service.OrderService;
@@ -40,5 +41,11 @@ public class OrderController {
   public ResponseEntity<?> getAllOrders() {
     List<OrderDTO> orders = orderService.getAllOrders();
     return ResponseEntity.ok(orders);
+  }
+
+  @GetMapping("/itemList/{orderId}")
+  public ResponseEntity<?> getOrderItemsByOrderId(@PathVariable("orderId") Long orderId) {
+    List<OrderItemDTO> orderItems = orderService.getOrderItemsByOrderId(orderId);
+    return ResponseEntity.ok(orderItems);
   }
 }

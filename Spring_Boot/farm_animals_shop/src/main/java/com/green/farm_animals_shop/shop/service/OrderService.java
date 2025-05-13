@@ -2,6 +2,7 @@ package com.green.farm_animals_shop.shop.service;
 
 import com.green.farm_animals_shop.shop.dto.DailyOrderSummaryDTO;
 import com.green.farm_animals_shop.shop.dto.OrderDTO;
+import com.green.farm_animals_shop.shop.dto.OrderItemDTO;
 import com.green.farm_animals_shop.shop.dto.OrderRequestDTO;
 import com.green.farm_animals_shop.shop.entity.OrderEntity;
 
@@ -15,4 +16,6 @@ public interface OrderService {
   List<DailyOrderSummaryDTO> getDailyOrderSummary(); // 최근 7일간의 주문 요약 정보 조회
 
   List<OrderDTO> getAllOrders(); // 모든 주문 내역 조회
+
+  List<OrderItemDTO> getOrderItemsByOrderId(Long orderId); // 주문 ID로 주문 상품 목록 조회
 }
