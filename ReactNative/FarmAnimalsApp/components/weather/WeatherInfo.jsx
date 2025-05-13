@@ -61,8 +61,6 @@ const WeatherInfo = () => {
     fetchWeather();
   }, []);
 
-  // 일단 이미지 못받음;;
-
   const iconUrl = `https://openweathermap.org/img/wn/${weather?.weather[0].icon}@2x.png`;
 
   return (
@@ -164,6 +162,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ddd",
     padding: 10,
     justifyContent: "space-between",
+    backgroundColor: "#f9f9f9"
   },
   tableCell: {
     flex: 1,
