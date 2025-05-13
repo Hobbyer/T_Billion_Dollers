@@ -30,7 +30,6 @@ const HomeScreen = () => {
   //const { isAuthenticated } = useAuth(); // 로그인 상태 확인
   //const isAuthenticated = null; // 로그인 상태 확인
   const { isAuthenticated, checkLogin } = useAuth();
-  console.log(isAuthenticated);
 
   useFocusEffect(
     useCallback(() => {

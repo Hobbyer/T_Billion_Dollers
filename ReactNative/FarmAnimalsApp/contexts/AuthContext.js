@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null); // 초기엔 null
   const router = useRouter();
   const pathname = usePathname(); // 현재 pathname을 가져옴
+  
   const checkTokenExpiration = (token) => {
     try {
       const decoded = jwtDecode(token);
@@ -22,22 +23,36 @@ export const AuthProvider = ({ children }) => {
   };
 
   const checkLogin = async () => {
-    const token = await AsyncStorage.getItem("accessToken");
-    const isTokenExpired = token ? checkTokenExpiration(token) : true;
+  // 저장소에서 accessToken 가져오기
+  const token = await AsyncStorage.getItem("accessToken");
+  const refreshToken = await AsyncStorage.getItem("refreshToken");
 
-    if (!token || isTokenExpired) {
-      setIsAuthenticated(false);
-      if (!pathname.startsWith("/auth")) {
-        router.replace("/auth/login");
-      }
-      return;
+  // 토큰이 존재하면 만료 여부 검사, 없으면 만료된 것으로 간주
+  const isTokenExpired = token ? checkTokenExpiration(token) : true;
+  const isRefreshExpired = refreshToken ? checkTokenExpiration(refreshToken) : true;
+
+  // 토큰이 없거나 만료되었을 경우
+  if (!token || isTokenExpired) {
+    // 인증 상태를 false로 설정
+    setIsAuthenticated(false);
+
+    // 현재 경로가 /auth로 시작하지 않으면 로그인 페이지로 이동
+    if (!pathname.startsWith("/auth")) {
+      router.replace("/auth/login");
     }
 
-    setIsAuthenticated(true);
-    if (pathname === "/auth/login") {
-      router.replace("/");
-    }
-  };
+    return; // 더 이상 실행하지 않고 종료
+  }
+
+  // 토큰이 유효한 경우 인증 상태를 true로 설정
+  setIsAuthenticated(true);
+
+  // 이미 로그인되어 있는데 경로가 로그인 페이지일 경우, 홈으로 리디렉션
+  if (pathname === "/auth/login") {
+    router.replace("/");
+  }
+};
+
 
   useEffect(() => {
     if (pathname) {
