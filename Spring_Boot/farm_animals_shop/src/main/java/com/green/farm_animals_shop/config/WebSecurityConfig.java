@@ -40,8 +40,8 @@ public class WebSecurityConfig implements WebMvcConfigurer {
             "http://localhost:5173",        // 개발용 로컬
             "https://farmdas.netlify.app",  // Netlify 배포 도메인
             "http://10.0.2.2:8080", // Android 에뮬레이터에서 localhost 접근 시 사용
-            "http://localhost:19006", // React Native Expo 개발용
-            "http://192.168.204.19:8080" // 실제 기기 + PC 로컬 IP
+            "http://localhost:8081", // Expo 웹 개발용
+            "http://192.168.204.19:8080" // 실제 기기
         ) // 허용할 출처를 설정합니다.
 
         .allowedMethods("*") // 모든 HTTP 메서드를 허용합니다.

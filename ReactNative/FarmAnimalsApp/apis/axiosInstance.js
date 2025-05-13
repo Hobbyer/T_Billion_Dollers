@@ -1,13 +1,16 @@
 // src/apis/axiosInstance.js
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert, InteractionManager } from 'react-native';
+import { Alert, InteractionManager, Platform } from 'react-native';
 import { refreshAccessToken } from './auth'; // refresh 토큰을 갱신하는 함수
 import { router } from 'expo-router';
 
 
 const axiosInstance = axios.create({
-  baseURL: 'http://10.0.2.2:8080', // 기본 API 주소
+  baseURL: 
+  Platform.OS === 'android'
+  ? "http://10.0.2.2:8080"
+  : "http://192.168.30.76:8080", // 기본 API 주소
   timeout: 5000,
 });
 
