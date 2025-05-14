@@ -89,7 +89,7 @@ export default function SalesInfoScreen() {
         renderItem={({ item }) => (
           <View style={styles.listItem}>
             <Text style={styles.dateText}>{item.orderDate}</Text>
-            <Text style={styles.orderText}>{item.orders}건</Text>
+            {/* <Text style={styles.orderText}>{item.orders}건</Text> */}
             <Text style={styles.priceText}>
               {(item.totalPriceSum || 0).toLocaleString()}원
             </Text>
