@@ -295,24 +295,24 @@ const OrderList = () => {
                       </tbody>
                     </table>
                     <div className="d-sm-none">
-  {order.orderItems.map((item, idx) => (
-    <div key={idx} className="border p-3 mb-2 rounded shadow-sm">
-      <p className="fw-bold mb-1">{item.itemName}</p>
-      <p className="mb-1">수량: {item.quantity}</p>
-      <p className="mb-2">가격: {item.totalPrice.toLocaleString()}원</p>
-      <Button
-        variant="success"
-        size="sm"
-        onClick={() => {
-          setIsShow(true);
-          setSelectedQuestion(item);
-        }}
-      >
-        문의하기
-      </Button>
-    </div>
-  ))}
-</div>
+                      {order.orderItems.map((item, idx) => (
+                        <div key={idx} className="border p-3 mb-2 rounded shadow-sm">
+                          <p className="fw-bold mb-1">{item.itemName}</p>
+                          <p className="mb-1">수량: {item.quantity}</p>
+                          <p className="mb-2">가격: {item.totalPrice.toLocaleString()}원</p>
+                          <Button
+                            variant="success"
+                            size="sm"
+                            onClick={() => {
+                              setIsShow(true);
+                              setSelectedQuestion(item);
+                            }}
+                          >
+                            문의하기
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               ))
