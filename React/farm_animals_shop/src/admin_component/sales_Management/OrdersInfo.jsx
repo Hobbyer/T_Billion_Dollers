@@ -26,8 +26,7 @@ const OrdersInfo = () => {
 
   Promise.all([
     GET(`${baseURL}/orders`),
-    GET(`${baseURL}/admin/members`),
-    
+    GET(`${baseURL}/admin/members`),   
   ])
     .then(([ordersRes, membersRes]) => {
       const orders = ordersRes.data;
@@ -53,6 +52,20 @@ const OrdersInfo = () => {
     })
 
   }, [])
+
+  const orderDetails = () => {
+    GET(`${baseURL}/orders/itemList/${selectedOrder.orderId}`)
+      .then((res) => {
+        const orderDetails = res.data;
+        setSelectedOrder((prevOrder) => ({
+          ...prevOrder,
+          items: orderDetails,
+        }));
+      })
+      .catch((err) => {
+        console.error('주문 상세 정보 로딩 실패:', err);
+      });
+  }
 
   const handleShow = (order) => {
     setSelectedOrder(order)

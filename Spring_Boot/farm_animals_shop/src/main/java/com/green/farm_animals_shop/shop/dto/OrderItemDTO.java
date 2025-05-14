@@ -19,4 +19,12 @@ public class OrderItemDTO {
   private Integer totalPrice;
 
   private String imagePath;  // DB의 IMAGE_PATH와 매핑
+
+  public OrderItemDTO(Integer itemCode, String itemName, Integer quantity, Integer price, Integer totalPrice) {
+    this.itemCode = itemCode;
+    this.itemName = itemName;
+    this.quantity = quantity;
+    this.price = price;
+    this.totalPrice = totalPrice;
+  }
 }

@@ -4,6 +4,7 @@ import com.green.farm_animals_shop.admin.entity.ItemInfoEntity;
 import com.green.farm_animals_shop.admin.repository.ItemInfoRepository;
 import com.green.farm_animals_shop.shop.dto.DailyOrderSummaryDTO;
 import com.green.farm_animals_shop.shop.dto.OrderDTO;
+import com.green.farm_animals_shop.shop.dto.OrderItemDTO;
 import com.green.farm_animals_shop.shop.dto.OrderRequestDTO;
 import com.green.farm_animals_shop.shop.entity.OrderEntity;
 import com.green.farm_animals_shop.shop.entity.OrderItemEntity;
@@ -94,5 +95,10 @@ public class OrderServiceImpl implements OrderService {
   @Override
   public List<OrderDTO> getAllOrders() {
     return orderRepository.findAllAsDTO();
+  }
+
+  @Override
+  public List<OrderItemDTO> getOrderItemsByOrderId(Long orderId) {
+    return orderItemRepository.findByOrderIdAsDTO(orderId);
   }
 }
