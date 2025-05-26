@@ -14,7 +14,7 @@ import Postcode from "react-daum-postcode";
 
 const baseURL = import.meta.env.VITE_API_URL;
 
-// * 돈나감 주의 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 인증번호 발송은 1회에 20원입니다. *
+// * 돈나감 주ㅈ의 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 인증번호 발송은 1회에 20원입니다. *
 const UserSignup = () => {
   const nav = useNavigate();
 
