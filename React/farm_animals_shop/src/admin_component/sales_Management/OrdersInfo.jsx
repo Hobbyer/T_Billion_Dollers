@@ -53,27 +53,28 @@ const OrdersInfo = () => {
 
   }, [])
 
-  const orderDetails = () => {
-    GET(`${baseURL}/orders/itemList/${selectedOrder.orderId}`)
-      .then((res) => {
-        const orderDetails = res.data;
-        setSelectedOrder((prevOrder) => ({
-          ...prevOrder,
-          items: orderDetails,
-        }));
-      })
-      .catch((err) => {
-        console.error('주문 상세 정보 로딩 실패:', err);
-      });
-  }
-
   const handleShow = (order) => {
     setSelectedOrder(order)
     setShowOffcanvas(true)
+    loadOrderItems(order.orderId)
   }
+
   const handleClose = () => {
     setShowOffcanvas(false)
     setSelectedOrder(null)
+  }
+
+  const loadOrderItems = (orderId) => {
+    GET(`${baseURL}/orders/itemList/${orderId}`)
+      .then((res) => {
+        setSelectedOrder((prevOrder) => ({
+          ...prevOrder,
+          items: res.data,
+        }))
+      })
+      .catch((err) => {
+        console.error('주문 아이템 로딩 실패:', err);
+      })
   }
 
   if (loading) {
@@ -109,9 +110,9 @@ const OrdersInfo = () => {
             <tr key={idx}>
               <td>{dayjs(o.orderDate).format('YYYY-MM-DD HH:mm:ss')}</td>
               <td>
-                <Button variant="link" className="p-0" onClick={() => handleShow(o)}>
+                {/* <Button variant="link" className="p-0" onClick={() => handleShow(o)}> */}
                   {o.orderId}
-                </Button>
+                {/* </Button> */}
               </td>
               <td>{o.userId}</td>
               <td>{o.userName}</td>
