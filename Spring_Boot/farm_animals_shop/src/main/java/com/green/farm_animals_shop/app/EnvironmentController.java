@@ -15,13 +15,13 @@ public class EnvironmentController {
 
   @GetMapping("/environment")
   public ResponseEntity<?> getEnvironmentData() {
-    String flaskUrl = "http://192.168.30.240:5000/sensor/environment";
+    String flaskUrl = "http://192.168.30.240:5000/sensor/environment"; // Flask 서버 IP
 
     try {
-      Map<String, Object> sensorData = restTemplate.getForObject(flaskUrl, Map.class);
-      return ResponseEntity.ok(sensorData);
+      Map<String, Object> sensorData = restTemplate.getForObject(flaskUrl, Map.class); // Flask 서버에서 데이터 가져오기
+      return ResponseEntity.ok(sensorData); // 가져온 데이터를 그대로 반환
     } catch (Exception e) {
-      return ResponseEntity.status(500).body("Error fetching data from Flask server: " + e.getMessage());
+      return ResponseEntity.status(500).body("Error fetching data from Flask server: " + e.getMessage()); // 에러 처리
     }
   }
 
@@ -30,11 +30,11 @@ public class EnvironmentController {
     String flaskUrl = "http://192.168.30.240:5000/sensor/toggle"; // Flask 서버 IP
 
     try {
-      RestTemplate restTemplate = new RestTemplate();
+      RestTemplate restTemplate = new RestTemplate(); // RestTemplate 객체 생성
       restTemplate.postForObject(flaskUrl, body, String.class); // 받은 데이터를 그대로 Flask로 넘김
-      return ResponseEntity.ok("Sensor toggle request sent successfully.");
+      return ResponseEntity.ok("Sensor toggle request sent successfully."); // 성공 메시지 반환
     } catch (Exception e) {
-      return ResponseEntity.status(500).body("Failed to toggle sensor: " + e.getMessage());
+      return ResponseEntity.status(500).body("Failed to toggle sensor: " + e.getMessage()); // 에러 처리
     }
   }
 }

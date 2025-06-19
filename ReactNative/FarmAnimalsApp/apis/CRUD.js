@@ -26,7 +26,7 @@ import { Platform } from 'react-native';
 export const baseURL =
  Platform.OS === 'android'
  ? "http://10.0.2.2:8080"
- : "http://192.168.30.76:8080"; // PC의 LAN IP (테스트용)
+ : "http://192.168.204.19:8080"; // PC의 LAN IP (테스트용)
 
 // 편의 함수: POST('/auth/login', data)
 export async function POST(path, data = {}) {
